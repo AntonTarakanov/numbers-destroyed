@@ -1,18 +1,14 @@
 import '/style.css';
-import Icon from './icon.png';
+// import Icon from './icon.png';
+import { baseForm } from "./render/baseForm";
 
-function component() {
-    const element = document.createElement('div');
-    const myIcon = new Image();
+/**
+ *
+ */
+function createApp() {
+    const elem = baseForm();
 
-    element.innerHTML = 'Hello webpack';
-    element.classList.add('hello');
-
-    myIcon.src = Icon;
-
-    element.appendChild(myIcon);
-
-    return element;
+    document.body.appendChild(elem);
 }
 
-document.body.appendChild(component());
+createApp();

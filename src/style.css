@@ -1,4 +1,23 @@
-.hello {
-    color: red;
-    background: url('./icon.png');
+/* Таблица используемых цветов */
+
+/* #282E33 - светлый фон для тёмной темы */
+/* #272822 - monokai фон */
+/* #18191D - Тёмный фон */
+/* #65AADD - синий цвет */
+/* #F92672 - monokai розовй */
+/* #A6E22E - monokai зелёный */
+/* #F8F8F0 - monokai белый */
+
+body {
+    background: #18191D;
+}
+
+.application {
+    justify-content: center;
+}
+
+/* common */
+
+.flex {
+    display: flex;
 }
