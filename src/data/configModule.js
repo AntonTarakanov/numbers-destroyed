@@ -13,4 +13,19 @@ export const getConfig = () => {
     };
 }
 
-export const getPlayersName = () => ['player0', 'player1'];
+const getNumberOfPlayers = () => {
+    const config = getConfig();
+
+    return config.COUNT_PLAYER;
+}
+
+export const getPlayersName = () => {
+    const value = getNumberOfPlayers();
+    const result = [];
+
+    for (let i = 0; i < value; i++) {
+        result.push('player' + i);
+    }
+
+    return result;
+};

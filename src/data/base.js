@@ -1,6 +1,6 @@
 import { createState } from './state';
 import { getPlayersName, getConfig } from './configModule';
-import { createMap } from './map';
+import { createMap, setRandomElementsInMap } from './map';
 
 /**
  * Набор данных необходимый для работы приложения.
@@ -9,14 +9,13 @@ export const createDataTools = () => {
     const config = getConfig();
     const names = getPlayersName();
     const state = createState(names);
-    const map = createMap(config);
+    const map = createMap(config, state);
+    const mapWithElements = setRandomElementsInMap(map, state); // вынести в другой метод.
 
-    const data = {
+    return {
         config,
         state,
-        map,
+        map: mapWithElements,
         // history: createHistory(),
-    }
-
-    return data;
+    };
 }

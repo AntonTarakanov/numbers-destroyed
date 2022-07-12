@@ -16,6 +16,20 @@ body {
     justify-content: center;
 }
 
+.cell {
+    min-height: 35px;
+    min-width: 35px;
+    height: 35px;
+    width: 35px;
+    /*margin: 4px;*/
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.cell_empty { background: #282E33; }
+.cell_waiting { background: #F92672; }
+
 /* common */
 
 .flex {
