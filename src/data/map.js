@@ -7,6 +7,16 @@ import { getRandomNumber } from '../utils';
  */
 export const createMap = config => getEmptyMap(config);
 
+const getDefaultMapItem = (position = { x: 0, y: 0 }, type = CELL_TYPE.EMPTY) => {
+    return {
+        powerValue: null,
+        position: { ...position },
+        type,
+        connectList: [],
+        className: getClassByCellType(type)
+    };
+}
+
 /**
  * Пустая карта для игры.
  * @param {any} config
@@ -20,12 +30,7 @@ const getEmptyMap = config => {
             const type = i % 2 === 0
                 ? j % 2 === 0 ? CELL_TYPE.WAITING : CELL_TYPE.EMPTY
                 : j % 2 === 0 ? CELL_TYPE.EMPTY : CELL_TYPE.WAITING;
-            rowResult.push({
-                position: {x: j, y: i},
-                type,
-                connectList: [],
-                className: getClassByCellType(type)
-            });
+            rowResult.push(getDefaultMapItem({ x: j, y: i }, type));
         }
 
         /* Проставляем горизонтальные связи. Идея в том, чтобы в массив записать типы границ. */
@@ -34,6 +39,7 @@ const getEmptyMap = config => {
                 const type = list[index - 1]?.type === CELL_TYPE.WAITING && list[index + 1]?.type === CELL_TYPE.WAITING
                     ? CONNECT_TYPE.LINE
                     : null;
+
                 if (type) {
                     item.connectList.push(type);
                 }
@@ -75,16 +81,32 @@ export const setRandomElementsInMap = (map, state) => {
     }, []);
     const ceilByCount = Math.ceil(waitingList.length / state.playersList.length);
 
-    state.playersList.forEach(item => {
+    state.playersList.forEach(playerName => {
         for (let i = 0; i < ceilByCount; i++) {
             if (waitingList.length) {
                 const currentRandom = getRandomNumber(waitingList.length - 1);
                 const currentPosition = waitingList[currentRandom];
 
                 waitingList.splice(currentRandom, 1);
+                changeMap(map, currentPosition, { powerValue: 2, color: state[playerName] });
             }
         }
     });
 
     return map;
+}
+
+/**
+ * Внести изменения в "карту". "Карта" + элемент для изменения (position и новое значение).
+ * y - это вложенный массив. x - элементы вложенного массива.
+ * @param {object} map
+ * @param {object} position - x/y.
+ * @param {object} item - powerValue, color.
+ */
+const changeMap = (map, position, item) => {
+    const findItem = map[position.y].find(elem => elem.position.x === position.x);
+
+    findItem.type = CELL_TYPE.READY;
+    findItem.color = item.color;
+    findItem.powerValue = item.powerValue;
 }
