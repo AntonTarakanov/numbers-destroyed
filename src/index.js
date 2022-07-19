@@ -10,9 +10,13 @@ import { renderTableByMatrix } from './render/map';
 function createApp() {
     const baseFormElement = baseForm();
     const dataTools = createDataTools();
-    const table = renderTableByMatrix(baseFormElement.firstChild, dataTools.map);
+    const table = renderTableByMatrix(baseFormElement.firstChild, dataTools.map, onClickHandler);
 
     document.body.appendChild(baseFormElement);
+}
+
+const onClickHandler = () => {
+    console.log('onClickHandler');
 }
 
 createApp();
