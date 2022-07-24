@@ -2,9 +2,9 @@ import { createDiv } from './helper';
 import { DOM_ID } from './constants';
 
 /**
- *
+ * Базовая пустая форма с картой, логированием, ID-элементов для дальнейшего добавления элементов.
  */
-export const baseForm = () => {
+const getBaseForm = () => {
     const appElem = createDiv();
     const map = createDiv();
 
@@ -15,3 +15,8 @@ export const baseForm = () => {
 
     return appElem;
 }
+
+/**
+ * Создаёт и добавляет "baseForm" в body.
+ */
+export const createBaseForm = () => document.body.appendChild(getBaseForm());

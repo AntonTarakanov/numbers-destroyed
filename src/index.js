@@ -1,18 +1,23 @@
 import '/style.css';
-// import Icon from './icon.png';
-import { baseForm } from './render/baseForm';
+import { createBaseForm } from './render/baseForm';
+import { baseFormIsCreated, createFullMapByMatrix } from './render/helper';
 import { createDataTools } from './data/base';
-import { renderTableByMatrix } from './render/map';
 
 /**
  * Инициализация приложения.
  */
 function createApp() {
-    const baseFormElement = baseForm();
-    const dataTools = createDataTools();
-    const table = renderTableByMatrix(baseFormElement.firstChild, dataTools.map, onClickHandler);
+    try {
+        createBaseForm();
 
-    document.body.appendChild(baseFormElement);
+        if (baseFormIsCreated()) {
+            const dataTools = createDataTools();
+
+            createFullMapByMatrix(dataTools.map, onClickHandler);
+        }
+    } catch(error) {
+        console.log(error);
+    }
 }
 
 const onClickHandler = () => {

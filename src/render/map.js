@@ -3,12 +3,10 @@ import { CELL_CLASS_NAME } from './constants';
 
 /**
  *
- * Куда именно всталвять созданные элементы определем по id.
- * @param {any} root - DOM-элемент.
  * @param {array} matrix - массив с массивами с инфой о клетке.
  * @param {any} onClickHandler
  */
-export const renderTableByMatrix = (root, matrix, onClickHandler) => {
+export const getRenderTableByMatrix = (matrix, onClickHandler) => {
     const tableElement = document.createElement('table');
 
     matrix.forEach(rowList => {
@@ -28,7 +26,7 @@ export const renderTableByMatrix = (root, matrix, onClickHandler) => {
         tableElement.appendChild(rowElement);
     });
 
-    return root.appendChild(tableElement);
+    return tableElement;
 }
 
 /**
