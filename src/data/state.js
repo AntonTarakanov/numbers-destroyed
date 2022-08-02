@@ -6,10 +6,10 @@ import { COLOR_LIST } from '../constants';
  */
 export const createState = names => {
     const playerState = {
-        stepType: null, //
-        color: '',      // цвет
+        stepType: null, // шаг/тип действия на клетке.
+        value: '',      // цвет.
     };
-    const arr = names.map((item, index) => [item, {...playerState, color: COLOR_LIST[index] }]);
+    const arr = names.map((item, index) => [item, {...playerState, value: COLOR_LIST[index] }]);
     const result = Object.fromEntries(arr);
 
     result.playersList = [...names];

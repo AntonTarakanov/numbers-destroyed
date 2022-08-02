@@ -4,7 +4,28 @@ import { getRenderTableByMatrix } from './map';
 
 export const getElementById = id => document.getElementById(id);
 
-export const createDiv = () => document.createElement('div');
+export const createEmptyDiv = () => document.createElement('div');
+
+/**
+ *
+ */
+export const createDiv = (className, text, child) => {
+    const element = document.createElement('div');
+
+    if (className) {
+        element.className = className;
+    }
+
+    if (text) {
+        element.textContent = text;
+    }
+
+    if (child) {
+        element.append(child);
+    }
+
+    return element;
+};
 
 const isCreated = id => !!getElementById(id);
 

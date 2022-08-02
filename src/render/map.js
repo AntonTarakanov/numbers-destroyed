@@ -1,5 +1,5 @@
-import { createDiv, getClassByColor } from './helper';
 import { CELL_CLASS_NAME } from './constants';
+import { getPowerTileRenderElement } from './powerTile';
 
 /**
  *
@@ -14,7 +14,7 @@ export const getRenderTableByMatrix = (matrix, onClickHandler) => {
 
         rowList.forEach(item => {
             const cellElement = document.createElement('td');
-            const content = tileRender(item);
+            const content = getPowerTileRenderElement(item);
 
             cellElement.appendChild(content);
             cellElement.addEventListener('click', onClickHandler);
@@ -30,32 +30,7 @@ export const getRenderTableByMatrix = (matrix, onClickHandler) => {
 }
 
 /**
- * @param {any} item
- */
-const tileRender = item => {
-    const content = createDiv();
-    let className = CELL_CLASS_NAME.COMMON;
-
-    if (item.className) {
-        className = `${className} ${item.className}`;
-        delete item.className;
-    }
-
-    if (item.color) {
-        const colorClass = getClassByColor(item.color);
-        className = `${className} ${colorClass}`;
-    }
-
-    if (item.powerValue) {
-        content.textContent = item.powerValue;
-    }
-
-    content.className = className;
-
-    return content;
-}
-
-/**
+ * TODO: всё нужно переделать.
  * Устанавливаем атрибуты для клетки.
  * @param {object} cellElement - DOM-элемент клетки таблицы.
  * @param {object} attribute - атрибуты.

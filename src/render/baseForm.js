@@ -1,12 +1,12 @@
-import { createDiv } from './helper';
+import { createEmptyDiv } from './helper';
 import { DOM_ID } from './constants';
 
 /**
  * Базовая пустая форма с картой, логированием, ID-элементов для дальнейшего добавления элементов.
  */
 const getBaseForm = () => {
-    const appElem = createDiv();
-    const map = createDiv();
+    const appElem = createEmptyDiv();
+    const map = createEmptyDiv();
 
     map.className = 'flex';
     map.id = DOM_ID.COMMON_MAP;

@@ -1,4 +1,4 @@
-import '/style.css';
+import './style.css';
 import { createBaseForm } from './render/baseForm';
 import { baseFormIsCreated, createFullMapByMatrix } from './render/helper';
 import { createDataTools } from './data/base';
