@@ -59,8 +59,8 @@ export const baseFormIsCreated = () => isCreated(DOM_ID.COMMON_MAP);
 /**
  * Создаёт карту и добавляет в DOM.
  */
-export const createFullMapByMatrix = (map, onClickHandler) => {
-    const table = getRenderTableByMatrix(map, onClickHandler);
+export const createFullMapByMatrix = (dataTools, onClickHandler) => {
+    const table = getRenderTableByMatrix(dataTools, onClickHandler);
     const root = getElementById(DOM_ID.COMMON_MAP);
 
     root.appendChild(table);

@@ -11,8 +11,10 @@ export const CELL_CLASS_NAME = {
 
 export const CONNECT_CLASS_NAME = {
     BASE: 'cell_connect',
+    EMPTY: 'cell_connect_empty',
     DIAGONAL_LEFT: 'cell_connect_diagonalLeft',
     DIAGONAL_RIGHT: 'cell_connect_diagonalRight',
+    LINE: 'cell_connect_line',
 }
 
 /* ID для взаимодействия с DOM. */

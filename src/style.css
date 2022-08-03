@@ -63,7 +63,7 @@ body {
 
 .cell_connect_diagonalLeft {
     border: none;
-    background-color: aqua;
+    background-color: #F8F8F0;
     color: aqua;
     height: 4px;
     width: 100%;
@@ -76,7 +76,7 @@ body {
 
 .cell_connect_diagonalRight {
     border: none;
-    background-color: aqua;
+    background-color: #F8F8F0;
     color: aqua;
     height: 4px;
     width: 100%;
@@ -85,6 +85,19 @@ body {
     -webkit-transform: rotate(7.5deg);
     -ms-transform: rotate(7.5deg);
     transform: rotate(45deg);
+}
+
+.cell_connect_line {
+    border: none;
+    background-color: #F8F8F0;
+    color: aqua;
+    height: 4px;
+    width: 100%;
+    -moz-transform: rotate(7.5deg);
+    -o-transform: rotate(7.5deg);
+    -webkit-transform: rotate(7.5deg);
+    -ms-transform: rotate(7.5deg);
+    transform: rotate(0deg);
 }
 
 /* COMMON: */

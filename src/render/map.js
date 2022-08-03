@@ -3,13 +3,13 @@ import { getPowerTileRenderElement } from './powerTile';
 
 /**
  *
- * @param {array} matrix - массив с массивами с инфой о клетке.
+ * @param {object} dataTools
  * @param {any} onClickHandler
  */
-export const getRenderTableByMatrix = (matrix, onClickHandler) => {
+export const getRenderTableByMatrix = (dataTools, onClickHandler) => {
     const tableElement = document.createElement('table');
 
-    matrix.forEach(rowList => {
+    dataTools.map.forEach(rowList => {
         const rowElement = document.createElement('tr');
 
         rowList.forEach(item => {
@@ -17,7 +17,7 @@ export const getRenderTableByMatrix = (matrix, onClickHandler) => {
             const content = getPowerTileRenderElement(item);
 
             cellElement.appendChild(content);
-            cellElement.addEventListener('click', onClickHandler);
+            cellElement.addEventListener('click', event => onClickHandler(event, dataTools));
             cellElement.className = CELL_CLASS_NAME.WRAP;
             setAttributeInCell(cellElement, item);
 

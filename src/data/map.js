@@ -48,9 +48,7 @@ const getEmptyMap = config => {
 
         /* Проставляем верхние связи слева. */
         if (result.length) {
-
-            // TODO: list ?
-            rowResult.forEach((item, index, list) => {
+            rowResult.forEach((item, index) => {
                 if (item.type === CELL_TYPE.WAITING) {
                     const previousRow = result[result.length - 1];
                     if (previousRow[index - 1]?.type === CELL_TYPE.WAITING) {

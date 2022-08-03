@@ -13,15 +13,22 @@ function createApp() {
         if (baseFormIsCreated()) {
             const dataTools = createDataTools();
 
-            createFullMapByMatrix(dataTools.map, onClickHandler);
+            // Брать значение из контекста или конфига.
+            dataTools.setActivePlayer(0);
+
+            createFullMapByMatrix(dataTools, onClickHandler);
         }
     } catch(error) {
         console.log(error);
     }
 }
 
-const onClickHandler = () => {
-    console.log('onClickHandler');
+/**
+ * Необходимо получить элемент по которому был совершён клик.
+ */
+const onClickHandler = (event, dataTools) => {
+    const whoseTurnKey = dataTools.getActivePlayer();
+    const whoseTurnItem = dataTools.getPlayerStateByName(whoseTurnKey);
 }
 
 createApp();

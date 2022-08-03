@@ -2,6 +2,8 @@ import { createEmptyDiv, getClassByColor, createDiv } from './helper';
 import { CELL_CLASS_NAME, CONNECT_CLASS_NAME } from './constants';
 import { CONNECT_TYPE } from '../constants';
 
+const getContentWrap = () => createDiv('cell_row flex justifySpaceBetween');
+
 /**
  *
  * @param {object} item - свойства color может быть пустым.
@@ -22,18 +24,22 @@ const getWrapElement = item => {
 
 /**
  * Рендер верхней части клетки.
+ * На данный момент есть возможность только прописывать верхнюю девую свзяь.
  * TODO: на данный момент middle - это лишний элемент. Можно убрать.
  * @param {array} connectList - список соединение строками.
  */
-const getTopElement = connectList => {
-    const element = createDiv('cell_row flex justifySpaceBetween');
+const getTopElement = ({ connectList }) => {
+    const element = getContentWrap();
+    const emptyClass = `${CONNECT_CLASS_NAME.BASE} ${CONNECT_CLASS_NAME.EMPTY}`;
 
-    const left = createDiv();
-    const middle = createDiv('cell_connect cell_connect_empty');
-    const right = createDiv('cell_connect cell_connect_empty');
+    const left = createDiv(CONNECT_CLASS_NAME.BASE);
+    const middle = createDiv(emptyClass);
+    const right = createDiv(emptyClass);
 
     if (connectList.includes(CONNECT_TYPE.LEFT_TOP)) {
-        left.className = `${CONNECT_CLASS_NAME.BASE} ${CONNECT_CLASS_NAME.DIAGONAL_LEFT}`;
+        left.className = `${left.className} ${CONNECT_CLASS_NAME.DIAGONAL_LEFT}`;
+    } else {
+        left.className = `${left.className} ${CONNECT_CLASS_NAME.EMPTY}`;
     }
 
     element.append(left, middle, right);
@@ -41,12 +47,20 @@ const getTopElement = connectList => {
     return element;
 }
 
-const getMiddleElement = powerValue => {
-    const element = createDiv('cell_row flex justifySpaceBetween');
+/**
+ * Могут в том числе проставляться горизонтальные связи.
+ */
+const getMiddleElement = ({ powerValue, connectList }) => {
+    const element = getContentWrap();
+    let contentClass = `${CONNECT_CLASS_NAME.BASE} ${CONNECT_CLASS_NAME.EMPTY}`;
 
-    const left = createDiv('cell_connect cell_connect_empty');
-    const middle = createDiv('cell_connect cell_connect_empty');
-    const right = createDiv('cell_connect cell_connect_empty');
+    if (connectList.includes(CONNECT_TYPE.LINE)) {
+        contentClass = `${contentClass} ${CONNECT_CLASS_NAME.LINE}`;
+    }
+
+    const left = createDiv(contentClass);
+    const middle = createDiv(contentClass);
+    const right = createDiv(contentClass);
 
     if (powerValue) {
         middle.textContent = powerValue;
@@ -57,15 +71,18 @@ const getMiddleElement = powerValue => {
     return element;
 }
 
-const getBottomElement = connectList => {
-    const element = createDiv('cell_row flex justifySpaceBetween');
+const getBottomElement = ({ connectList }) => {
+    const element = getContentWrap();
+    const emptyClass = `${CONNECT_CLASS_NAME.BASE} ${CONNECT_CLASS_NAME.EMPTY}`
 
-    const left = createDiv('cell_connect cell_connect_empty');
-    const middle = createDiv('cell_connect cell_connect_empty');
-    const right = createDiv();
+    const left = createDiv(emptyClass);
+    const middle = createDiv(emptyClass);
+    const right = createDiv(CONNECT_CLASS_NAME.BASE);
 
     if (connectList.includes(CONNECT_TYPE.RIGHT_BOTTOM)) {
-        right.className = `${CONNECT_CLASS_NAME.BASE} ${CONNECT_CLASS_NAME.DIAGONAL_RIGHT}`;
+        right.className = `${right.className} ${CONNECT_CLASS_NAME.DIAGONAL_RIGHT}`;
+    } else {
+        right.className = `${right.className} ${CONNECT_CLASS_NAME.EMPTY}`;
     }
 
     element.append(left, middle, right);
@@ -79,12 +96,9 @@ const getBottomElement = connectList => {
  */
 export const getPowerTileRenderElement = item => {
     const wrap = getWrapElement(item);
+    const methodList = [getTopElement,  getMiddleElement, getBottomElement];
 
-    const topElement = getTopElement(item.connectList);
-    const middleElement = getMiddleElement(item.powerValue);
-    const bottomElement = getBottomElement(item.connectList);
-
-    wrap.append(topElement, middleElement, bottomElement);
+    methodList.forEach(method => wrap.append(method(item)));
 
     return wrap;
 }
