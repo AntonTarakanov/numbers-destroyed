@@ -8,6 +8,9 @@ import { getPowerTileRenderElement } from './powerTile';
  */
 export const getRenderTableByMatrix = (dataTools, onClickHandler) => {
     const tableElement = document.createElement('table');
+    const handler = function(event) {
+        return onClickHandler(event, dataTools, this);
+    }
 
     dataTools.map.forEach(rowList => {
         const rowElement = document.createElement('tr');
@@ -17,7 +20,7 @@ export const getRenderTableByMatrix = (dataTools, onClickHandler) => {
             const content = getPowerTileRenderElement(item);
 
             cellElement.appendChild(content);
-            cellElement.addEventListener('click', event => onClickHandler(event, dataTools));
+            cellElement.addEventListener('click', handler);
             cellElement.className = CELL_CLASS_NAME.WRAP;
             setAttributeInCell(cellElement, item);
 
