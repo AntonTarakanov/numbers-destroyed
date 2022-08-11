@@ -12,6 +12,7 @@ export const getRenderTableByMatrix = (dataTools, onClickHandler) => {
         return onClickHandler(event, dataTools, this);
     }
 
+    // TODO: map - заменить из-за нативного свойства.
     dataTools.map.forEach(rowList => {
         const rowElement = document.createElement('tr');
 

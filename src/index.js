@@ -1,45 +1,57 @@
 import './style.css';
-import { createBaseForm } from './render/baseForm';
-import { baseFormIsCreated, createFullMapByMatrix } from './render/helper';
-import { createDataTools } from './data/base';
+import { RenderHelper } from './render';
+import { DataHelper } from './data';
 
 /**
  * Инициализация приложения.
+ * Классы только для текущего приложения. Далее можно вынести общие методы в небольшую библиотеку.
+ * Смысл метода в комбинированном взаимодействии двух классов через переданные в них handler.
+ * Возможно имеет смысл создать общий класс для этого взаимодействия.
  */
 function createApp() {
+    const renderHelperArg1 = { root: 'powerValue' };
+    const renderHelperArg2 = { cellClick: busDomHandler };
+
     try {
-        createBaseForm();
+        const AppData = new DataHelper(busDataHandler);
+        const AppRender = new RenderHelper(renderHelperArg1, renderHelperArg2);
 
-        if (baseFormIsCreated()) {
-            const dataTools = createDataTools();
+        const dataCreated = AppData.createApp();
+        const formCreated = AppRender.createApp();
 
-            // TODO: Брать значение из контекста или конфига.
-            dataTools.setActivePlayer(0);
-
-            createFullMapByMatrix(dataTools, onClickHandler);
+        if (formCreated && dataCreated) {
+            AppRender.createFullMapByMatrix(AppData, onClickHandler);
         }
     } catch(error) {
         console.log(error);
     }
 }
 
+function busDataHandler() {
+    console.log('busDataHandler');
+}
+
+function busDomHandler() {
+    console.log('busDomHandler');
+}
+
 /**
  * Необходимо получить элемент по которому был совершён клик.
  */
 const onClickHandler = (event, dataTools, clickElem) => {
-    const getterForAttribute = (attr, key) => {
-        const attrKey = 'key';
-    }
 
+    // TODO: Переписать вот это сложное на простое dataset.
     const entries = clickElem.getAttributeNames().map(item => [item, clickElem.getAttribute(item)]);
     const attributeObj = Object.fromEntries(entries);
     const whoseTurnKey = dataTools.getActivePlayer();
     const whoseTurnItem = dataTools.getPlayerStateByName(whoseTurnKey);
 
+    // Ожидание выбора своей клетки для совершения хода.
     if (whoseTurnItem.stepType === 'activeWaiting') {
         // могу кликнуть только по своей клетке
         // выделить свою клетку
         // подсветить возможные клетки после клика
+        // меняем stepType
     }
 
     if (whoseTurnItem.stepType === 'opponentWaiting') {
@@ -50,6 +62,12 @@ const onClickHandler = (event, dataTools, clickElem) => {
         // необходимо кликнуть по сопернику
         // подсветить возможные клетки соперника
         // выполнить перерасчёт
+        // меняем stepType
+    }
+    if (whoseTurnItem.stepType === 'setPower') {
+        // можно кликать только по своим клеткам
+        // есть ограничения по кол-ву кликов
+        // меняем stepType
     }
 }
 

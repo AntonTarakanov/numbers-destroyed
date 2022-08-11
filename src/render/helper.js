@@ -52,10 +52,6 @@ export const getClassByColor = color => {
     }
 }
 
-/* Функции для упрощения логики в базовом файле при операциях с DOM: */
-
-export const baseFormIsCreated = () => isCreated(DOM_ID.COMMON_MAP);
-
 /**
  * Создаёт карту и добавляет в DOM.
  */

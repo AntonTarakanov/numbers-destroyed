@@ -1,4 +1,5 @@
 import { DOM_ID } from './constants';
+import { getRenderTableByMatrix } from './map';
 
 /**
  *
@@ -26,14 +27,21 @@ export class RenderHelper {
     }
 
     createApp() {
-        return document.body.appendChild(this.getBaseForm());
+        return !!document.body.appendChild(this.getBaseForm());
     }
 
     getEmptyDiv() {
         return document.createElement('div');
     }
 
-    createFullMapByMatrix(data) {
+    getElementById(id) {
+        return document.getElementById(id);
+    }
 
+    createFullMapByMatrix(data) {
+        const table = getRenderTableByMatrix(data, this.handlers.cellClick);
+        const root = this.getElementById(DOM_ID.COMMON_MAP);
+
+        root.appendChild(table);
     }
 }

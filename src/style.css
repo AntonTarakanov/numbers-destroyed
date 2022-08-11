@@ -114,3 +114,8 @@ body {
 .justifyCenter {
     justify-content: center;
 }
+
+/* example */
+.additionalBorderForSelect {
+    border: 3px white solid;
+}

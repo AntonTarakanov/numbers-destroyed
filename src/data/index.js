@@ -1,15 +1,14 @@
-import { DEFAULT_CONFIG } from './constants';
+import { DEFAULT_CONFIG, CELL_TARGET_TYPE } from './constants';
 import { createState } from './state';
 import { createMap, setRandomElementsInMap } from './map';
+import { STEP_TYPE, CELL_TYPE } from '../constants';
 
 /**
  * Набор данных необходимый для работы приложения.
  */
 export class DataHelper {
-    constructor(domIds, handlers) {
-        this.domIds = domIds;
-        this.handlers = handlers;
-
+    constructor(handler) {
+        this.handler = handler;
         this.config = DEFAULT_CONFIG;
     }
 
@@ -20,9 +19,14 @@ export class DataHelper {
         const emptyMap = createMap(this.config, this.state);
         this.map = setRandomElementsInMap(emptyMap, this.state);
 
-        this.setStepType(this.getFirstTurnName(), 'setActivePlayer');
+        this.setFirstTurn();
+        this.setCellType(CELL_TARGET_TYPE.byPlayerName, 'player0', CELL_TYPE.WAITING_SELECT);
 
         return true;
+    }
+
+    setFirstTurn() {
+        this.setStepType(this.getFirstTurnName(), STEP_TYPE.GIVE_POWER);
     }
 
     /**
@@ -50,5 +54,23 @@ export class DataHelper {
 
     setStepType(name, value) {
         this.state[name].stepType = value;
+    }
+
+    /**
+     * Проставить stepType.
+     * @param {string} targetType - тип простановки. На все, по id, ещё какие-то выборки.
+     * @param {any} target
+     * @param {string} value
+     */
+    setCellType(targetType, target, value) {
+        if (CELL_TARGET_TYPE.byPlayerName === targetType) {
+            this.map.forEach(row => {
+                row.forEach(cell => {
+                    if (cell.playerName === target) {
+                        cell.type = value;
+                    }
+                });
+            });
+        }
     }
 }

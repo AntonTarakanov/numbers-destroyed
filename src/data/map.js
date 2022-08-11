@@ -84,9 +84,16 @@ export const setRandomElementsInMap = (map, state) => {
             if (waitingList.length) {
                 const currentRandom = getRandomNumber(waitingList.length - 1);
                 const currentPosition = waitingList[currentRandom];
+                const value = {
+                    powerValue: 2,
+                    color: {
+                        value: state[playerName].value,
+                    },
+                    playerName,
+                }
 
                 waitingList.splice(currentRandom, 1);
-                changeMap(map, currentPosition, { powerValue: 2, color: state[playerName] });
+                changeMap(map, currentPosition, value);
             }
         }
     });
@@ -107,4 +114,5 @@ const changeMap = (map, position, item) => {
     findItem.type = CELL_TYPE.READY;
     findItem.color = item.color;
     findItem.powerValue = item.powerValue;
+    findItem.playerName = item.playerName;
 }
