@@ -1,6 +1,6 @@
-import { DEFAULT_CONFIG, CELL_TARGET_TYPE } from './constants';
 import { createState } from './state';
 import { createMap, setRandomElementsInMap } from './map';
+import { DEFAULT_CONFIG, CELL_TARGET_TYPE } from './constants';
 import { STEP_TYPE, CELL_TYPE } from '../constants';
 
 /**
@@ -23,6 +23,10 @@ export class DataHelper {
         this.setCellType(CELL_TARGET_TYPE.byPlayerName, 'player0', CELL_TYPE.WAITING_SELECT);
 
         return true;
+    }
+
+    getStateByName(name) {
+        return this.state[name];
     }
 
     setFirstTurn() {

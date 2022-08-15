@@ -6,7 +6,7 @@ export const DEFAULT_CONFIG = {
         }
     },
     COUNT_PLAYER: 4,
-    FIRST_TURN_INDEX: 1,
+    FIRST_TURN_INDEX: 0,
 };
 
 export const CELL_TARGET_TYPE = {

@@ -9,7 +9,7 @@ import { getPowerTileRenderElement } from './powerTile';
 export const getRenderTableByMatrix = (dataTools, onClickHandler) => {
     const tableElement = document.createElement('table');
     const handler = function(event) {
-        return onClickHandler(event, dataTools, this);
+        return onClickHandler(event, this);
     }
 
     // TODO: map - заменить из-за нативного свойства.

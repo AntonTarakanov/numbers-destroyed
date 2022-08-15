@@ -1,6 +1,7 @@
 import './style.css';
 import { RenderHelper } from './render';
 import { DataHelper } from './data';
+import { STEP_TYPE } from './constants';
 
 /**
  * Инициализация приложения.
@@ -10,11 +11,17 @@ import { DataHelper } from './data';
  */
 function createApp() {
     const renderHelperArg1 = { root: 'powerValue' };
-    const renderHelperArg2 = { cellClick: busDomHandler };
 
     try {
-        const AppData = new DataHelper(busDataHandler);
-        const AppRender = new RenderHelper(renderHelperArg1, renderHelperArg2);
+        const proxyDataHandler = function() {
+            return busDataHandler(AppRender);
+        }
+        const proxyDomHandler = function(event, context) {
+            busDomHandler(event, context, AppData);
+        }
+
+        const AppData = new DataHelper(proxyDataHandler);
+        const AppRender = new RenderHelper(renderHelperArg1, proxyDomHandler);
 
         const dataCreated = AppData.createApp();
         const formCreated = AppRender.createApp();
@@ -31,23 +38,27 @@ function busDataHandler() {
     console.log('busDataHandler');
 }
 
-function busDomHandler() {
-    console.log('busDomHandler');
+/**
+ *
+ */
+function busDomHandler(event, dataTools, context) {
+    onClickHandler(event, dataTools, context);
 }
 
 /**
  * Необходимо получить элемент по которому был совершён клик.
  */
-const onClickHandler = (event, dataTools, clickElem) => {
-
-    // TODO: Переписать вот это сложное на простое dataset.
-    const entries = clickElem.getAttributeNames().map(item => [item, clickElem.getAttribute(item)]);
+const onClickHandler = (event, context, appData) => {
+    const entries = context.getAttributeNames().map(item => [item, context.getAttribute(item)]);
     const attributeObj = Object.fromEntries(entries);
-    const whoseTurnKey = dataTools.getActivePlayer();
-    const whoseTurnItem = dataTools.getPlayerStateByName(whoseTurnKey);
+    const attrDataset = context.dataset;
+
+    const whoseTurnItem = appData.getStateByName(attrDataset.playername);
 
     // Ожидание выбора своей клетки для совершения хода.
-    if (whoseTurnItem.stepType === 'activeWaiting') {
+    if (whoseTurnItem.stepType === STEP_TYPE.GIVE_POWER) {
+        // additionalBorderForSelect
+
         // могу кликнуть только по своей клетке
         // выделить свою клетку
         // подсветить возможные клетки после клика

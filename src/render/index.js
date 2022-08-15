@@ -5,9 +5,9 @@ import { getRenderTableByMatrix } from './map';
  *
  */
 export class RenderHelper {
-    constructor(domIds, handlers) {
+    constructor(domIds, handler) {
         this.DOM_IDS = domIds;
-        this.handlers = handlers;
+        this.handler = handler;
     }
 
     /**
@@ -39,7 +39,7 @@ export class RenderHelper {
     }
 
     createFullMapByMatrix(data) {
-        const table = getRenderTableByMatrix(data, this.handlers.cellClick);
+        const table = getRenderTableByMatrix(data, this.handler);
         const root = this.getElementById(DOM_ID.COMMON_MAP);
 
         root.appendChild(table);
