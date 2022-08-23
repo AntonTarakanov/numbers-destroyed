@@ -13,7 +13,7 @@ const getDefaultMapItem = (position = { x: 0, y: 0 }, type = CELL_TYPE.EMPTY) =>
         position: { ...position },
         type,
         connectList: [],
-        className: getClassByCellType(type)
+        className: getClassByCellType(type),
     };
 }
 
@@ -101,15 +101,17 @@ export const setRandomElementsInMap = (map, state) => {
     return map;
 }
 
+const findItemInMatrix = (matrix, position) => matrix[position.y].find(elem => elem.position.x === position.x);
+
 /**
  * Внести изменения в "карту". "Карта" + элемент для изменения (position и новое значение).
  * y - это вложенный массив. x - элементы вложенного массива.
- * @param {object} map
+ * @param {object} matrix
  * @param {object} position - x/y.
  * @param {object} item - powerValue, color.
  */
-const changeMap = (map, position, item) => {
-    const findItem = map[position.y].find(elem => elem.position.x === position.x);
+export const changeMap = (matrix, position, item) => {
+    const findItem = findItemInMatrix(matrix, position);
 
     findItem.type = CELL_TYPE.READY;
     findItem.color = item.color;

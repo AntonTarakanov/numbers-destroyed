@@ -44,7 +44,13 @@ body {
     width: 40px;*/
 }
 
-.cell_waiting { background: #F92672; }
+.cell_wrap:hover,
+.cell_waitingSelect {
+    -moz-box-shadow:0 0 10px #000;
+    -webkit-box-shadow:0 0 10px #000;
+    box-shadow:0 0 10px white;
+}
+
 .cell_green { background: #A6E22E!important; }
 .cell_red { background: darkred!important; }
 .cell_magenta { background: #F92672!important; }

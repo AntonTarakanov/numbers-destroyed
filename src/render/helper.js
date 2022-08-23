@@ -1,6 +1,5 @@
 import { CELL_TYPE } from '../constants';
-import { CELL_CLASS_NAME, COLOR, DOM_ID } from './constants';
-import { getRenderTableByMatrix } from './map';
+import { CELL_CLASS_NAME, COLOR } from './constants';
 
 export const getElementById = id => document.getElementById(id);
 
@@ -31,6 +30,7 @@ export const getClassByCellType = (type) => {
     switch (type) {
         case CELL_TYPE.EMPTY: return CELL_CLASS_NAME.EMPTY;
         case CELL_TYPE.WAITING: return CELL_CLASS_NAME.WAITING;
+        case CELL_TYPE.WAITING_SELECT: return CELL_CLASS_NAME.WAITING_SELECT;
         case CELL_TYPE.READY: return '';
         default: return CELL_CLASS_NAME.EMPTY;
     }

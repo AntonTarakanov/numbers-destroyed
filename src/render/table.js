@@ -1,29 +1,19 @@
-import { CELL_CLASS_NAME } from './constants';
 import { getPowerTileRenderElement } from './powerTile';
+import { CELL_CLASS_NAME } from './constants';
+import { CELL_TYPE } from '../constants';
+import { getClassByCellType } from './helper';
 
 /**
- *
- * @param {object} dataTools
- * @param {any} onClickHandler
+ * Создаём таблицу для приложения.
  */
-export const getRenderTableByMatrix = (dataTools, onClickHandler) => {
+export function buildTable(matrix) {
     const tableElement = document.createElement('table');
-    const handler = function(event) {
-        return onClickHandler(event, this);
-    }
 
-    // TODO: map - заменить из-за нативного свойства.
-    dataTools.map.forEach(rowList => {
+    matrix.forEach(rowList => {
         const rowElement = document.createElement('tr');
 
         rowList.forEach(item => {
-            const cellElement = document.createElement('td');
-            const content = getPowerTileRenderElement(item);
-
-            cellElement.appendChild(content);
-            cellElement.addEventListener('click', handler);
-            cellElement.className = CELL_CLASS_NAME.WRAP;
-            setAttributeInCell(cellElement, item);
+            const cellElement = buildTD.call(this, item);
 
             rowElement.appendChild(cellElement);
         });
@@ -33,8 +23,34 @@ export const getRenderTableByMatrix = (dataTools, onClickHandler) => {
     return tableElement;
 }
 
+export function buildTD(item) {
+    const onClickHandler = this.handler;
+    const tdHandler = function(event) {
+        return onClickHandler(event, this);
+    }
+    const cellElement = document.createElement('td');
+    const content = getPowerTileRenderElement(item);
+
+    cellElement.appendChild(content);
+    cellElement.addEventListener('click', tdHandler);
+    cellElement.className = getClassForTD(item);
+    setAttributeInCell(cellElement, item);
+
+    return cellElement;
+}
+
+const getClassForTD = item => {
+    const availableType = [CELL_TYPE.WAITING_SELECT];
+    let result = CELL_CLASS_NAME.WRAP;
+
+    if (availableType.includes(item.type)) {
+        result = `${result} ${getClassByCellType(item.type)}`;
+    }
+
+    return result;
+}
+
 /**
- * TODO: всё нужно переделать.
  * Устанавливаем атрибуты для клетки.
  * @param {object} cellElement - DOM-элемент клетки таблицы.
  * @param {object} attribute - атрибуты.

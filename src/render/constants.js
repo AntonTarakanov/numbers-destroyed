@@ -7,6 +7,7 @@ export const CELL_CLASS_NAME = {
     RED: 'cell_red',
     MAGENTA: 'cell_magenta',
     BLUE: 'cell_blue',
+    WAITING_SELECT: 'cell_waitingSelect',
 };
 
 export const CONNECT_CLASS_NAME = {

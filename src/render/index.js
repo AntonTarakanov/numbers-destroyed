@@ -1,5 +1,5 @@
 import { DOM_ID } from './constants';
-import { getRenderTableByMatrix } from './map';
+import { buildTable, buildTD } from './table';
 
 /**
  *
@@ -38,10 +38,29 @@ export class RenderHelper {
         return document.getElementById(id);
     }
 
-    createFullMapByMatrix(data) {
-        const table = getRenderTableByMatrix(data, this.handler);
-        const root = this.getElementById(DOM_ID.COMMON_MAP);
+    /**
+     * Создаёт элемент в DOM.
+     * Элемент является таблицей которая строится по переданной матрице.
+     */
+    createMap(matrix) {
+        if (matrix) {
+            const table = this.buildTable(matrix);
+            const root = this.getElementById(DOM_ID.COMMON_MAP);
 
-        root.appendChild(table);
+            root.appendChild(table);
+        } else {
+            console.log('Ошибка в переданной матрице.');
+        }
+    }
+
+    buildTable(matrix) {
+        return buildTable.call(this, matrix);
+    }
+
+    /**
+     * Найти элемент в tr и заменить.
+     */
+    rerenderTD(matrix, item) {
+        const elementTD = buildTD.call(this, item);
     }
 }

@@ -13,8 +13,8 @@ function createApp() {
     const renderHelperArg1 = { root: 'powerValue' };
 
     try {
-        const proxyDataHandler = function() {
-            return busDataHandler(AppRender);
+        const proxyDataHandler = function(position) {
+            return busDataHandler.call(AppData, AppRender, position);
         }
         const proxyDomHandler = function(event, context) {
             busDomHandler(event, context, AppData);
@@ -27,42 +27,47 @@ function createApp() {
         const formCreated = AppRender.createApp();
 
         if (formCreated && dataCreated) {
-            AppRender.createFullMapByMatrix(AppData, onClickHandler);
+            AppRender.createMap(AppData.matrix, onClickHandler);
         }
     } catch(error) {
         console.log(error);
     }
 }
 
-function busDataHandler() {
-    console.log('busDataHandler');
+function busDataHandler(AppRender, position) {
+    const item = this.findItemByPosition(position);
+
+    AppRender.rerenderTD(this.matrix, item);
 }
 
 /**
  *
  */
-function busDomHandler(event, dataTools, context) {
-    onClickHandler(event, dataTools, context);
+function busDomHandler(event, context, appData) {
+    onClickHandler(event, context, appData);
 }
 
 /**
  * Необходимо получить элемент по которому был совершён клик.
  */
 const onClickHandler = (event, context, appData) => {
-    const entries = context.getAttributeNames().map(item => [item, context.getAttribute(item)]);
-    const attributeObj = Object.fromEntries(entries);
+    // const entries = context.getAttributeNames().map(item => [item, context.getAttribute(item)]);
+    // const attributeObj = Object.fromEntries(entries);
     const attrDataset = context.dataset;
 
-    const whoseTurnItem = appData.getStateByName(attrDataset.playername);
+    const playerName = attrDataset.playername;
+    const position = { x: Number(attrDataset.positionX), y: Number(attrDataset.positionY) };
+    const whoseTurnItem = appData.getStateByName(playerName);
 
     // Ожидание выбора своей клетки для совершения хода.
     if (whoseTurnItem.stepType === STEP_TYPE.GIVE_POWER) {
-        // additionalBorderForSelect
-
         // могу кликнуть только по своей клетке
         // выделить свою клетку
         // подсветить возможные клетки после клика
         // меняем stepType
+
+        // Пишем в клетку в matrix -> меняем state -> проверки и смена статусов.
+        appData.doGivePower(position, playerName);
     }
 
     if (whoseTurnItem.stepType === 'opponentWaiting') {
