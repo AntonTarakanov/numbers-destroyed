@@ -1,5 +1,6 @@
 import { DOM_ID } from './constants';
 import { buildTable, buildTD } from './table';
+import { buildLog } from './logTile';
 
 /**
  *
@@ -11,23 +12,37 @@ export class RenderHelper {
     }
 
     /**
-     * Базовая пустая форма с картой, логированием, ID-элементов для дальнейшего добавления элементов.
+     * Базовая пустая форма с картой, логированием, ID-элементов для дальнейшего наполнения узлов.
      */
     getBaseForm() {
-        const appElem = this.getEmptyDiv();
-        const map = this.getEmptyDiv();
+        const appNode = this.getEmptyDiv();
+        const matrixNode = this.getEmptyDiv();
+        const logNode = this.getEmptyDiv();
 
-        map.className = 'flex';
-        map.id = DOM_ID.COMMON_MAP;
-        appElem.id = this.DOM_IDS.root;
-        appElem.className = 'application flex';
-        appElem.appendChild(map);
+        logNode.id = DOM_ID.LOG_BLOCK;
 
-        return appElem;
+        matrixNode.className = 'flex';
+        matrixNode.id = DOM_ID.COMMON_MAP;
+
+        appNode.id = this.DOM_IDS.root;
+        appNode.className = 'application flex';
+        appNode.append(matrixNode, logNode);
+
+        return appNode;
     }
 
     createApp() {
         return !!document.body.appendChild(this.getBaseForm());
+    }
+
+    /**
+     * Не хватило фантазии на более интересное название.
+     */
+    createLog(state) {
+        const rootNode = this.getElementById(DOM_ID.LOG_BLOCK);
+        const logNode = buildLog.call(this, state);
+
+        rootNode.append(logNode);
     }
 
     getEmptyDiv() {
@@ -61,6 +76,20 @@ export class RenderHelper {
      * Найти элемент в tr и заменить.
      */
     rerenderTD(matrix, item) {
-        const elementTD = buildTD.call(this, item);
+        const tdNode = buildTD.call(this, item);
+
+        const commonMap = this.getElementById(DOM_ID.COMMON_MAP);
+        const trNode = commonMap.getElementsByTagName('tr')[item.position.y];
+        const oldTd = trNode.getElementsByTagName('td')[item.position.x];
+
+        trNode.replaceChild(tdNode, oldTd);
+    }
+
+    // TODO: доработать. На данный момент только для тестирования.
+    rerenderLog(state) {
+        const rootNode = this.getElementById(DOM_ID.LOG_BLOCK);
+        const logNode = buildLog.call(this, state);
+
+        rootNode.replaceChild(logNode, rootNode.firstChild);
     }
 }

@@ -1,8 +1,6 @@
 import { CELL_TYPE } from '../constants';
 import { CELL_CLASS_NAME, COLOR } from './constants';
 
-export const getElementById = id => document.getElementById(id);
-
 export const createEmptyDiv = () => document.createElement('div');
 
 /**

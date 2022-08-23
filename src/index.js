@@ -28,6 +28,7 @@ function createApp() {
 
         if (formCreated && dataCreated) {
             AppRender.createMap(AppData.matrix, onClickHandler);
+            AppRender.createLog(AppData.state);
         }
     } catch(error) {
         console.log(error);
@@ -38,6 +39,7 @@ function busDataHandler(AppRender, position) {
     const item = this.findItemByPosition(position);
 
     AppRender.rerenderTD(this.matrix, item);
+    AppRender.rerenderLog(this.state);
 }
 
 /**
@@ -48,7 +50,9 @@ function busDomHandler(event, context, appData) {
 }
 
 /**
- * Необходимо получить элемент по которому был совершён клик.
+ * @param {event} event
+ * @param {object} context
+ * @param {DataHelper} appData
  */
 const onClickHandler = (event, context, appData) => {
     // const entries = context.getAttributeNames().map(item => [item, context.getAttribute(item)]);
@@ -72,6 +76,7 @@ const onClickHandler = (event, context, appData) => {
 
     if (whoseTurnItem.stepType === 'opponentWaiting') {
         // ничего не могу
+        console.log('Дождитесь хода соперника.');
     }
 
     if (whoseTurnItem.stepType === 'selectOpponent') {

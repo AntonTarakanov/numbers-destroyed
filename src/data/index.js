@@ -32,7 +32,6 @@ export class DataHelper {
         const name = this.getFirstTurnName();
 
         this.setStepType(name, STEP_TYPE.GIVE_POWER);
-        this.setCellType(CELL_TARGET_TYPE.byPlayerName, name, CELL_TYPE.WAITING_SELECT);
         this.calcAvailablePower();
     }
 
@@ -61,6 +60,19 @@ export class DataHelper {
 
     setStepType(name, value) {
         this.state[name].stepType = value;
+        this.state.playersList.forEach(otherName => {
+            if (otherName !== name) {
+                this.state[otherName].stepType = STEP_TYPE.WAITING;
+            }
+        });
+
+        this.state.currentStepType = value;
+        this.state.currentTurn = name;
+
+        // Подсвечиваем клетки в которые можно раздать power.
+        if (value === STEP_TYPE.GIVE_POWER) {
+            this.setCellType(CELL_TARGET_TYPE.byPlayerName, name, CELL_TYPE.WAITING_SELECT);
+        }
     }
 
     getAvailablePower(name) {

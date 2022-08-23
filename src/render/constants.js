@@ -31,3 +31,7 @@ export const COLOR = {
     BLUE: 'blue',
     DEFAULT: '',
 };
+
+export const LOG_CLASS = {
+    WRAP: 'log_wrap',
+}

@@ -9,8 +9,9 @@ import { getClassByCellType } from './helper';
 export function buildTable(matrix) {
     const tableElement = document.createElement('table');
 
-    matrix.forEach(rowList => {
+    matrix.forEach((rowList, index) => {
         const rowElement = document.createElement('tr');
+        rowElement.setAttribute('data-order', index);
 
         rowList.forEach(item => {
             const cellElement = buildTD.call(this, item);

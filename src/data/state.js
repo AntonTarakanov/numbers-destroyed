@@ -14,6 +14,8 @@ export const createState = names => {
     const result = Object.fromEntries(arr);
 
     result.playersList = [...names];
+    result.currentTurn = null;
+    result.currentStepType = null;
 
     return result;
 };

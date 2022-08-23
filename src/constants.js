@@ -20,4 +20,5 @@ export const COLOR_LIST = ['red', 'magenta', 'green', 'blue'];
 //
 export const STEP_TYPE = {
     GIVE_POWER: 'givePower',
+    WAITING: 'waiting',
 }
