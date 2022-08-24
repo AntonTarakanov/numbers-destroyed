@@ -6,11 +6,15 @@ export const createEmptyDiv = () => document.createElement('div');
 /**
  *
  */
-export const createDiv = (className, text, child) => {
-    const element = document.createElement('div');
+export const createDiv = (className, text, id, child) => {
+    const element = createEmptyDiv();
 
     if (className) {
         element.className = className;
+    }
+
+    if (id) {
+        element.id = id;
     }
 
     if (text) {

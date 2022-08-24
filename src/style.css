@@ -7,6 +7,7 @@
 /* #F92672 - monokai розовй */
 /* #A6E22E - monokai зелёный */
 /* #F8F8F0 - monokai белый */
+/* #00CC99 - приятный зелёный */
 
 body {
     background: #18191D;
@@ -14,6 +15,18 @@ body {
 
 .application {
     justify-content: center;
+}
+
+.header {
+    height: 70px;
+    display: flex;
+    justify-content: space-between;
+    color: #F8F8F0;
+}
+
+.header_img {
+    height: 50px;
+    margin: 10px;
 }
 
 .cell {
@@ -106,7 +119,8 @@ body {
     transform: rotate(0deg);
 }
 
-/* LOG: */
+/* LOG START: */
+
 .log_wrap {
     margin: 10px;
     height: 200px;
@@ -116,7 +130,17 @@ body {
     padding: 10px;
 }
 
-/* COMMON: */
+.log_button {
+    margin: 10px;
+    height: 20px;
+    width: 160px;
+    background: #18191D;
+    padding: 10px;
+}
+
+/* LOG END. */
+
+/* COMMON START: */
 
 .flex {
     display: flex;
@@ -131,7 +155,4 @@ body {
     justify-content: center;
 }
 
-/* example */
-.additionalBorderForSelect {
-    border: 3px white solid;
-}
+/* COMMON END. */

@@ -1,9 +1,16 @@
 import { LOG_CLASS } from './constants';
+import { HANDLER_TYPE } from '../constants';
 
 export function buildLog(state) {
-    const logNode = this.getEmptyDiv();
+    const onClickHandler = this.handler;
+    const buttonHandler = function(event) {
+        return onClickHandler(event, this, HANDLER_TYPE.TURN_BUTTON_CLICK);
+    }
 
-    logNode.className = LOG_CLASS.WRAP;
+    const logNode = this.getDiv(LOG_CLASS.WRAP);
+    const buttonNode = this.getDiv('log_button', 'Завершить ход');
+
+    buttonNode.addEventListener('click', buttonHandler);
 
     // Информация по каждму игроку.
     state.playersList.forEach(name => {
@@ -15,13 +22,10 @@ export function buildLog(state) {
     });
 
     // Статус игры, чей ход
-    const turnNode = this.getEmptyDiv();
-    const stepNode = this.getEmptyDiv();
+    const turnNode = this.getDiv(null, `turn - ${state.currentTurn}`);
+    const stepNode = this.getDiv(null, `step - ${state.currentStepType}`);
 
-    turnNode.textContent = `turn - ${state.currentTurn}`;
-    stepNode.textContent = `step - ${state.currentStepType}`;
-
-    logNode.append(turnNode, stepNode);
+    logNode.append(turnNode, stepNode, buttonNode);
 
     return logNode;
 }

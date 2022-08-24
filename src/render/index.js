@@ -1,6 +1,8 @@
 import { DOM_ID } from './constants';
 import { buildTable, buildTD } from './table';
 import { buildLog } from './logTile';
+import { createDiv } from './helper';
+import { buildHeader } from './header';
 
 /**
  *
@@ -15,24 +17,25 @@ export class RenderHelper {
      * Базовая пустая форма с картой, логированием, ID-элементов для дальнейшего наполнения узлов.
      */
     getBaseForm() {
-        const appNode = this.getEmptyDiv();
-        const matrixNode = this.getEmptyDiv();
-        const logNode = this.getEmptyDiv();
+        const appNode = this.getDiv('application', null, this.DOM_IDS.root);
+        const contentNode = this.getDiv('flex justifyCenter');
+        const matrixNode = this.getDiv('flex', null, DOM_ID.COMMON_MAP);
+        const logNode = this.getDiv(null, null, DOM_ID.LOG_BLOCK);
+        const headerNode = this.createHeader();
 
-        logNode.id = DOM_ID.LOG_BLOCK;
-
-        matrixNode.className = 'flex';
-        matrixNode.id = DOM_ID.COMMON_MAP;
-
-        appNode.id = this.DOM_IDS.root;
-        appNode.className = 'application flex';
-        appNode.append(matrixNode, logNode);
+        contentNode.append(matrixNode, logNode);
+        appNode.append(headerNode, contentNode);
 
         return appNode;
     }
 
-    createApp() {
-        return !!document.body.appendChild(this.getBaseForm());
+    createApp(matrix, onClickHandler, state) {
+        const formReady = !!document.body.appendChild(this.getBaseForm());
+
+        if (formReady) {
+            this.createMap(matrix, onClickHandler);
+            this.createLog(state);
+        }
     }
 
     /**
@@ -45,8 +48,16 @@ export class RenderHelper {
         rootNode.append(logNode);
     }
 
+    createHeader() {
+        return buildHeader();
+    }
+
     getEmptyDiv() {
         return document.createElement('div');
+    }
+
+    getDiv(className, text, id, child) {
+        return createDiv(className, text, id, child);
     }
 
     getElementById(id) {

@@ -22,3 +22,9 @@ export const STEP_TYPE = {
     GIVE_POWER: 'givePower',
     WAITING: 'waiting',
 }
+
+//
+export const HANDLER_TYPE = {
+    TURN_BUTTON_CLICK: 'turnButtonClick',
+    TILE_CLICK: 'tileClick',
+}

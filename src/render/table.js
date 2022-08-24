@@ -1,6 +1,6 @@
 import { getPowerTileRenderElement } from './powerTile';
 import { CELL_CLASS_NAME } from './constants';
-import { CELL_TYPE } from '../constants';
+import { CELL_TYPE, HANDLER_TYPE } from '../constants';
 import { getClassByCellType } from './helper';
 
 /**
@@ -27,7 +27,7 @@ export function buildTable(matrix) {
 export function buildTD(item) {
     const onClickHandler = this.handler;
     const tdHandler = function(event) {
-        return onClickHandler(event, this);
+        return onClickHandler(event, this, HANDLER_TYPE.TILE_CLICK);
     }
     const cellElement = document.createElement('td');
     const content = getPowerTileRenderElement(item);

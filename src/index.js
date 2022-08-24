@@ -1,7 +1,7 @@
 import './style.css';
 import { RenderHelper } from './render';
 import { DataHelper } from './data';
-import { STEP_TYPE } from './constants';
+import { STEP_TYPE, HANDLER_TYPE } from './constants';
 
 /**
  * Инициализация приложения.
@@ -16,20 +16,15 @@ function createApp() {
         const proxyDataHandler = function(position) {
             return busDataHandler.call(AppData, AppRender, position);
         }
-        const proxyDomHandler = function(event, context) {
-            busDomHandler(event, context, AppData);
+        const proxyDomHandler = function(event, context, type) {
+            busDomHandler(event, context, AppData, type);
         }
 
         const AppData = new DataHelper(proxyDataHandler);
         const AppRender = new RenderHelper(renderHelperArg1, proxyDomHandler);
 
-        const dataCreated = AppData.createApp();
-        const formCreated = AppRender.createApp();
-
-        if (formCreated && dataCreated) {
-            AppRender.createMap(AppData.matrix, onClickHandler);
-            AppRender.createLog(AppData.state);
-        }
+        AppData.createApp();
+        AppRender.createApp(AppData.matrix, onClickHandler, AppData.state);
     } catch(error) {
         console.log(error);
     }
@@ -45,8 +40,14 @@ function busDataHandler(AppRender, position) {
 /**
  *
  */
-function busDomHandler(event, context, appData) {
-    onClickHandler(event, context, appData);
+function busDomHandler(event, context, appData, type) {
+    if (type === HANDLER_TYPE.TILE_CLICK) {
+        onClickHandler(event, context, appData);
+    }
+
+    if (type === HANDLER_TYPE.TURN_BUTTON_CLICK) {
+        console.log('buttonClick');
+    }
 }
 
 /**
@@ -55,22 +56,14 @@ function busDomHandler(event, context, appData) {
  * @param {DataHelper} appData
  */
 const onClickHandler = (event, context, appData) => {
-    // const entries = context.getAttributeNames().map(item => [item, context.getAttribute(item)]);
-    // const attributeObj = Object.fromEntries(entries);
     const attrDataset = context.dataset;
 
     const playerName = attrDataset.playername;
     const position = { x: Number(attrDataset.positionX), y: Number(attrDataset.positionY) };
     const whoseTurnItem = appData.getStateByName(playerName);
 
-    // Ожидание выбора своей клетки для совершения хода.
+    // Ожидание выбора своих клеток для раздачи power.
     if (whoseTurnItem.stepType === STEP_TYPE.GIVE_POWER) {
-        // могу кликнуть только по своей клетке
-        // выделить свою клетку
-        // подсветить возможные клетки после клика
-        // меняем stepType
-
-        // Пишем в клетку в matrix -> меняем state -> проверки и смена статусов.
         appData.doGivePower(position, playerName);
     }
 

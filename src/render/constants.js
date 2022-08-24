@@ -21,7 +21,8 @@ export const CONNECT_CLASS_NAME = {
 /* ID для взаимодействия с DOM. */
 export const DOM_ID = {
     COMMON_MAP: 'commonMap',
-    LOG_BLOCK: 'logBlock'
+    LOG_BLOCK: 'logBlock',
+    HEADER: 'header',
 };
 
 export const COLOR = {
