@@ -33,6 +33,7 @@ export const getClassByCellType = (type) => {
         case CELL_TYPE.EMPTY: return CELL_CLASS_NAME.EMPTY;
         case CELL_TYPE.WAITING: return CELL_CLASS_NAME.WAITING;
         case CELL_TYPE.WAITING_SELECT: return CELL_CLASS_NAME.WAITING_SELECT;
+        case CELL_TYPE.SELECTED: return CELL_CLASS_NAME.SELECTED;
         case CELL_TYPE.READY: return '';
         default: return CELL_CLASS_NAME.EMPTY;
     }

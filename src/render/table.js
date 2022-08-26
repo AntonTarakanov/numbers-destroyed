@@ -41,11 +41,11 @@ export function buildTD(item) {
 }
 
 const getClassForTD = item => {
-    const availableType = [CELL_TYPE.WAITING_SELECT];
     let result = CELL_CLASS_NAME.WRAP;
+    const byCellType = getClassByCellType(item.type);
 
-    if (availableType.includes(item.type)) {
-        result = `${result} ${getClassByCellType(item.type)}`;
+    if (byCellType) {
+        result = `${result} ${byCellType}`;
     }
 
     return result;

@@ -29,11 +29,11 @@ export class RenderHelper {
         return appNode;
     }
 
-    createApp(matrix, onClickHandler, state) {
+    createApp(matrix, state) {
         const formReady = !!document.body.appendChild(this.getBaseForm());
 
         if (formReady) {
-            this.createMap(matrix, onClickHandler);
+            this.createMap(matrix);
             this.createLog(state);
         }
     }

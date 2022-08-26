@@ -1,7 +1,9 @@
 import './style.css';
 import { RenderHelper } from './render';
-import { DataHelper } from './data';
-import { STEP_TYPE, HANDLER_TYPE } from './constants';
+import { PowerDataHelper } from './data';
+import { HANDLER_TYPE } from './constants';
+import { tileClickHandler } from './power/powerTurn';
+import { POWER_CONFIG } from './data/constants';
 
 /**
  * Инициализация приложения.
@@ -20,11 +22,11 @@ function createApp() {
             busDomHandler(event, context, AppData, type);
         }
 
-        const AppData = new DataHelper(proxyDataHandler);
+        const AppData = new PowerDataHelper(proxyDataHandler, POWER_CONFIG);
         const AppRender = new RenderHelper(renderHelperArg1, proxyDomHandler);
 
         AppData.createApp();
-        AppRender.createApp(AppData.matrix, onClickHandler, AppData.state);
+        AppRender.createApp(AppData.matrix, AppData.state);
     } catch(error) {
         console.log(error);
     }
@@ -37,51 +39,13 @@ function busDataHandler(AppRender, position) {
     AppRender.rerenderLog(this.state);
 }
 
-/**
- *
- */
 function busDomHandler(event, context, appData, type) {
     if (type === HANDLER_TYPE.TILE_CLICK) {
-        onClickHandler(event, context, appData);
+        tileClickHandler(event, context, appData);
     }
 
     if (type === HANDLER_TYPE.TURN_BUTTON_CLICK) {
         console.log('buttonClick');
-    }
-}
-
-/**
- * @param {event} event
- * @param {object} context
- * @param {DataHelper} appData
- */
-const onClickHandler = (event, context, appData) => {
-    const attrDataset = context.dataset;
-
-    const playerName = attrDataset.playername;
-    const position = { x: Number(attrDataset.positionX), y: Number(attrDataset.positionY) };
-    const whoseTurnItem = appData.getStateByName(playerName);
-
-    // Ожидание выбора своих клеток для раздачи power.
-    if (whoseTurnItem.stepType === STEP_TYPE.GIVE_POWER) {
-        appData.doGivePower(position, playerName);
-    }
-
-    if (whoseTurnItem.stepType === 'opponentWaiting') {
-        // ничего не могу
-        console.log('Дождитесь хода соперника.');
-    }
-
-    if (whoseTurnItem.stepType === 'selectOpponent') {
-        // необходимо кликнуть по сопернику
-        // подсветить возможные клетки соперника
-        // выполнить перерасчёт
-        // меняем stepType
-    }
-    if (whoseTurnItem.stepType === 'setPower') {
-        // можно кликать только по своим клеткам
-        // есть ограничения по кол-ву кликов
-        // меняем stepType
     }
 }
 

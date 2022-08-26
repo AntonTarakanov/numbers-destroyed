@@ -8,6 +8,7 @@ export const CELL_CLASS_NAME = {
     MAGENTA: 'cell_magenta',
     BLUE: 'cell_blue',
     WAITING_SELECT: 'cell_waitingSelect',
+    SELECTED: 'cell_selected',
 };
 
 export const CONNECT_CLASS_NAME = {

@@ -1,4 +1,4 @@
-export const DEFAULT_CONFIG = {
+export const POWER_CONFIG = {
     MAP: {
         SIZE: {
             x: 11,
@@ -7,6 +7,7 @@ export const DEFAULT_CONFIG = {
     },
     COUNT_PLAYER: 4,
     FIRST_TURN_INDEX: 0,
+    MAX_POWER_VALUE: 8,
 };
 
 export const CELL_TARGET_TYPE = {

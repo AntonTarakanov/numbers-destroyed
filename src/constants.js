@@ -1,10 +1,11 @@
-//
+// Возможные варианты состояния клетки
 export const CELL_TYPE = {
-    EMPTY: null,
-    WAITING: 'waiting',
-    READY: 'ready',
-    CONNECT_LINE: 'connectLine', // удалить.
-    WAITING_SELECT: 'waitingSelect',
+    EMPTY: null,                        //
+    WAITING: 'waiting',                 //
+    READY: 'ready',                     //
+    CONNECT_LINE: 'connectLine',        // удалить.
+    WAITING_SELECT: 'waitingSelect',    // ожидание выбора, подсветка.
+    SELECTED: 'selected',               // выбранная/активная прилтка
 };
 
 //
@@ -17,10 +18,12 @@ export const CONNECT_TYPE = {
 //
 export const COLOR_LIST = ['red', 'magenta', 'green', 'blue'];
 
-//
+// Возможные варианты состояния хода.
 export const STEP_TYPE = {
-    GIVE_POWER: 'givePower',
-    WAITING: 'waiting',
+    GIVE_POWER: 'givePower',                // раздать power по завершению хода.
+    CHOOSE_FOR_ATTACK: 'chooseForAttack',   // выбор своей клетки для атаки.
+    ATTACK: 'attack',                       // выбор клетки оппонента для атаки.
+    WAITING: 'waiting',                     // ожидание оппонента.
 }
 
 //
