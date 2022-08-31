@@ -2,7 +2,7 @@ import { CELL_TARGET_TYPE, STATE_FIELDS } from './constants';
 import { STEP_TYPE, CELL_TYPE } from '../constants';
 import { DataHelper } from '../library/DataHelper';
 import { getEmptyMatrix, getOpponentLinkedTile, setRandomElementsInMap } from './matrix';
-import { createState } from './state';
+import { createState } from './State';
 import { MATRIX_FIELDS } from './Tile';
 
 
@@ -125,6 +125,22 @@ export class PowerDataHelper extends DataHelper {
         linkedList.forEach(({ position }) => {
             this.setCellType(CELL_TARGET_TYPE.byPosition, position, CELL_TYPE.WAITING_SELECT, true);
         });
+
+        return linkedList;
+    }
+
+    resetHighlight() {
+        const highlightList = [CELL_TYPE.WAITING_SELECT, CELL_TYPE.SELECTED];
+
+        this.changeParamByParam(MATRIX_FIELDS.TYPE, highlightList, CELL_TYPE.READY, true);
+    }
+
+    getAvailablePosition() {
+        return this.getStateProperty('availablePosition');
+    }
+
+    setAvailablePosition(positionList) {
+        this.setState('availablePosition', positionList);
     }
 
     /**
@@ -136,8 +152,20 @@ export class PowerDataHelper extends DataHelper {
     doSelectForAttack(position, useRerender = false) {
         this.resetWaitingSelect();
         this.highlightActiveTile(position);
-        this.highlightOpponent(position);
+        const opponentList = this.highlightOpponent(position);
+        const opponentPositionList = opponentList.map(item => item.position);
         this.setCurrentStepType(STEP_TYPE.ATTACK);
+        this.setAvailablePosition(opponentPositionList);
+    }
+
+    /**
+     * Отмена "doSelectForAttack", можно заново выбрать клетку для атаки.
+     */
+    doResetSelectForAttack() {
+        const name = this.getStateProperty('currentTurn');
+
+        this.setStepType(name, STEP_TYPE.CHOOSE_FOR_ATTACK);
+        this.resetHighlight();
     }
 
     /**

@@ -1,4 +1,5 @@
 import { STEP_TYPE } from '../constants';
+import { getPositionObject, someEqualPosition } from './utils';
 
 /**
  * Логика игры.
@@ -19,7 +20,7 @@ export const tileClickHandler = (event, context, appData) => {
     const currentTurnState = appData.getStateProperty('currentTurn');
 
     const tilePlayerName = attrDataset.playername;
-    const pressedPosition = { x: Number(attrDataset.positionX), y: Number(attrDataset.positionY) };
+    const pressedPosition = getPositionObject(attrDataset.positionX, attrDataset.positionY);
 
     // Ожидание выбора своей клетки для дальнейшей атаки.
     if (currentStepTypeState === STEP_TYPE.CHOOSE_FOR_ATTACK) {
@@ -34,7 +35,16 @@ export const tileClickHandler = (event, context, appData) => {
 
     // Ожидание клика по плитке оппонента для совершения атаки.
     if (currentStepTypeState === STEP_TYPE.ATTACK) {
+        const availableList = appData.getAvailablePosition();
 
+        // Выполнить атаку / сбросить ход.
+        if (someEqualPosition(availableList, pressedPosition)) {
+            console.log('someEqualPosition');
+        } else {
+            appData.doResetSelectForAttack();
+        }
+
+        // pressedPosition
         // Могу кликнуть только по сопернику.
         // Могу кликнуть только по соседнему сопернику.
 
@@ -45,12 +55,12 @@ export const tileClickHandler = (event, context, appData) => {
     }
 
     // Ожидание выбора своих клеток для раздачи power.
-    if (whoseTurnItem.stepType === STEP_TYPE.GIVE_POWER) {
+    /*if (whoseTurnItem.stepType === STEP_TYPE.GIVE_POWER) {
         // appData.doGivePower(pressedPosition, playerName);
-    }
+    }*/
 
     // Ожидание пока сходит соперник.
-    if (whoseTurnItem.stepType === 'opponentWaiting') {
+    /*if (whoseTurnItem.stepType === 'opponentWaiting') {
         console.log('Дождитесь хода соперника.');
-    }
+    }*/
 }

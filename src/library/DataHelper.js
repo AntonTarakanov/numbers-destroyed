@@ -51,11 +51,24 @@ export class DataHelper {
 
     /**
      * Меняем одно переданное значение на другое
+     *
+     * @param {string} property
+     * @param {any|array} oldValue
+     * @param {any} newValue
+     * @param {boolean} useRerender
      */
     changeParamByParam(property, oldValue, newValue, useRerender = false) {
         this.matrix.forEach(row => {
             row.forEach(item => {
-                if (item[property] === oldValue) {
+                let isEqual;
+
+                if (Array.isArray(oldValue)) {
+                    isEqual = oldValue.some(oldValueItem => oldValueItem === item[property]);
+                } else {
+                    isEqual = item[property] === oldValue;
+                }
+
+                if (isEqual) {
                     item[property] = newValue;
 
                     if (useRerender) {
