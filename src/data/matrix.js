@@ -1,27 +1,13 @@
 import { CELL_TYPE, CONNECT_TYPE } from '../constants';
-import { getClassByCellType } from '../render/helper';
 import { getRandomNumber } from '../utils';
-
-/**
- *
- */
-export const createMap = config => getEmptyMap(config);
-
-const getDefaultMapItem = (position = { x: 0, y: 0 }, type = CELL_TYPE.EMPTY) => {
-    return {
-        powerValue: null,
-        position: { ...position },
-        type,
-        connectList: [],
-        className: getClassByCellType(type),
-    };
-}
+import { Tile } from './Tile';
+import { MATRIX_TYPES } from './constants';
 
 /**
  * Пустая карта для игры.
  * @param {any} config
  */
-const getEmptyMap = config => {
+export const getEmptyMatrix = config => {
     const result = [];
 
     for (let i = 0; i < config.MAP.SIZE.y; i++) {
@@ -30,11 +16,11 @@ const getEmptyMap = config => {
             const type = i % 2 === 0
                 ? j % 2 === 0 ? CELL_TYPE.WAITING : CELL_TYPE.EMPTY
                 : j % 2 === 0 ? CELL_TYPE.EMPTY : CELL_TYPE.WAITING;
-            rowResult.push(getDefaultMapItem({ x: j, y: i }, type));
+            rowResult.push(new Tile({ x: j, y: i }, type));
         }
 
         /* Проставляем горизонтальные связи. Идея в том, чтобы в массив записать типы границ. */
-        rowResult.forEach((item, index, list) => {
+        /*rowResult.forEach((item, index, list) => {
             if (!item.type) {
                 const type = list[index - 1]?.type === CELL_TYPE.WAITING && list[index + 1]?.type === CELL_TYPE.WAITING
                     ? CONNECT_TYPE.LINE
@@ -44,7 +30,7 @@ const getEmptyMap = config => {
                     item.connectList.push(type);
                 }
             }
-        });
+        });*/
 
         /* Проставляем верхние связи слева. */
         if (result.length) {
@@ -58,6 +44,19 @@ const getEmptyMap = config => {
                 }
             });
         }
+
+        /* Проставляем верхние связи справа */
+        /*if (result.length) {
+            rowResult.forEach((item, index) => {
+                if (item.type === CELL_TYPE.WAITING) {
+                    const previousRow = result[result.length - 1];
+                    if (previousRow[index - 1]?.type === CELL_TYPE.WAITING) {
+                        item.connectList.push(CONNECT_TYPE.LEFT_TOP);
+                        previousRow[index - 1].connectList.push(CONNECT_TYPE.RIGHT_BOTTOM);
+                    }
+                }
+            });
+        }*/
         result.push(rowResult);
     }
 
@@ -101,7 +100,7 @@ export const setRandomElementsInMap = (map, state) => {
     return map;
 }
 
-const findItemInMatrix = (matrix, position) => matrix[position.y].find(elem => elem.position.x === position.x);
+const findItemInMatrix = (matrix, position) => matrix[position.y][position.x];
 
 /**
  * Внести изменения в "карту". "Карта" + элемент для изменения (position и новое значение).
@@ -117,4 +116,41 @@ export const changeMap = (matrix, position, item) => {
     findItem.color = item.color;
     findItem.powerValue = item.powerValue;
     findItem.playerName = item.playerName;
+}
+
+/**
+ * Получить список связанные клеток учитывая исключения.
+ *
+ * @return {array}
+ */
+export function getOpponentLinkedTile(position) {
+    const isOpponentCondition = (name1, name2) => name1 !== name2;
+    const tile = this.getItemByPosition(position);
+
+    if (this.config.MATRIX_TYPE === MATRIX_TYPES.SIMPLE) {
+        const opponentTiles = tile.connectList.map(linkType => {
+            let linkedPosition = null;
+            let result = null;
+
+            if (CONNECT_TYPE.LEFT_TOP === linkType) {
+                linkedPosition = { x: position.x - 1, y: position.y - 1 };
+            }
+
+            if (CONNECT_TYPE.RIGHT_BOTTOM === linkType) {
+                linkedPosition = { x: position.x + 1, y: position.y + 1 };
+            }
+
+            if (linkedPosition) {
+                const item = this.getItemByPosition(linkedPosition);
+
+                if (isOpponentCondition(item.playerName, tile.playerName)) {
+                    result = item;
+                }
+            }
+
+            return result;
+        });
+
+        return opponentTiles.filter(item => !!item);
+    }
 }

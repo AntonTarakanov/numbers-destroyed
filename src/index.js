@@ -33,7 +33,7 @@ function createApp() {
 }
 
 function busDataHandler(AppRender, position) {
-    const item = this.findItemByPosition(position);
+    const item = this.getItemByPosition(position);
 
     AppRender.rerenderTD(this.matrix, item);
     AppRender.rerenderLog(this.state);

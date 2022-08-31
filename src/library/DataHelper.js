@@ -1,5 +1,3 @@
-import { createState } from '../data/state';
-import { createMap, setRandomElementsInMap } from '../data/map';
 import { DEFAULT_CONFIG } from './config';
 import { CELL_TARGET_TYPE } from '../data/constants';
 
@@ -14,29 +12,14 @@ export class DataHelper {
         this.config = config ? config : DEFAULT_CONFIG;
     }
 
-    /**
-     * TODO: перенести в частное.
-     */
-    createApp() {
-        this.playersName = this.getPlayersName();
-        this.state = createState(this.playersName);
-
-        const emptyMap = createMap(this.config, this.state);
-        this.matrix = setRandomElementsInMap(emptyMap, this.state);
-
-        this.setFirstTurn();
-
-        return true;
-    }
-
     setState(property, value) {
         if (property) {
             this.state[property] = value;
         }
     }
 
-    getStateByName(name) {
-        return this.state[name];
+    getStateProperty(property) {
+        return this.state[property];
     }
 
     /**
@@ -58,7 +41,11 @@ export class DataHelper {
         return this.config.COUNT_PLAYER;
     }
 
-    findItemByPosition(position) {
+    getItemByPosition(position) {
+        if (!this.checkPositionLimits(position)) {
+            console.log('checkPositionLimits ERROR');
+        }
+
         return this.matrix[position.y][position.x];
     }
 

@@ -15,25 +15,29 @@ import { STEP_TYPE } from '../constants';
 export const tileClickHandler = (event, context, appData) => {
     const attrDataset = context.dataset;
 
-    const playerName = attrDataset.playername;
-    const position = { x: Number(attrDataset.positionX), y: Number(attrDataset.positionY) };
-    const whoseTurnItem = appData.getStateByName(playerName);
+    const currentStepTypeState = appData.getStateProperty('currentStepType');
+    const currentTurnState = appData.getStateProperty('currentTurn');
 
-    console.log('tileClickHandler', whoseTurnItem.stepType);
+    const tilePlayerName = attrDataset.playername;
+    const pressedPosition = { x: Number(attrDataset.positionX), y: Number(attrDataset.positionY) };
 
-    // Ожидание выбора своей клетки для дальнейшей атаки
-    if (whoseTurnItem.stepType === STEP_TYPE.CHOOSE_FOR_ATTACK) {
-        appData.doSelectForAttack(position);
-        // Игра со статусами.
+    // Ожидание выбора своей клетки для дальнейшей атаки.
+    if (currentStepTypeState === STEP_TYPE.CHOOSE_FOR_ATTACK) {
 
-        // проставить state type. Обозначит выделенную клетку.
-        // Сбросить предыдущие выделенные клетки.
-        // Выделить другие клетки оппонента.
+        // Можно нажать только на свою клетку.
+        if (tilePlayerName === currentTurnState) {
+            appData.doSelectForAttack(pressedPosition);
+        } else {
+            console.log('Нажмите на свою клетку.');
+        }
     }
 
-    // Ожидание клика по пилтке оппонента дял совершения атаки.
-    if (whoseTurnItem.stepType === STEP_TYPE.ATTACK) {
-        console.log('STEP_TYPE.ATTACK');
+    // Ожидание клика по плитке оппонента для совершения атаки.
+    if (currentStepTypeState === STEP_TYPE.ATTACK) {
+
+        // Могу кликнуть только по сопернику.
+        // Могу кликнуть только по соседнему сопернику.
+
         // необходимо кликнуть по сопернику
         // подсветить возможные клетки соперника
         // выполнить перерасчёт
@@ -42,11 +46,11 @@ export const tileClickHandler = (event, context, appData) => {
 
     // Ожидание выбора своих клеток для раздачи power.
     if (whoseTurnItem.stepType === STEP_TYPE.GIVE_POWER) {
-        appData.doGivePower(position, playerName);
+        // appData.doGivePower(pressedPosition, playerName);
     }
 
+    // Ожидание пока сходит соперник.
     if (whoseTurnItem.stepType === 'opponentWaiting') {
-        // ничего не могу
         console.log('Дождитесь хода соперника.');
     }
 }
