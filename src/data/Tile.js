@@ -7,6 +7,42 @@ export class Tile {
         this[MATRIX_FIELDS.TYPE] = type;
         this[MATRIX_FIELDS.CONNECT_LIST] = [];
     }
+
+    getPowerValue() {
+        return this[MATRIX_FIELDS.POWER_VALUE];
+    }
+
+    getColor() {
+        return this[MATRIX_FIELDS.COLOR];
+    }
+
+    getPlayerName() {
+        return this[MATRIX_FIELDS.PLAYER_NAME];
+    }
+
+    setProperty(property, value) {
+        this[property] = value;
+    }
+
+    /**
+     * @param {object} values
+     * @return {boolean} is changed
+     */
+    setValues(values = {}) {
+        const property = Object.values(MATRIX_FIELDS);
+        let result = false;
+
+        for (let key in values) {
+            if (property.includes(key)) {
+                if (this[key] !== values[key]) {
+                    this.setProperty(key, values[key]);
+                    result = true;
+                }
+            }
+        }
+
+        return result;
+    }
 }
 
 export const MATRIX_FIELDS = {
@@ -14,4 +50,6 @@ export const MATRIX_FIELDS = {
     POWER_VALUE: 'powerValue',
     POSITION: 'position',
     CONNECT_LIST: 'connectList',
+    PLAYER_NAME: 'playerName',
+    COLOR: 'color',
 };

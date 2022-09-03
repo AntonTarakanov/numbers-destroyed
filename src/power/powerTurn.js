@@ -39,7 +39,7 @@ export const tileClickHandler = (event, context, appData) => {
 
         // Выполнить атаку / сбросить ход.
         if (someEqualPosition(availableList, pressedPosition)) {
-            console.log('someEqualPosition');
+            appData.doAttack(pressedPosition);
         } else {
             appData.doResetSelectForAttack();
         }

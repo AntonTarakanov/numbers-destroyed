@@ -31,3 +31,8 @@ export const HANDLER_TYPE = {
     TURN_BUTTON_CLICK: 'turnButtonClick',
     TILE_CLICK: 'tileClick',
 }
+
+export const CALC_ATTACK_RESULTS = {
+    ATTACK: 'attack',
+    DEFENSIVE: 'defensive',
+}

@@ -1,10 +1,10 @@
-import { CELL_TARGET_TYPE, STATE_FIELDS } from './constants';
-import { STEP_TYPE, CELL_TYPE } from '../constants';
+import { CELL_TARGET_TYPE } from './constants';
+import { STEP_TYPE, CELL_TYPE, CALC_ATTACK_RESULTS } from '../constants';
 import { DataHelper } from '../library/DataHelper';
 import { getEmptyMatrix, getOpponentLinkedTile, setRandomElementsInMap } from './matrix';
-import { createState } from './State';
+import { PowerState, STATE_FIELDS } from './State';
 import { MATRIX_FIELDS } from './Tile';
-
+import { calcAttackResult } from '../power/main';
 
 /**
  * Набор данных необходимый для работы приложения.
@@ -13,7 +13,7 @@ export class PowerDataHelper extends DataHelper {
 
     createApp() {
         this.playersName = this.getPlayersName();
-        this.state = createState(this.playersName);
+        this.state = new PowerState(this.playersName);
 
         const emptyMap = this.createEmptyMatrix();
         this.matrix = setRandomElementsInMap(emptyMap, this.state);
@@ -43,6 +43,11 @@ export class PowerDataHelper extends DataHelper {
 
     decreaseAvailablePower(name) {
         --this.state[name].availablePower;
+    }
+
+    getPowerValue(position) {
+        const tile = this.getItemByPosition(position);
+        return tile.getPowerValue();
     }
 
     setFirstTurn() {
@@ -143,6 +148,36 @@ export class PowerDataHelper extends DataHelper {
         this.setState('availablePosition', positionList);
     }
 
+    setActiveTilePosition(position) {
+        this.highlightActiveTile(position);
+        this.setState(STATE_FIELDS.ACTIVE_TILE_POSITION, { ...position });
+    }
+
+    getActiveTilePosition() {
+        return this.state.getStateProperty(STATE_FIELDS.ACTIVE_TILE_POSITION);
+    }
+
+    changeTileAfterAttack(attackPosition, defensivePosition, result) {
+        const attackTile = this.getItemByPosition(attackPosition);
+        const defensiveTile = this.getItemByPosition(defensivePosition);
+
+        attackTile.setValues({
+            [MATRIX_FIELDS.POWER_VALUE]: result.activeValue,
+        });
+        const defensiveTileIsChanges = defensiveTile.setValues({
+            [MATRIX_FIELDS.POWER_VALUE]: result.defensiveValue,
+            [MATRIX_FIELDS.PLAYER_NAME]: result.winner === CALC_ATTACK_RESULTS.ATTACK ? attackTile.getPlayerName() : defensiveTile.getPlayerName(),
+            [MATRIX_FIELDS.COLOR]: result.winner === CALC_ATTACK_RESULTS.ATTACK ? attackTile.getColor() : defensiveTile.getColor(),
+        });
+
+        this.rerenderByPosition(attackPosition);
+
+        // может не измениться если power 2 нападет на power 1.
+        if (defensiveTileIsChanges) {
+            this.rerenderByPosition(defensivePosition);
+        }
+    }
+
     /**
      * Выделяем клетку чтобы совершить атаку. Выделем клетки которые можно атаковать.
      *
@@ -151,7 +186,7 @@ export class PowerDataHelper extends DataHelper {
      */
     doSelectForAttack(position, useRerender = false) {
         this.resetWaitingSelect();
-        this.highlightActiveTile(position);
+        this.setActiveTilePosition(position);
         const opponentList = this.highlightOpponent(position);
         const opponentPositionList = opponentList.map(item => item.position);
         this.setCurrentStepType(STEP_TYPE.ATTACK);
@@ -162,10 +197,22 @@ export class PowerDataHelper extends DataHelper {
      * Отмена "doSelectForAttack", можно заново выбрать клетку для атаки.
      */
     doResetSelectForAttack() {
-        const name = this.getStateProperty('currentTurn');
+        const name = this.getStateProperty(STATE_FIELDS.CURRENT_TURN);
 
         this.setStepType(name, STEP_TYPE.CHOOSE_FOR_ATTACK);
         this.resetHighlight();
+    }
+
+    doAttack(position) {
+        const activePosition = this.getActiveTilePosition();
+        const activePower = this.getPowerValue(activePosition);
+        const defensivePower = this.getPowerValue(position);
+        const attackResult = calcAttackResult(activePower, defensivePower);
+
+        this.changeTileAfterAttack(activePosition, position, attackResult);
+
+        // this.setStepType(STEP_TYPE.CHOOSE_FOR_ATTACK);
+        // this.setCurrentStepType(STEP_TYPE.CHOOSE_FOR_ATTACK);
     }
 
     /**

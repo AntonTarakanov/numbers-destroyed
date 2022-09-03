@@ -3,10 +3,6 @@ export const CELL_TARGET_TYPE = {
     byPosition: 'byPosition',
 };
 
-export const STATE_FIELDS = {
-    CURRENT_STEP_TYPE: 'currentStepType',
-};
-
 export const MATRIX_TYPES = {
     SIMPLE: 'simple',
 }
