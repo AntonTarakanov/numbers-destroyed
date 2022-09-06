@@ -27,16 +27,6 @@ export class PowerDataHelper extends DataHelper {
         return getEmptyMatrix(this.config, this.state);
     }
 
-    getStateByName(name) {
-        return this.getStateProperty(name);
-    }
-
-    getAvailablePower(name) {
-        const player = this.getStateByName(name);
-
-        return player.availablePower;
-    }
-
     increaseAvailablePower(name) {
         ++this.state[name].availablePower;
     }
@@ -86,34 +76,24 @@ export class PowerDataHelper extends DataHelper {
         return this.playersName[this.config.FIRST_TURN_INDEX];
     }
 
-    getConnectList (position) {
-        return this.getItemByPosition(position).connectList;
-    }
-
-    setStepType(name, value) {
-        this.state[name].stepType = value;
-        this.state.playersList.forEach(otherName => {
-            if (otherName !== name) {
-                this.state[otherName].stepType = STEP_TYPE.WAITING;
-            }
-        });
-
-        this.state.currentStepType = value;
-        this.state.currentTurn = name;
+    setStepType(name, value, useRerender = false) {
+        this.state.changeStepType(name, value);
+        this.setCurrentStepType(value);
+        this.state.setCurrentTurn(name);
 
         // Подсвечиваем клетки в которые можно раздать power.
         if (value === STEP_TYPE.GIVE_POWER) {
-            this.setCellType(CELL_TARGET_TYPE.byPlayerName, name, CELL_TYPE.WAITING_SELECT);
+            this.setCellType(CELL_TARGET_TYPE.byPlayerName, name, CELL_TYPE.WAITING_SELECT, useRerender);
         }
 
         // Подсвечиваем клетки которые можно выбрать для атаки.
         if (value === STEP_TYPE.CHOOSE_FOR_ATTACK) {
-            this.setCellType(CELL_TARGET_TYPE.byPlayerName, name, CELL_TYPE.WAITING_SELECT);
+            this.setCellType(CELL_TARGET_TYPE.byPlayerName, name, CELL_TYPE.WAITING_SELECT, useRerender);
         }
     }
 
     setCurrentStepType(type) {
-        this.setState(STATE_FIELDS.CURRENT_STEP_TYPE, type);
+        this.state.setCurrentStepType(type);
     }
 
     resetWaitingSelect() {
@@ -141,11 +121,11 @@ export class PowerDataHelper extends DataHelper {
     }
 
     getAvailablePosition() {
-        return this.getStateProperty('availablePosition');
+        return this.state.getAvailablePosition();
     }
 
     setAvailablePosition(positionList) {
-        this.setState('availablePosition', positionList);
+        this.state.getAvailablePosition(positionList);
     }
 
     setActiveTilePosition(position) {
@@ -207,19 +187,18 @@ export class PowerDataHelper extends DataHelper {
         const activePosition = this.getActiveTilePosition();
         const activePower = this.getPowerValue(activePosition);
         const defensivePower = this.getPowerValue(position);
+        const currentTurn = this.state.getCurrentTurn();
         const attackResult = calcAttackResult(activePower, defensivePower);
 
         this.changeTileAfterAttack(activePosition, position, attackResult);
-
-        // this.setStepType(STEP_TYPE.CHOOSE_FOR_ATTACK);
-        // this.setCurrentStepType(STEP_TYPE.CHOOSE_FOR_ATTACK);
+        this.setStepType(currentTurn, STEP_TYPE.CHOOSE_FOR_ATTACK, true);
     }
 
     /**
      * Раздаём power, делаем проверки, меняем статусы.
      */
     doGivePower(position, playerName) {
-        const availablePower = this.getAvailablePower(playerName);
+        const availablePower = this.state.getAvailablePower(playerName);
 
         // уменьшаем в state / добавляем в map
         if (availablePower > 0) {

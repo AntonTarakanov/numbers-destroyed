@@ -1,4 +1,4 @@
-import { COLOR_LIST } from '../constants';
+import { COLOR_LIST, STEP_TYPE } from '../constants';
 import { State } from '../library/State';
 
 export class PowerState extends State {
@@ -18,8 +18,52 @@ export class PowerState extends State {
     createPlayerStateObj(value) {
         return new PlayerState(value);
     }
+
+    setCurrentStepType(value) {
+        return this.setState(STATE_FIELDS.CURRENT_STEP_TYPE, value);
+    }
+
+    getCurrentTurn() {
+        return this.getStateProperty(STATE_FIELDS.CURRENT_TURN);
+    }
+
+    setCurrentTurn(value) {
+        return this.setState(STATE_FIELDS.CURRENT_TURN, value);
+    }
+
+    getPlayersList() {
+        return this.getStateProperty(STATE_FIELDS.PLAYERS_LIST);
+    }
+
+    changeStepType(name, value) {
+        this.setStepTypeByName(name, value);
+        this.getPlayersList().forEach(otherName => {
+            if (otherName !== name) {
+                this.setStepTypeByName(otherName, STEP_TYPE.WAITING);
+            }
+        });
+    }
+
+    setStepTypeByName(name, value) {
+        this[name].setStepType(value);
+    }
+
+    getAvailablePower(playerName) {
+        return this[playerName][STATE_FIELDS.AVAILABLE_POWER];
+    }
+
+    getAvailablePosition() {
+        return this.getStateProperty(STATE_FIELDS.AVAILABLE_POSITION);
+    }
+
+    setAvailablePosition(value) {
+        this.setState(STATE_FIELDS.AVAILABLE_POSITION, value);
+    }
 }
 
+/**
+ *
+ */
 export class PlayerState extends State {
     constructor(value) {
         super();
@@ -27,6 +71,10 @@ export class PlayerState extends State {
         this[STATE_FIELDS.STEP_TYPE] = null;
         this[STATE_FIELDS.VALUE] = value || '';
         this[STATE_FIELDS.AVAILABLE_POWER] = 0;
+    }
+
+    setStepType(type) {
+        this[STATE_FIELDS.STEP_TYPE] = type;
     }
 }
 
@@ -38,4 +86,5 @@ export const STATE_FIELDS = {
     CURRENT_TURN: 'currentTurn',            // текущий ход, активный игрок.
     CURRENT_STEP_TYPE: 'currentStepType',   // этап текущего хода.
     ACTIVE_TILE_POSITION: 'activeTilePosition', // координаты активной плитки.
+    AVAILABLE_POSITION: 'availablePosition',    // доступные для активной клетки ходы.
 }
