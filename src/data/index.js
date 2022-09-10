@@ -76,19 +76,27 @@ export class PowerDataHelper extends DataHelper {
         return this.playersName[this.config.FIRST_TURN_INDEX];
     }
 
+    /**
+     *
+     * @param {string} name
+     * @param {any} value
+     * @param {boolean} useRerender
+     */
     setStepType(name, value, useRerender = false) {
         this.state.changeStepType(name, value);
-        this.setCurrentStepType(value);
+        this.state.setCurrentStepType(value);
         this.state.setCurrentTurn(name);
 
         // Подсвечиваем клетки в которые можно раздать power.
         if (value === STEP_TYPE.GIVE_POWER) {
-            this.setCellType(CELL_TARGET_TYPE.byPlayerName, name, CELL_TYPE.WAITING_SELECT, useRerender);
+            this.setCellTypeForAll(CELL_TARGET_TYPE.byPlayerName, name, CELL_TYPE.WAITING_SELECT, useRerender);
         }
 
         // Подсвечиваем клетки которые можно выбрать для атаки.
         if (value === STEP_TYPE.CHOOSE_FOR_ATTACK) {
-            this.setCellType(CELL_TARGET_TYPE.byPlayerName, name, CELL_TYPE.WAITING_SELECT, useRerender);
+            // TODO: добавить проверку на то, что клетке есть кого атаковать.
+
+            this.setCellTypeForAll(CELL_TARGET_TYPE.byPlayerName, name, CELL_TYPE.WAITING_SELECT, useRerender);
         }
     }
 
@@ -101,14 +109,14 @@ export class PowerDataHelper extends DataHelper {
     }
 
     highlightActiveTile(position) {
-        this.setCellType(CELL_TARGET_TYPE.byPosition, position, CELL_TYPE.SELECTED, true);
+        this.setCellTypeForAll(CELL_TARGET_TYPE.byPosition, position, CELL_TYPE.SELECTED, true);
     }
 
     highlightOpponent(myPosition) {
         const linkedList = getOpponentLinkedTile.call(this, myPosition, this.config.MATRIX_TYPE);
 
         linkedList.forEach(({ position }) => {
-            this.setCellType(CELL_TARGET_TYPE.byPosition, position, CELL_TYPE.WAITING_SELECT, true);
+            this.setCellTypeForAll(CELL_TARGET_TYPE.byPosition, position, CELL_TYPE.WAITING_SELECT, true);
         });
 
         return linkedList;
@@ -125,7 +133,7 @@ export class PowerDataHelper extends DataHelper {
     }
 
     setAvailablePosition(positionList) {
-        this.state.getAvailablePosition(positionList);
+        this.state.setAvailablePosition(positionList);
     }
 
     setActiveTilePosition(position) {
@@ -137,17 +145,22 @@ export class PowerDataHelper extends DataHelper {
         return this.state.getStateProperty(STATE_FIELDS.ACTIVE_TILE_POSITION);
     }
 
+    /**
+     * TODO: вероятно нужно переместить часть логики в Tile чтобы не затаскивать MATRIX_FIELDS.
+     */
     changeTileAfterAttack(attackPosition, defensivePosition, result) {
         const attackTile = this.getItemByPosition(attackPosition);
         const defensiveTile = this.getItemByPosition(defensivePosition);
 
         attackTile.setValues({
             [MATRIX_FIELDS.POWER_VALUE]: result.activeValue,
+            [MATRIX_FIELDS.TYPE]: CELL_TYPE.READY,
         });
         const defensiveTileIsChanges = defensiveTile.setValues({
             [MATRIX_FIELDS.POWER_VALUE]: result.defensiveValue,
             [MATRIX_FIELDS.PLAYER_NAME]: result.winner === CALC_ATTACK_RESULTS.ATTACK ? attackTile.getPlayerName() : defensiveTile.getPlayerName(),
             [MATRIX_FIELDS.COLOR]: result.winner === CALC_ATTACK_RESULTS.ATTACK ? attackTile.getColor() : defensiveTile.getColor(),
+            [MATRIX_FIELDS.TYPE]: CELL_TYPE.READY,
         });
 
         this.rerenderByPosition(attackPosition);
@@ -156,6 +169,12 @@ export class PowerDataHelper extends DataHelper {
         if (defensiveTileIsChanges) {
             this.rerenderByPosition(defensivePosition);
         }
+    }
+
+    changeStepAfterAttack(name) {
+        this.state.resetActiveTilePosition();
+        this.state.resetAvailablePosition();
+        this.setStepType(name, STEP_TYPE.CHOOSE_FOR_ATTACK, true);
     }
 
     /**
@@ -191,7 +210,8 @@ export class PowerDataHelper extends DataHelper {
         const attackResult = calcAttackResult(activePower, defensivePower);
 
         this.changeTileAfterAttack(activePosition, position, attackResult);
-        this.setStepType(currentTurn, STEP_TYPE.CHOOSE_FOR_ATTACK, true);
+        this.resetHighlight();
+        this.changeStepAfterAttack(currentTurn);
     }
 
     /**

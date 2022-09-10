@@ -8,6 +8,10 @@ export class Tile {
         this[MATRIX_FIELDS.CONNECT_LIST] = [];
     }
 
+    setProperty(property, value) {
+        this[property] = value;
+    }
+
     getPowerValue() {
         return this[MATRIX_FIELDS.POWER_VALUE];
     }
@@ -20,8 +24,23 @@ export class Tile {
         return this[MATRIX_FIELDS.PLAYER_NAME];
     }
 
-    setProperty(property, value) {
-        this[property] = value;
+    getType() {
+        return this[MATRIX_FIELDS.TYPE];
+    }
+
+    /**
+     * Содержит в том числе логику допустимых значений для type.
+     *
+     * @param {MATRIX_FIELDS} value
+     */
+    setType(value) {
+        let result = value;
+
+        if (value === CELL_TYPE.WAITING_SELECT && this.getPowerValue() === 1) {
+            result = this.getType();
+        }
+
+        this.setProperty(MATRIX_FIELDS.TYPE, result);
     }
 
     /**

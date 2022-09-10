@@ -9,6 +9,7 @@ export class PowerState extends State {
         this[STATE_FIELDS.CURRENT_TURN] = null;
         this[STATE_FIELDS.CURRENT_STEP_TYPE] = null;
         this[STATE_FIELDS.ACTIVE_TILE_POSITION] = {};
+        this[STATE_FIELDS.AVAILABLE_POSITION] = [];
 
         names.forEach((name, index) => {
             this.setState(name, this.createPlayerStateObj(COLOR_LIST[index]));
@@ -58,6 +59,14 @@ export class PowerState extends State {
 
     setAvailablePosition(value) {
         this.setState(STATE_FIELDS.AVAILABLE_POSITION, value);
+    }
+
+    resetAvailablePosition() {
+        this.setState(STATE_FIELDS.AVAILABLE_POSITION, []);
+    }
+
+    resetActiveTilePosition() {
+        this.setState(STATE_FIELDS.ACTIVE_TILE_POSITION, {});
     }
 }
 

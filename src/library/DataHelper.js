@@ -88,12 +88,16 @@ export class DataHelper {
      * @param {string} value
      * @param {boolean} useRerender
      */
-    setCellType(targetType, target, value, useRerender = false) {
+    setCellTypeForAll(targetType, target, value, useRerender = false) {
         if (CELL_TARGET_TYPE.byPlayerName === targetType) {
             this.matrix.forEach(row => {
                 row.forEach(cell => {
-                    if (cell.playerName === target) {
-                        cell.type = value;
+                    if (cell.getPlayerName() === target) {
+                        cell.setType(value);
+                    }
+
+                    if (useRerender) {
+                        this.rerenderByPosition(cell.position);
                     }
                 });
             });
