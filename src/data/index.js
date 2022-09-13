@@ -1,7 +1,7 @@
 import { CELL_TARGET_TYPE } from './constants';
 import { STEP_TYPE, CELL_TYPE, CALC_ATTACK_RESULTS } from '../constants';
 import { DataHelper } from '../library/DataHelper';
-import { getEmptyMatrix, getOpponentLinkedTile, setRandomElementsInMap } from './matrix';
+import { getEmptyMatrix, getOpponentLinkedTile, setRandomElementsInMap } from './Matrix';
 import { PowerState, STATE_FIELDS } from './State';
 import { MATRIX_FIELDS } from './Tile';
 import { calcAttackResult } from '../power/main';
