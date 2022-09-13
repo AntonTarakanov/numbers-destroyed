@@ -3,12 +3,90 @@ import { getRandomNumber } from '../utils';
 import { Tile } from './Tile';
 import { MATRIX_TYPES } from './constants';
 
+class MatrixArray extends Array {
+    constructor(config) {
+        super();
+
+        this.config = config;
+    }
+
+    getTileListByPlayer(name) {
+        const filtered = this.map(row => {
+            return row.filter(tile => tile.playerName === name);
+        });
+
+        return filtered.flat();
+    }
+
+    getTileListByCanAttack(name) {
+        const tileList = this.getTileListByPlayer(name);
+
+        return tileList.filter(tile => {
+            const neighbors = this.getNeighbors(tile);
+            let result = false;
+
+            if (neighbors.length) {
+                result = neighbors.some(neighborTile => neighborTile.playerName !== name);
+            }
+
+            return result;
+        });
+    }
+
+    getTileByPosition({x, y}) {
+        if (!this.checkPositionLimits({x, y})) {
+            console.log('Ошибка получения элемента матрицы. Метод "getTileByPosition"');
+
+            return null;
+        }
+
+        return this[x][y];
+    }
+
+    /**
+     * TODO: убрать 'simple' заглушку.
+     * Возвращает список доступных клеток через connectList.
+     *
+     * @param {Tile} tile
+     * @param {string} scheme - схема / тип карты.
+     * @return {array}
+     */
+    getNeighbors({ connectList, position }, scheme = 'simple') {
+        if (scheme === 'simple') {
+            const result = [];
+
+            connectList.forEach(type => {
+                if (type === CONNECT_TYPE.LEFT_TOP) {
+                    const neighbor = this.getTileByPosition({ x: position.x - 1, y: position.y - 1 });
+
+                    result.push(neighbor);
+                }
+
+                if (type === CONNECT_TYPE.RIGHT_BOTTOM) {
+                    const neighbor = this.getTileByPosition({ x: position.x + 1, y: position.y + 1 });
+
+                    result.push(neighbor);
+                }
+            });
+
+            return result;
+        }
+    }
+
+    // TODO: убрать дублирование
+    checkPositionLimits({ x, y }) {
+        const limitsMethod = (value, maxLimit) => value >= 0 && value <= maxLimit;
+
+        return limitsMethod(x, this.config.MAP.SIZE.x) && limitsMethod(y, this.config.MAP.SIZE.y);
+    }
+}
+
 /**
  * Пустая карта для игры.
  * @param {any} config
  */
 export const getEmptyMatrix = config => {
-    const result = [];
+    const result = new MatrixArray(config);
 
     for (let i = 0; i < config.MAP.SIZE.y; i++) {
         let rowResult = [];
