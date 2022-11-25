@@ -126,26 +126,33 @@ body {
     transform: rotate(0deg);
 }
 
-/* LOG START: */
+/* ADDITIONAL/LOG START: */
+/* Используем "log" т.к. так короче. */
 
-.log_wrap {
+/*.log_wrap {
     margin: 10px;
     height: 200px;
     width: 200px;
     background: #272822;
     color: #F8F8F0;
     padding: 10px;
+}*/
+
+.log_tile {
+    margin: 10px;
+    background: #272822;
+    color: #F8F8F0;
+    padding: 10px;
 }
 
 .log_button {
-    margin: 10px;
     height: 20px;
     width: 160px;
     background: #18191D;
     padding: 10px;
 }
 
-/* LOG END. */
+/* ADDITIONAL/LOG END. */
 
 /* COMMON START: */
 .justifyCenter,

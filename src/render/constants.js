@@ -19,6 +19,7 @@ export const CONNECT_CLASS_NAME = {
     LINE: 'cell_connect_line',
 }
 
+// TODO: выпилить это.
 /* ID для взаимодействия с DOM. */
 export const DOM_ID = {
     COMMON_MAP: 'commonMap',
@@ -35,5 +36,7 @@ export const COLOR = {
 };
 
 export const LOG_CLASS = {
-    WRAP: 'log_wrap',
+    // WRAP: 'log_wrap',
+    TILE: 'log_tile',
+    BUTTON: 'log_button',
 }

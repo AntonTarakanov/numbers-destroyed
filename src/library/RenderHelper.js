@@ -1,4 +1,4 @@
-import { getDiv } from './elements/utils';
+import { getDiv, getEmptyDiv } from './elements/utils';
 import { getHeader } from './elements/header';
 import { COMMON_CLASS_NAMES, COMMON_DOM_IDS } from './renderConstants';
 
@@ -39,7 +39,23 @@ export class RenderHelper {
         return appNode;
     }
 
+    getAdditionalNode() {
+        return this.getElementById(COMMON_DOM_IDS.ADDITIONAL);
+    }
+
     getHeader() {
         return getHeader(COMMON_CLASS_NAMES.HEADER, COMMON_CLASS_NAMES.HEADER_IMG, COMMON_DOM_IDS.HEADER);
+    }
+
+    getElementById(id) {
+        return document.getElementById(id);
+    }
+
+    getDiv(className, id, text, child) {
+        return getDiv(className, id, text, child);
+    }
+
+    getEmptyDiv() {
+        return getEmptyDiv();
     }
 }

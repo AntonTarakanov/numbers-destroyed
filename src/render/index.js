@@ -1,51 +1,41 @@
 import { RenderHelper } from '../library/RenderHelper';
 import { DOM_ID } from './constants';
 import { buildTable, buildTD } from './table';
-import { buildLog } from './logTile';
 import { createDiv } from './helper';
+import { additionalField } from './additionalField';
 
 /**
  * Всё что связано с визуальным отображением.
  */
 export class PowerRenderHelper extends RenderHelper {
     createApp(matrix, state) {
-        // TODO: переписать эту фигню.
-        const formReady = !!document.body.appendChild(this.getBaseForm());
+        const baseForm = this.getBaseForm();
 
-        if (formReady) {
-            this.createMap(matrix);
-            this.createLog(state);
-        }
+        document.body.appendChild(baseForm);
+
+        this.createMatrix(matrix);
+        this.createAdditionalInfo(state);
     }
 
     /**
      * Не хватило фантазии на более интересное название.
      */
-    createLog(state) {
-        // TODO: убрать additionalField строкой
-        const rootNode = this.getElementById('additionalField');
-        const logNode = buildLog.call(this, state);
+    createAdditionalInfo(state) {
+        const rootNode = this.getAdditionalNode();
+        const content = additionalField.call(this, state);
 
-        rootNode.append(logNode);
-    }
-
-    getEmptyDiv() {
-        return document.createElement('div');
+        rootNode.append(content);
     }
 
     getDiv(className, text, id, child) {
         return createDiv(className, text, id, child);
     }
 
-    getElementById(id) {
-        return document.getElementById(id);
-    }
-
     /**
      * Создаёт элемент в DOM.
      * Элемент является таблицей которая строится по переданной матрице.
      */
-    createMap(matrix) {
+    createMatrix(matrix) {
         if (matrix) {
             const table = this.buildTable(matrix);
             // TODO: убрать mainField строкой
@@ -76,9 +66,10 @@ export class PowerRenderHelper extends RenderHelper {
 
     // TODO: доработать. На данный момент только для тестирования.
     rerenderLog(state) {
-        const rootNode = this.getElementById(DOM_ID.LOG_BLOCK);
-        const logNode = buildLog.call(this, state);
+        // const rootNode = this.getElementById(DOM_ID.LOG_BLOCK);
+        // TODO: тут всё поломалось
+        // const logNode = buildLog.call(this, state);
 
-        rootNode.replaceChild(logNode, rootNode.firstChild);
+        // rootNode.replaceChild(logNode, rootNode.firstChild);
     }
 }
