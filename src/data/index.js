@@ -198,8 +198,8 @@ export class PowerDataHelper extends DataHelper {
     doResetSelectForAttack() {
         const name = this.getStateProperty(STATE_FIELDS.CURRENT_TURN);
 
-        this.setStepType(name, STEP_TYPE.CHOOSE_FOR_ATTACK);
         this.resetHighlight();
+        this.setStepType(name, STEP_TYPE.CHOOSE_FOR_ATTACK, true);
     }
 
     doAttack(position) {

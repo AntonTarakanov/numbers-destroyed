@@ -148,7 +148,7 @@ body {
 /* LOG END. */
 
 /* COMMON START: */
-
+.justifyCenter,
 .flex {
     display: flex;
 }

@@ -1,35 +1,15 @@
+import { RenderHelper } from '../library/RenderHelper';
 import { DOM_ID } from './constants';
 import { buildTable, buildTD } from './table';
 import { buildLog } from './logTile';
 import { createDiv } from './helper';
-import { buildHeader } from './header';
 
 /**
- *
+ * Всё что связано с визуальным отображением.
  */
-export class RenderHelper {
-    constructor(domIds, handler) {
-        this.DOM_IDS = domIds;
-        this.handler = handler;
-    }
-
-    /**
-     * Базовая пустая форма с картой, логированием, ID-элементов для дальнейшего наполнения узлов.
-     */
-    getBaseForm() {
-        const appNode = this.getDiv('application', null, this.DOM_IDS.root);
-        const contentNode = this.getDiv('flex justifyCenter');
-        const matrixNode = this.getDiv('flex', null, DOM_ID.COMMON_MAP);
-        const logNode = this.getDiv(null, null, DOM_ID.LOG_BLOCK);
-        const headerNode = this.createHeader();
-
-        contentNode.append(matrixNode, logNode);
-        appNode.append(headerNode, contentNode);
-
-        return appNode;
-    }
-
+export class PowerRenderHelper extends RenderHelper {
     createApp(matrix, state) {
+        // TODO: переписать эту фигню.
         const formReady = !!document.body.appendChild(this.getBaseForm());
 
         if (formReady) {
@@ -42,14 +22,11 @@ export class RenderHelper {
      * Не хватило фантазии на более интересное название.
      */
     createLog(state) {
-        const rootNode = this.getElementById(DOM_ID.LOG_BLOCK);
+        // TODO: убрать additionalField строкой
+        const rootNode = this.getElementById('additionalField');
         const logNode = buildLog.call(this, state);
 
         rootNode.append(logNode);
-    }
-
-    createHeader() {
-        return buildHeader();
     }
 
     getEmptyDiv() {
@@ -71,7 +48,8 @@ export class RenderHelper {
     createMap(matrix) {
         if (matrix) {
             const table = this.buildTable(matrix);
-            const root = this.getElementById(DOM_ID.COMMON_MAP);
+            // TODO: убрать mainField строкой
+            const root = this.getElementById('mainField');
 
             root.appendChild(table);
         } else {

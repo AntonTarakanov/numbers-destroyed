@@ -1,9 +1,11 @@
 import './style.css';
-import { RenderHelper } from './render';
+import { PowerRenderHelper } from './render';
 import { PowerDataHelper } from './data';
 import { HANDLER_TYPE } from './constants';
 import { tileClickHandler } from './power/powerTurn';
 import { POWER_CONFIG } from './data/constants';
+
+const APP_NAME = 'powerValue';
 
 /**
  * Инициализация приложения.
@@ -12,7 +14,7 @@ import { POWER_CONFIG } from './data/constants';
  * Возможно имеет смысл создать общий класс для этого взаимодействия.
  */
 function createApp() {
-    const renderHelperArg1 = { root: 'powerValue' };
+    const renderHelperArg1 = { root: APP_NAME };
 
     try {
         const proxyDataHandler = function(position) {
@@ -23,7 +25,7 @@ function createApp() {
         }
 
         const AppData = new PowerDataHelper(proxyDataHandler, POWER_CONFIG);
-        const AppRender = new RenderHelper(renderHelperArg1, proxyDomHandler);
+        const AppRender = new PowerRenderHelper(renderHelperArg1, proxyDomHandler);
 
         AppData.createApp();
         AppRender.createApp(AppData.matrix, AppData.state);
