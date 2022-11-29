@@ -1,8 +1,8 @@
 import { RenderHelper } from '../library/RenderHelper';
-import { DOM_ID } from './constants';
 import { buildTable, buildTD } from './table';
 import { createDiv } from './helper';
 import { additionalField } from './additionalField';
+import { COMMON_DOM_IDS } from '../library/renderConstants';
 
 /**
  * Всё что связано с визуальным отображением.
@@ -57,7 +57,7 @@ export class PowerRenderHelper extends RenderHelper {
     rerenderTD(matrix, item) {
         const tdNode = buildTD.call(this, item);
 
-        const commonMap = this.getElementById(DOM_ID.COMMON_MAP);
+        const commonMap = this.getElementById(COMMON_DOM_IDS.MAIN);
         const trNode = commonMap.getElementsByTagName('tr')[item.position.y];
         const oldTd = trNode.getElementsByTagName('td')[item.position.x];
 

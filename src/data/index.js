@@ -94,9 +94,9 @@ export class PowerDataHelper extends DataHelper {
 
         // Подсвечиваем клетки которые можно выбрать для атаки.
         if (value === STEP_TYPE.CHOOSE_FOR_ATTACK) {
-            // TODO: добавить проверку на то, что клетке есть кого атаковать.
+            const tileList = this.matrix.getTileListByCanAttack(name);
 
-            this.setCellTypeForAll(CELL_TARGET_TYPE.byPlayerName, name, CELL_TYPE.WAITING_SELECT, useRerender);
+            this.setCellTypeInList(tileList, CELL_TYPE.WAITING_SELECT, useRerender);
         }
     }
 

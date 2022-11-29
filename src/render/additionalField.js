@@ -1,4 +1,4 @@
-import { LOG_CLASS } from './constants';
+import { LOG_CLASS, TEXTS } from './constants';
 import { HANDLER_TYPE } from '../constants';
 
 /**
@@ -8,7 +8,7 @@ import { HANDLER_TYPE } from '../constants';
  */
 export function additionalField(state) {
     const baseNode = this.getDiv();
-    const buttonNode = getTurnButton.call(this);
+    const buttonNode = getPowerTurnButton.call(this);
     const logNode = buildLog.call(this, state);
 
     baseNode.append(buttonNode, logNode);
@@ -23,13 +23,13 @@ function getTile() {
 /**
  * Кнопка при нажатии на которую меняем ход игрока.
  */
-export function getTurnButton() {
+export function getPowerTurnButton() {
     const onClickHandler = this.handler;
     const buttonHandler = function(event) {
         return onClickHandler(event, this, HANDLER_TYPE.TURN_BUTTON_CLICK);
     }
     const buttonTile = getTile.call(this);
-    const buttonNode = this.getDiv(LOG_CLASS.BUTTON, 'Завершить ход');
+    const buttonNode = this.getDiv(LOG_CLASS.BUTTON, TEXTS.NEXT_TURN);
 
     buttonNode.addEventListener('click', buttonHandler);
 
@@ -39,7 +39,10 @@ export function getTurnButton() {
 }
 
 /**
+ * Логирование для возможности отладки приложения.
  *
+ * TODO: реализовать расширенное дублирование в консоль.
+ * TODO: часть нужно вынести в library.
  */
 export function buildLog(state) {
     const logNode = getTile.call(this);

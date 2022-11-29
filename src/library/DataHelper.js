@@ -18,6 +18,7 @@ export class DataHelper {
         }
     }
 
+    // TODO: лишнее.
     getStateProperty(property) {
         return this.state[property];
     }
@@ -115,6 +116,22 @@ export class DataHelper {
                 this.rerenderByPosition(target);
             }
         }
+    }
+
+    /**
+     * Проставить stepType для переданного списка.
+     * @param {array} list
+     * @param {any} value
+     * @param {boolean} useRerender
+     */
+    setCellTypeInList(list, value, useRerender = false) {
+        list.forEach(tile => {
+            tile.setType(value);
+
+            if (useRerender) {
+                this.rerenderByPosition(tile.position);
+            }
+        });
     }
 
     rerenderByPosition(position) {

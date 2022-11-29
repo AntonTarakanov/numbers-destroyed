@@ -19,14 +19,6 @@ export const CONNECT_CLASS_NAME = {
     LINE: 'cell_connect_line',
 }
 
-// TODO: выпилить это.
-/* ID для взаимодействия с DOM. */
-export const DOM_ID = {
-    COMMON_MAP: 'commonMap',
-    LOG_BLOCK: 'logBlock',
-    HEADER: 'header',
-};
-
 export const COLOR = {
     GREEN: 'green',
     RED: 'red',
@@ -39,4 +31,8 @@ export const LOG_CLASS = {
     // WRAP: 'log_wrap',
     TILE: 'log_tile',
     BUTTON: 'log_button',
+}
+
+export const TEXTS = {
+    NEXT_TURN: 'Завершить ход',
 }
