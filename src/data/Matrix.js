@@ -3,6 +3,9 @@ import { getRandomNumber } from '../utils';
 import { Tile } from './Tile';
 import { MATRIX_TYPES } from './constants';
 
+/**
+ *
+ */
 class MatrixArray extends Array {
     constructor(config) {
         super();
@@ -18,6 +21,12 @@ class MatrixArray extends Array {
         return filtered.flat();
     }
 
+    /**
+     * Возвращает список tile, которые могут атаковать.
+     *
+     * @param {string} name - playerName.
+     * @return {array}
+     */
     getTileListByCanAttack(name) {
         const tileList = this.getTileListByPlayer(name);
 
@@ -25,7 +34,8 @@ class MatrixArray extends Array {
             const neighbors = this.getNeighbors(tile);
             let result = false;
 
-            if (neighbors.length) {
+            // Есть соседние клетки и есть powerValue для атаки.
+            if (neighbors.length && tile.powerValue > 1) {
                 result = neighbors.some(neighborTile => neighborTile.playerName !== name);
             }
 
@@ -40,7 +50,7 @@ class MatrixArray extends Array {
             return null;
         }
 
-        return this[x][y];
+        return this[y][x];
     }
 
     /**
@@ -56,17 +66,17 @@ class MatrixArray extends Array {
             const result = [];
 
             connectList.forEach(type => {
-                if (type === CONNECT_TYPE.LEFT_TOP) {
-                    const neighbor = this.getTileByPosition({ x: position.x - 1, y: position.y - 1 });
+                let neighborPosition;
 
-                    result.push(neighbor);
+                if (type === CONNECT_TYPE.LEFT_TOP) {
+                    neighborPosition = { x: position.x - 1, y: position.y - 1 };
                 }
 
                 if (type === CONNECT_TYPE.RIGHT_BOTTOM) {
-                    const neighbor = this.getTileByPosition({ x: position.x + 1, y: position.y + 1 });
-
-                    result.push(neighbor);
+                    neighborPosition = { x: position.x + 1, y: position.y + 1 };
                 }
+
+                result.push(this.getTileByPosition(neighborPosition));
             });
 
             return result;
