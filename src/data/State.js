@@ -68,6 +68,16 @@ export class PowerState extends State {
     resetActiveTilePosition() {
         this.setState(STATE_FIELDS.ACTIVE_TILE_POSITION, {});
     }
+
+    setIsPeopleFlagTrue(peopleNameList) {
+        peopleNameList.forEach(name => {
+            this[name].setIsPeopleFlag(true);
+        });
+    }
+
+    getIsPeopleFlag(playerName) {
+        return this[playerName].getIsPeopleFlag();
+    }
 }
 
 /**
@@ -80,10 +90,19 @@ export class PlayerState extends State {
         this[STATE_FIELDS.STEP_TYPE] = null;
         this[STATE_FIELDS.VALUE] = value || '';
         this[STATE_FIELDS.AVAILABLE_POWER] = 0;
+        this[STATE_FIELDS.IS_PEOPLE] = false;
     }
 
     setStepType(type) {
-        this[STATE_FIELDS.STEP_TYPE] = type;
+        this.setState(STATE_FIELDS.STEP_TYPE, type)
+    }
+
+    setIsPeopleFlag(value) {
+        this.setState(STATE_FIELDS.IS_PEOPLE, value);
+    }
+
+    getIsPeopleFlag() {
+        return this.getStateProperty(STATE_FIELDS.IS_PEOPLE);
     }
 }
 
@@ -96,4 +115,5 @@ export const STATE_FIELDS = {
     CURRENT_STEP_TYPE: 'currentStepType',   // этап текущего хода.
     ACTIVE_TILE_POSITION: 'activeTilePosition', // координаты активной плитки.
     AVAILABLE_POSITION: 'availablePosition',    // доступные для активной клетки ходы.
+    IS_PEOPLE: 'isPeople',                  // флаг, человек.
 }

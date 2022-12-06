@@ -1,17 +1,19 @@
 import { RenderHelper } from '../library/RenderHelper';
 import { buildTable, buildTD } from './table';
 import { createDiv } from './helper';
-import { additionalField } from './additionalField';
 import { COMMON_DOM_IDS } from '../library/renderConstants';
+import { AdditionalFieldComponent } from './components/AdditionalField';
 
 /**
- * Всё что связано с визуальным отображением.
+ * Всё что связано с визуальным отображением игры.
  */
 export class PowerRenderHelper extends RenderHelper {
     createApp(matrix, state) {
         const baseForm = this.getBaseForm();
 
         document.body.appendChild(baseForm);
+
+        this.isDev = true;
 
         this.createMatrix(matrix);
         this.createAdditionalInfo(state);
@@ -22,9 +24,9 @@ export class PowerRenderHelper extends RenderHelper {
      */
     createAdditionalInfo(state) {
         const rootNode = this.getAdditionalNode();
-        const content = additionalField.call(this, state);
 
-        rootNode.append(content);
+        this.additionalField = new AdditionalFieldComponent(this.handler, this.isDev);
+        this.additionalField.pastIn(rootNode);
     }
 
     getDiv(className, text, id, child) {
@@ -62,6 +64,10 @@ export class PowerRenderHelper extends RenderHelper {
         const oldTd = trNode.getElementsByTagName('td')[item.position.x];
 
         trNode.replaceChild(tdNode, oldTd);
+    }
+
+    rerenderTurnButton(state) {
+        this.additionalField.buttonHighlight(state);
     }
 
     // TODO: доработать. На данный момент только для тестирования.

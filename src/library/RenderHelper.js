@@ -14,9 +14,10 @@ export class RenderHelper {
      *
      *
      */
-    constructor(domIds, handler) {
+    constructor(domIds, handler, isDev = false) {
         this.DOM_IDS = domIds;
         this.handler = handler;
+        this.isDev = isDev;
     }
 
     /**

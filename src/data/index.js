@@ -18,6 +18,12 @@ export class PowerDataHelper extends DataHelper {
         const emptyMap = this.createEmptyMatrix();
         this.matrix = setRandomElementsInMap(emptyMap, this.state);
 
+        // TODO: реализовать нормальный функционал после раздела "настройки".
+        const typeType = 'default';
+        if (typeType === 'default') {
+            this.state.setIsPeopleFlagTrue(['player0']);
+        }
+
         this.setFirstTurn();
 
         return true;
@@ -104,6 +110,10 @@ export class PowerDataHelper extends DataHelper {
         this.state.setCurrentStepType(type);
     }
 
+    getOpponentTileList(myPosition) {
+        return getOpponentLinkedTile.call(this, myPosition, this.config.MATRIX_TYPE);
+    }
+
     resetWaitingSelect() {
         this.changeParamByParam(MATRIX_FIELDS.TYPE, CELL_TYPE.WAITING_SELECT, CELL_TYPE.READY, true);
     }
@@ -112,8 +122,9 @@ export class PowerDataHelper extends DataHelper {
         this.setCellTypeForAll(CELL_TARGET_TYPE.byPosition, position, CELL_TYPE.SELECTED, true);
     }
 
+
     highlightOpponent(myPosition) {
-        const linkedList = getOpponentLinkedTile.call(this, myPosition, this.config.MATRIX_TYPE);
+        const linkedList = this.getOpponentTileList(myPosition);
 
         linkedList.forEach(({ position }) => {
             this.setCellTypeForAll(CELL_TARGET_TYPE.byPosition, position, CELL_TYPE.WAITING_SELECT, true);
@@ -136,8 +147,10 @@ export class PowerDataHelper extends DataHelper {
         this.state.setAvailablePosition(positionList);
     }
 
-    setActiveTilePosition(position) {
-        this.highlightActiveTile(position);
+    setActiveTilePosition(position, isPeople = false) {
+        if (isPeople) {
+            this.highlightActiveTile(position);
+        }
         this.setState(STATE_FIELDS.ACTIVE_TILE_POSITION, { ...position });
     }
 
@@ -178,6 +191,27 @@ export class PowerDataHelper extends DataHelper {
     }
 
     /**
+     * Проверка на возможность совершить дальнейший ход.
+     * Если человек - подсветить кнопку "Завершить ход".
+     * Если компьютер - перейти к след. игроку.
+     *
+     * @param {string} name - playerName.
+     */
+    checkMoveIsCompleted(name) {
+        const canAttackList = this.matrix.getTileListByCanAttack(name);
+        const isPeople = this.state.getIsPeopleFlag(name);
+
+        if (canAttackList.length === 0) {
+            if (isPeople) {
+                this.rerender('turnButtonActive');
+            } else {
+                // След. ход.
+                console.log("isn't people");
+            }
+        }
+    }
+
+    /**
      * Выделяем клетку чтобы совершить атаку. Выделем клетки которые можно атаковать.
      *
      * @param {object} position
@@ -202,7 +236,7 @@ export class PowerDataHelper extends DataHelper {
         this.setStepType(name, STEP_TYPE.CHOOSE_FOR_ATTACK, true);
     }
 
-    doAttack(position) {
+    doPeopleAttack(position) {
         const activePosition = this.getActiveTilePosition();
         const activePower = this.getPowerValue(activePosition);
         const defensivePower = this.getPowerValue(position);
@@ -212,6 +246,37 @@ export class PowerDataHelper extends DataHelper {
         this.changeTileAfterAttack(activePosition, position, attackResult);
         this.resetHighlight();
         this.changeStepAfterAttack(currentTurn);
+        this.checkMoveIsCompleted(currentTurn);
+    }
+
+    /**
+     *
+     * @param {object} active - {x, y}
+     * @param {object} defensive - {x, y}
+     * @param {string} playerName
+     */
+    doPCAttack(active, defensive, playerName) {
+        const activePower = this.getPowerValue(active);
+        const defensivePower = this.getPowerValue(defensive);
+        const attackResult = calcAttackResult(activePower, defensivePower);
+
+        this.changeTileAfterAttack(active, defensive, attackResult);
+        this.resetHighlight();
+        this.checkMoveIsCompleted(playerName);
+    }
+
+    activeGivePowerStepForPeople() {
+        this.setCurrentStepType(STEP_TYPE.GIVE_POWER);
+        this.rerender('turnButtonInactive');
+
+        // получить только свои тайлы.
+        // подсветить клетки.
+        // вывести число power.
+        // сбросить кнопку.
+    }
+
+    activeGivePowerStepForPC() {
+        this.setCurrentStepType(STEP_TYPE.GIVE_POWER);
     }
 
     /**
@@ -234,6 +299,7 @@ export class PowerDataHelper extends DataHelper {
         }
     }
 
+    // TODO: убрать дублирование
     checkPositionLimits({ x, y }) {
         const limitsMethod = (value, maxLimit) => value >= 0 && value <= maxLimit;
 

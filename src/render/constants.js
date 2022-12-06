@@ -36,3 +36,7 @@ export const LOG_CLASS = {
 export const TEXTS = {
     NEXT_TURN: 'Завершить ход',
 }
+
+export const POWER_DOM_IDS = {
+    TURN_BUTTON: 'turnButton',      // TODO: может оказаться лишним.
+}

@@ -11,7 +11,6 @@ import { getPositionObject, someEqualPosition } from './utils';
  * @param {event} event
  * @param {object} context
  * @param {DataHelper} appData
- *
  */
 export const tileClickHandler = (event, context, appData) => {
     const attrDataset = context.dataset;
@@ -39,19 +38,10 @@ export const tileClickHandler = (event, context, appData) => {
 
         // Выполнить атаку / сбросить ход.
         if (someEqualPosition(availableList, pressedPosition)) {
-            appData.doAttack(pressedPosition);
+            appData.doPeopleAttack(pressedPosition);
         } else {
             appData.doResetSelectForAttack();
         }
-
-        // pressedPosition
-        // Могу кликнуть только по сопернику.
-        // Могу кликнуть только по соседнему сопернику.
-
-        // необходимо кликнуть по сопернику
-        // подсветить возможные клетки соперника
-        // выполнить перерасчёт
-        // меняем stepType
     }
 
     // Ожидание выбора своих клеток для раздачи power.

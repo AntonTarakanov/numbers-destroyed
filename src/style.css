@@ -65,6 +65,7 @@ body {
     box-shadow:0 0 10px #F8F8F0;
 }
 
+/* Так же для TurnButton. */
 .cell_selected {
     -moz-box-shadow:0 0 10px #000;
     -webkit-box-shadow:0 0 10px #000;

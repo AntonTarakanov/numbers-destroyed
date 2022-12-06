@@ -7,9 +7,10 @@ import { CELL_TARGET_TYPE } from '../data/constants';
  * config - размер matrix которую необходимо построить.
  */
 export class DataHelper {
-    constructor(handler, config) {
+    constructor(handler, config, isDev = false) {
         this.handler = handler;
         this.config = config ? config : DEFAULT_CONFIG;
+        this.isDev = isDev;
     }
 
     setState(property, value) {
@@ -135,6 +136,13 @@ export class DataHelper {
     }
 
     rerenderByPosition(position) {
-        this.handler(position);
+        this.rerender('rerenderByPosition', position);
+    }
+
+    /**
+     *
+     */
+    rerender(type, data) {
+        this.handler(type, data);
     }
 }
