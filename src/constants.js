@@ -30,6 +30,8 @@ export const STEP_TYPE = {
 export const HANDLER_TYPE = {
     TURN_BUTTON_CLICK: 'turnButtonClick',
     TILE_CLICK: 'tileClick',
+
+    DEV_DO_RANDOM_1: 'devDoRandom1',
 }
 
 export const CALC_ATTACK_RESULTS = {
