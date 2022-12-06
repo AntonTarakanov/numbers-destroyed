@@ -21,6 +21,10 @@ class MatrixArray extends Array {
         return filtered.flat();
     }
 
+    getCountTilesByName(name) {
+        return this.getTileListByPlayer(name).length;
+    }
+
     /**
      * Возвращает список tile, которые могут атаковать.
      *

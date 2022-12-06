@@ -35,6 +35,7 @@ export const LOG_CLASS = {
 
 export const TEXTS = {
     NEXT_TURN: 'Завершить ход',
+    END_GIFT: 'Завершить раздачу',
 }
 
 export const POWER_DOM_IDS = {

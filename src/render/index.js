@@ -66,8 +66,14 @@ export class PowerRenderHelper extends RenderHelper {
         trNode.replaceChild(tdNode, oldTd);
     }
 
-    rerenderTurnButton(state) {
-        this.additionalField.buttonHighlight(state);
+    rerenderTurnButton(type, data) {
+        if (type === 'highlight') {
+            this.additionalField.buttonHighlight(data);
+        }
+
+        if (type === 'activeGiftView') {
+            this.additionalField.activeGiftView(data);
+        }
     }
 
     // TODO: доработать. На данный момент только для тестирования.

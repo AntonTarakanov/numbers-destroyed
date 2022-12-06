@@ -16,17 +16,15 @@ export class AdditionalFieldComponent extends BaseComponent {
         // this.handler = handler;
         this.tileClassName = LOG_CLASS.TILE;
         this.buttonClassName = LOG_CLASS.BUTTON;
-        this.text = TEXTS.NEXT_TURN;
 
-        this.buttonElement = new TurnButtonComponent(handler, HANDLER_TYPE.TURN_BUTTON_CLICK);
+        this.buttonElement = new TurnButtonComponent(handler, HANDLER_TYPE.TURN_BUTTON_CLICK, TEXTS.NEXT_TURN);
         this.element = this.getNewElement();
 
         // Вспомогательные действия для отладки.
         if (isDev) {
-            this.devButtonElement1 = new TurnButtonComponent(handler, HANDLER_TYPE.DEV_DO_RANDOM_1);
+            this.devButtonElement1 = new TurnButtonComponent(handler, HANDLER_TYPE.DEV_DO_RANDOM_1, 'Сделать ходы');
 
             this.devButtonElement1.pastIn(this.element);
-            this.devButtonElement1.element.children[0].textContent = 'Сделать ходы';
         }
     }
 
@@ -43,5 +41,12 @@ export class AdditionalFieldComponent extends BaseComponent {
      */
     buttonHighlight(status) {
         status ? this.buttonElement.highlightOn() : this.buttonElement.highlightOff();
+    }
+
+    /**
+     *
+     */
+    activeGiftView(data) {
+        this.buttonElement.setText(`${TEXTS.END_GIFT} - ${data}`);
     }
 }

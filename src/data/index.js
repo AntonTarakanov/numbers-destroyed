@@ -33,10 +33,6 @@ export class PowerDataHelper extends DataHelper {
         return getEmptyMatrix(this.config, this.state);
     }
 
-    increaseAvailablePower(name) {
-        ++this.state[name].availablePower;
-    }
-
     decreaseAvailablePower(name) {
         --this.state[name].availablePower;
     }
@@ -50,22 +46,26 @@ export class PowerDataHelper extends DataHelper {
         const name = this.getFirstTurnName();
 
         this.setStepType(name, STEP_TYPE.CHOOSE_FOR_ATTACK);
-        this.calcAvailablePower();
     }
 
     /**
      * Проставить availablePower в state
+     *
+     * @param {string} name
+     * @param {number|string} value
      */
-    calcAvailablePower() {
-        this.matrix.forEach(row => {
-            row.forEach(item => {
-                if (item.playerName) {
-                    this.increaseAvailablePower(item.playerName);
-                }
-            });
-        });
+    setAvailablePower(name, value) {
+        if (value === undefined) {
+            value = this.matrix.getCountTilesByName(name);
+        }
+
+        // TODO: прописать метод.
+        this.state[name].availablePower = value;
     }
 
+    /**
+     * TODO: переписать логику. При превышении значения снимать подсветку и не обрабатывать клик.
+     */
     increasePowerValue(position) {
         let result = false;
         const item = this.getItemByPosition(position);
@@ -265,14 +265,18 @@ export class PowerDataHelper extends DataHelper {
         this.checkMoveIsCompleted(playerName);
     }
 
+    /**
+     * Перевести ход в стадию раздачи power.
+     */
     activeGivePowerStepForPeople() {
-        this.setCurrentStepType(STEP_TYPE.GIVE_POWER);
-        this.rerender('turnButtonInactive');
+        const playerName = this.state.getCurrentTurn();
+        const tileList = this.matrix.getTileListByPlayer(playerName);
 
-        // получить только свои тайлы.
-        // подсветить клетки.
-        // вывести число power.
-        // сбросить кнопку.
+        this.setStepType(playerName, STEP_TYPE.GIVE_POWER, true);
+        this.setAvailablePower(playerName, tileList.length);
+
+        this.rerender('turnButtonInactive');
+        this.rerender('activeGiftView', tileList.length);
     }
 
     activeGivePowerStepForPC() {
@@ -281,21 +285,29 @@ export class PowerDataHelper extends DataHelper {
 
     /**
      * Раздаём power, делаем проверки, меняем статусы.
+     *
+     * @param {object} position
+     * @param {string} playerName
      */
     doGivePower(position, playerName) {
         const availablePower = this.state.getAvailablePower(playerName);
 
-        // уменьшаем в state / добавляем в map
+        // уменьшаем в state / меняем отображение.
         if (availablePower > 0) {
             const increaseResult = this.increasePowerValue(position);
 
             if (increaseResult) {
+                const newPower = availablePower - 1;
+
                 this.decreaseAvailablePower(playerName);
                 this.rerenderByPosition(position);
+                this.rerender('activeGiftView', newPower);
+
+                // Если нет возможности раздавать - подсвечиваем кнопку.
+                if (newPower === 0) {
+                    this.rerender('turnButtonActive');
+                }
             }
-        } else {
-            // Меняем state / map / и вообще всё что только можно. Другая стадия хода.
-            console.log('Меняем state / map / и вообще всё что только можно. Другая стадия хода.');
         }
     }
 

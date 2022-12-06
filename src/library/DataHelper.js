@@ -92,16 +92,14 @@ export class DataHelper {
      */
     setCellTypeForAll(targetType, target, value, useRerender = false) {
         if (CELL_TARGET_TYPE.byPlayerName === targetType) {
-            this.matrix.forEach(row => {
-                row.forEach(cell => {
-                    if (cell.getPlayerName() === target) {
-                        cell.setType(value);
-                    }
+            const tileList = this.matrix.getTileListByPlayer(target);
 
-                    if (useRerender) {
-                        this.rerenderByPosition(cell.position);
-                    }
-                });
+            tileList.forEach(tile => {
+                tile.setType(value);
+
+                if (useRerender) {
+                    this.rerenderByPosition(tile.position);
+                }
             });
         }
 

@@ -1,25 +1,23 @@
 import { BaseComponent } from '../../library';
 
-import { LOG_CLASS, TEXTS } from '../constants';
+import { LOG_CLASS } from '../constants';
 
 /**
  * Компонент кнопки для смены состояния хода.
  */
 export class TurnButtonComponent extends BaseComponent {
-    constructor(handler, type) {
+    constructor(handler, type, text) {
         super();
 
         this.handler = handler;
         this.handlerType = type;
         this.tileClassName = LOG_CLASS.TILE;
         this.buttonClassName = LOG_CLASS.BUTTON;
-        this.text = TEXTS.NEXT_TURN;
-        // this.turnButtonId = POWER_DOM_IDS.TURN_BUTTON;
 
-        this.element = this.getNewElement();
+        this.element = this.getNewElement(text);
     }
 
-    getNewElement() {
+    getNewElement(text) {
         const onClickHandler = this.handler;
         const type = this.handlerType;
         const buttonHandler = function(event) {
@@ -27,7 +25,7 @@ export class TurnButtonComponent extends BaseComponent {
         }
 
         const buttonTile = this.getDiv(this.tileClassName);
-        const buttonNode = this.getDiv(this.buttonClassName, null, this.text);
+        const buttonNode = this.getDiv(this.buttonClassName, null, text);
 
         this.buttonNode = buttonNode;
         buttonNode.addEventListener('click', buttonHandler);
@@ -41,6 +39,10 @@ export class TurnButtonComponent extends BaseComponent {
     }
 
     highlightOff() {
-        this.buttonNode.className = `cell_selected`;
+        this.buttonNode.className = this.buttonClassName;
+    }
+
+    setText(value) {
+        this.buttonNode.textContent = value;
     }
 }

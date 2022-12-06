@@ -34,13 +34,7 @@ export class Tile {
      * @param {MATRIX_FIELDS} value
      */
     setType(value) {
-        let result = value;
-
-        if (value === CELL_TYPE.WAITING_SELECT && this.getPowerValue() === 1) {
-            result = this.getType();
-        }
-
-        this.setProperty(MATRIX_FIELDS.TYPE, result);
+        this.setProperty(MATRIX_FIELDS.TYPE, value);
     }
 
     /**

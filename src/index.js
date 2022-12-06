@@ -50,11 +50,15 @@ function busDataHandler(AppData, AppRender, data, type) {
     }
 
     if (type === 'turnButtonActive') {
-        AppRender.rerenderTurnButton(true);
+        AppRender.rerenderTurnButton('highlight', true);
     }
 
     if (type === 'turnButtonInactive') {
-        AppRender.rerenderTurnButton(false);
+        AppRender.rerenderTurnButton('highlight', false);
+    }
+
+    if (type === 'activeGiftView') {
+        AppRender.rerenderTurnButton('activeGiftView', data);
     }
 }
 
