@@ -18,20 +18,18 @@ export class TurnButtonComponent extends BaseComponent {
     }
 
     getNewElement(text) {
-        const onClickHandler = this.handler;
-        const type = this.handlerType;
-        const buttonHandler = function(event) {
-            return onClickHandler(event, this, type);
-        }
-
         const buttonTile = this.getDiv(this.tileClassName);
         const buttonNode = this.getDiv(this.buttonClassName, null, text);
 
         this.buttonNode = buttonNode;
-        buttonNode.addEventListener('click', buttonHandler);
+        buttonNode.addEventListener('click', event => this.clickHandler(event));
         buttonTile.append(buttonNode);
 
         return buttonTile;
+    }
+
+    clickHandler(event) {
+        this.handler(event, null, this.handlerType);
     }
 
     highlightOn() {
@@ -44,5 +42,10 @@ export class TurnButtonComponent extends BaseComponent {
 
     setText(value) {
         this.buttonNode.textContent = value;
+    }
+
+    changeTurnInfo(caption, type) {
+        this.setText(caption);
+        this.handlerType = type;
     }
 }

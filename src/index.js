@@ -1,6 +1,6 @@
 import './style.css';
 import { PowerRenderHelper } from './render';
-import { PowerDataHelper } from './data';
+import { PowerDataAPI } from './data';
 import { HANDLER_TYPE } from './constants';
 import { tileClickHandler } from './power/powerTurn';
 import { POWER_CONFIG } from './data/constants';
@@ -26,7 +26,7 @@ function createApp() {
             busDomHandler(event, context, AppData, type);
         }
 
-        const AppData = new PowerDataHelper(proxyDataHandler, POWER_CONFIG, isDev);
+        const AppData = new PowerDataAPI(proxyDataHandler, POWER_CONFIG, isDev);
         const AppRender = new PowerRenderHelper(renderHelperArg1, proxyDomHandler, isDev);
 
         AppData.createApp();
@@ -39,7 +39,6 @@ function createApp() {
 /**
  * TODO: добавить возможность сразу передавать Tile, без лишнего запроса "getItemByPosition".
  */
-
 function busDataHandler(AppData, AppRender, data, type) {
 
     if (type === 'rerenderByPosition') {
@@ -60,6 +59,10 @@ function busDataHandler(AppData, AppRender, data, type) {
     if (type === 'activeGiftView') {
         AppRender.rerenderTurnButton('activeGiftView', data);
     }
+
+    if (type === 'dev_AutoGiftActive') {
+        AppRender.rerenderTurnButton('dev_AutoGiftActive');
+    }
 }
 
 /**
@@ -71,11 +74,20 @@ function busDomHandler(event, context, appData, type) {
     }
 
     if (type === HANDLER_TYPE.TURN_BUTTON_CLICK) {
-        appData.activeGivePowerStepForPeople();
+        appData.activeGivePowerStep();
+    }
+
+    if (type === HANDLER_TYPE.GIFT_END_BUTTON_CLICK) {
+        // Обработка хода соперника.
+        // appData.activeGivePowerStep();
     }
 
     if (type === HANDLER_TYPE.DEV_DO_RANDOM_1) {
-        LogicApi.doRandomAttacks(appData.state.currentTurn, appData);
+        if (appData.state.currentStepType === 'givePower') {
+            LogicApi.doSimpleGiftPower(appData.state.currentTurn, appData);
+        } else {
+            LogicApi.doRandomAttacks(appData.state.currentTurn, appData);
+        }
     }
 }
 

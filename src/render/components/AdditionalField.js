@@ -47,6 +47,13 @@ export class AdditionalFieldComponent extends BaseComponent {
      *
      */
     activeGiftView(data) {
-        this.buttonElement.setText(`${TEXTS.END_GIFT} - ${data}`);
+        this.buttonElement.changeTurnInfo(`${TEXTS.END_GIFT} - ${data}`, HANDLER_TYPE.GIFT_END_BUTTON_CLICK);
+    }
+
+    /**
+     *
+     */
+    devButtonChange(type, data) {
+        this.devButtonElement1.setText('Раздать power');
     }
 }

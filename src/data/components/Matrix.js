@@ -1,7 +1,7 @@
-import { CELL_TYPE, CONNECT_TYPE } from '../constants';
-import { getRandomNumber } from '../utils';
+import { CELL_TYPE, CONNECT_TYPE } from '../../constants';
+import { getRandomNumber } from '../../utils';
 import { Tile } from './Tile';
-import { MATRIX_TYPES } from './constants';
+import { MATRIX_TYPES } from '../constants';
 
 /**
  *

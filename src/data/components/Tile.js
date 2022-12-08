@@ -1,4 +1,4 @@
-import { CELL_TYPE } from '../constants';
+import { CELL_TYPE } from '../../constants';
 
 export class Tile {
     constructor(position = { x: 0, y: 0 }, type = CELL_TYPE.EMPTY) {
@@ -29,7 +29,6 @@ export class Tile {
     }
 
     /**
-     * Содержит в том числе логику допустимых значений для type.
      *
      * @param {MATRIX_FIELDS} value
      */

@@ -1,5 +1,5 @@
-import { COLOR_LIST, STEP_TYPE } from '../constants';
-import { State } from '../library/State';
+import { COLOR_LIST, STEP_TYPE } from '../../constants';
+import { State } from '../../library/State';
 
 export class PowerState extends State {
     constructor(names) {

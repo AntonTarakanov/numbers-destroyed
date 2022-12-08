@@ -13,8 +13,6 @@ export class PowerRenderHelper extends RenderHelper {
 
         document.body.appendChild(baseForm);
 
-        this.isDev = true;
-
         this.createMatrix(matrix);
         this.createAdditionalInfo(state);
     }
@@ -73,6 +71,10 @@ export class PowerRenderHelper extends RenderHelper {
 
         if (type === 'activeGiftView') {
             this.additionalField.activeGiftView(data);
+        }
+
+        if (type === 'dev_AutoGiftActive') {
+            this.additionalField.devButtonChange(type, data);
         }
     }
 

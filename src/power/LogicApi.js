@@ -16,6 +16,18 @@ const doRandomAttacks = (name, DataApi) => {
     });
 }
 
+/**
+ *
+ */
+const doSimpleGiftPower = (name, DataApi) => {
+    const tileList = DataApi.matrix.getTileListByPlayer(name);
+
+    tileList.forEach(tile => {
+        DataApi.doGivePowerPC(name, tile.position);
+    });
+}
+
 export const LogicApi = {
     doRandomAttacks: doRandomAttacks,
+    doSimpleGiftPower: doSimpleGiftPower,
 }

@@ -46,7 +46,7 @@ export const tileClickHandler = (event, context, appData) => {
 
     // Ожидание выбора своих клеток для раздачи power.
     if (currentStepTypeState === STEP_TYPE.GIVE_POWER) {
-        appData.doGivePower(pressedPosition, tilePlayerName);
+        appData.doGivePower(tilePlayerName, pressedPosition);
     }
 
     // Ожидание пока сходит соперник.
