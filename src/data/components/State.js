@@ -78,6 +78,10 @@ export class PowerState extends State {
     getIsPeopleFlag(playerName) {
         return this[playerName].getIsPeopleFlag();
     }
+
+    getPlayerInfo(playerName) {
+        return this[playerName];
+    }
 }
 
 /**

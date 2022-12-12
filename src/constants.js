@@ -28,14 +28,21 @@ export const STEP_TYPE = {
 
 //
 export const HANDLER_TYPE = {
-    TURN_BUTTON_CLICK: 'turnButtonClick',
-    GIFT_END_BUTTON_CLICK: 'giftEndButtonClick',
-    TILE_CLICK: 'tileClick',
+    TURN_BUTTON_CLICK: 'turnButtonClick',           // клик по "Следующий ход".
+    GIFT_END_BUTTON_CLICK: 'giftEndButtonClick',    // клик по "Завершить раздачу".
+    TILE_CLICK: 'tileClick',                        // клик по плитке.
 
-    DEV_DO_RANDOM_1: 'devDoRandom1',
+    DEV_DO_RANDOM_1: 'devDoRandom1',                // клик по автовыполнению чего либо.
 }
 
+//
 export const CALC_ATTACK_RESULTS = {
     ATTACK: 'attack',
     DEFENSIVE: 'defensive',
 }
+
+//
+export const TURN_BUTTON_EVENTS = [
+    HANDLER_TYPE.TURN_BUTTON_CLICK,
+    HANDLER_TYPE.GIFT_END_BUTTON_CLICK
+];

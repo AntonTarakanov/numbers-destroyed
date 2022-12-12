@@ -1,10 +1,10 @@
 import './style.css';
 import { PowerRenderHelper } from './render';
 import { PowerDataAPI } from './data';
-import { HANDLER_TYPE } from './constants';
+import { HANDLER_TYPE, TURN_BUTTON_EVENTS } from './constants';
 import { tileClickHandler } from './power/powerTurn';
 import { POWER_CONFIG } from './data/constants';
-import { LogicApi } from './power/LogicApi';
+import { PowerLogicAPI } from './power/LogicAPI';
 
 const APP_NAME = 'powerValue';
 const isDev = true;
@@ -19,13 +19,15 @@ function createApp() {
     const renderHelperArg1 = { root: APP_NAME };
 
     try {
+        // TODO: привести к единому виду.
         const proxyDataHandler = function(type, data) {
             return busDataHandler(AppData, AppRender, data, type);
         }
         const proxyDomHandler = function(event, context, type) {
-            busDomHandler(event, context, AppData, type);
+            busDomHandler(event, context, AppData, type, LogicAPI);
         }
 
+        const LogicAPI = new PowerLogicAPI();
         const AppData = new PowerDataAPI(proxyDataHandler, POWER_CONFIG, isDev);
         const AppRender = new PowerRenderHelper(renderHelperArg1, proxyDomHandler, isDev);
 
@@ -68,25 +70,23 @@ function busDataHandler(AppData, AppRender, data, type) {
 /**
  *
  */
-function busDomHandler(event, context, appData, type) {
+function busDomHandler(event, context, appData, type, LogicAPI) {
+    console.log(event, context, appData, type);
+
     if (type === HANDLER_TYPE.TILE_CLICK) {
         tileClickHandler(event, context, appData);
     }
 
-    if (type === HANDLER_TYPE.TURN_BUTTON_CLICK) {
-        appData.activeGivePowerStep();
-    }
-
-    if (type === HANDLER_TYPE.GIFT_END_BUTTON_CLICK) {
-        // Обработка хода соперника.
-        // appData.activeGivePowerStep();
+    if (TURN_BUTTON_EVENTS.includes(type)) {
+        LogicAPI.turnButtonClickHandler(appData, null, { type });
     }
 
     if (type === HANDLER_TYPE.DEV_DO_RANDOM_1) {
         if (appData.state.currentStepType === 'givePower') {
-            LogicApi.doSimpleGiftPower(appData.state.currentTurn, appData);
+            LogicAPI.doSimpleGiftPower(appData.state.currentTurn, appData);
+            appData.rerender('turnButtonActive');
         } else {
-            LogicApi.doRandomAttacks(appData.state.currentTurn, appData);
+            LogicAPI.doRandomAttacks(appData.state.currentTurn, appData);
         }
     }
 }

@@ -151,6 +151,21 @@ export class PowerData extends DataHelper {
         return playersList[currentIndex + 1];
     }
 
+    /**
+     *
+     * @return {object} { info, name }
+     */
+    getNextPlayerInfo() {
+        const oldName = this.state.getCurrentTurn();
+        const nextName = this.getNextPlayerName(oldName);
+        const playerInfo = this.state.getPlayerInfo(nextName);
+
+        return {
+            info: { ...playerInfo },
+            name: nextName,
+        };
+    }
+
     getAvailablePosition() {
         return this.state.getAvailablePosition();
     }
