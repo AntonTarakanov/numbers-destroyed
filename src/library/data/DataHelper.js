@@ -1,39 +1,61 @@
-import { DEFAULT_CONFIG } from './config';
-import { CELL_TARGET_TYPE } from '../data/constants';
+import { Base } from '../base/base';
+import { BaseState } from './State';
+import { BaseMatrix } from './Matrix';
+import {
+    REQUIRED_FIELDS,
+    ERROR_TEXT,
+    DEFAULT_PLAYER_NAME,
+} from './constants';
+
+import { CELL_TARGET_TYPE } from '../../data/constants';
 
 /**
  * Универсальные методы для работы с данными.
+ * Данные в виде матрицы по переданным размерам.
  *
  * config - размер matrix которую необходимо построить.
+ * handler - вызов при изменении полей matrix.
  */
-export class DataHelper {
+export class DataHelper extends Base {
     constructor(handler, config, isDev = false) {
+        super();
+
+        this.REQUIRED_FIELDS = REQUIRED_FIELDS;
+        this.ERROR_TEXT = ERROR_TEXT;
+
         this.handler = handler;
-        this.config = config ? config : DEFAULT_CONFIG;
+        this.config = config;
         this.isDev = isDev;
+
+        this.checkRequiredFields();
+        this.initData();
+    }
+
+    /**
+     * Определение минимально необходимых данных.
+     */
+    initData() {
+        this.state = new BaseState();
+        this.matrix = new BaseMatrix();
     }
 
     setState(property, value) {
-        if (property) {
-            this.state[property] = value;
-        }
+        this.state.setState(property, value);
     }
 
-    // TODO: лишнее.
     getStateProperty(property) {
-        return this.state[property];
+        return this.state.getStateProperty(property);
     }
 
     /**
      * Возвращает имена/ключи игроков самым простым способом.
-     * В дальнейшем можно сделать более интересную и настраиваемую систему.
      */
     getPlayersName() {
         const value = this.getNumberOfPlayers();
         const result = [];
 
         for (let i = 0; i < value; i++) {
-            result.push('player' + i);
+            result.push(DEFAULT_PLAYER_NAME + i);
         }
 
         return result;
@@ -43,12 +65,13 @@ export class DataHelper {
         return this.config.COUNT_PLAYER;
     }
 
+    /**
+     * Получить элемент матрицы по координатам.
+     *
+     * @param {object} position - { x, y } .
+     */
     getItemByPosition(position) {
-        if (!this.checkPositionLimits(position)) {
-            console.log('checkPositionLimits ERROR');
-        }
-
-        return this.matrix[position.y][position.x];
+        return this.matrix.getItem(position);
     }
 
     /**
@@ -59,6 +82,7 @@ export class DataHelper {
      * @param {any} newValue
      * @param {boolean} useRerender
      */
+    // TODO: переделать/пересомтреть всё что ниже.
     changeParamByParam(property, oldValue, newValue, useRerender = false) {
         this.matrix.forEach(row => {
             row.forEach(item => {
