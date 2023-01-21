@@ -1,11 +1,15 @@
 import { CELL_TYPE } from '../../constants';
 
 export class Tile {
-    constructor(position = { x: 0, y: 0 }, type = CELL_TYPE.EMPTY) {
+    constructor(position = { x: 0, y: 0 }, type = CELL_TYPE.EMPTY, connectType) {
         this[MATRIX_FIELDS.POWER_VALUE] = null;
         this[MATRIX_FIELDS.POSITION] = { ...position };
         this[MATRIX_FIELDS.TYPE] = type;
         this[MATRIX_FIELDS.CONNECT_LIST] = [];
+
+        if (connectType) {
+            this[MATRIX_FIELDS.CONNECT_TYPE] = connectType;
+        }
     }
 
     setProperty(property, value) {
@@ -55,6 +59,16 @@ export class Tile {
 
         return result;
     }
+
+    /**
+     *
+     * @param {string} value
+     */
+    addToConnectList(value) {
+        if (!this[MATRIX_FIELDS.CONNECT_LIST].includes(value)) {
+            this[MATRIX_FIELDS.CONNECT_LIST].push(value);
+        }
+    }
 }
 
 export const MATRIX_FIELDS = {
@@ -64,4 +78,5 @@ export const MATRIX_FIELDS = {
     CONNECT_LIST: 'connectList',
     PLAYER_NAME: 'playerName',
     COLOR: 'color',
+    CONNECT_TYPE: 'connectType',
 };

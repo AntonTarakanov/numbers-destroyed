@@ -1,18 +1,31 @@
+import { MATRIX_NAMES } from './data';
+
+/**
+ * То что может использоваться везде.
+ */
+
 // Возможные варианты состояния клетки
 export const CELL_TYPE = {
-    EMPTY: null,                        //
-    WAITING: 'waiting',                 //
-    READY: 'ready',                     //
-    CONNECT_LINE: 'connectLine',        // удалить.
-    WAITING_SELECT: 'waitingSelect',    // ожидание выбора, подсветка.
-    SELECTED: 'selected',               // выбранная/активная прилтка
+    EMPTY: null,                                //
+    WAITING: 'waiting',                         //
+    WAITING_ALLOCATION: 'waitingAllocation',    // клетка под power, но не имеет принадлежности.
+    READY: 'ready',                             //
+    CONNECT_LINE: 'connectLine',                //
+    WAITING_SELECT: 'waitingSelect',            // ожидание выбора, подсветка.
+    SELECTED: 'selected',                       // выбранная/активная плитка
 };
 
 //
 export const CONNECT_TYPE = {
     LINE: 'line',
+    LEFT_LINE: 'leftLine',
+    RIGHT_LINE: 'rightLine',
     LEFT_TOP: 'leftTop',
     RIGHT_BOTTOM: 'rightBottom',
+    LEFT_TO_BOTTOM: 'leftToBottom',
+    RIGHT_TO_BOTTOM: 'rightToBottom',
+    LEFT_TO_TOP: 'leftToTop',
+    RIGHT_TO_TOP: 'rightToTop',
 };
 
 //
@@ -46,3 +59,9 @@ export const TURN_BUTTON_EVENTS = [
     HANDLER_TYPE.TURN_BUTTON_CLICK,
     HANDLER_TYPE.GIFT_END_BUTTON_CLICK
 ];
+
+// Тип карты / тип элементов на карте.
+export const MATRIX_TYPES = {
+    SIMPLE: MATRIX_NAMES.SQUARE1_MATRIX_NAME,   // Квадрат с двумя связями. Нужен только для тестирования. Реализован через таблицу.
+    HEXAGON: MATRIX_NAMES.HEXAGON1_MATRIX_NAME, // Базовый тип с шестью связями.
+}
