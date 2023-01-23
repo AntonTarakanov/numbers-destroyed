@@ -1,7 +1,7 @@
 import { COLOR_LIST, STEP_TYPE } from '../../constants';
-import { State } from '../../library/State';
+import { BaseState } from '../../library';
 
-export class PowerState extends State {
+export class PowerState extends BaseState {
     constructor(names) {
         super();
 
@@ -53,6 +53,10 @@ export class PowerState extends State {
         return this[playerName][STATE_FIELDS.AVAILABLE_POWER];
     }
 
+    setAvailablePower(playerName, power) {
+        this[playerName][STATE_FIELDS.AVAILABLE_POWER] = power;
+    }
+
     getAvailablePosition() {
         return this.getStateProperty(STATE_FIELDS.AVAILABLE_POSITION);
     }
@@ -82,12 +86,23 @@ export class PowerState extends State {
     getPlayerInfo(playerName) {
         return this[playerName];
     }
+
+    getPlayerColor(playerName) {
+        return this.getPlayerInfo(playerName).value;
+    }
+
+    /**
+     * @return {array} [ [name, color], ... ] .
+     */
+    getShotInfo() {
+        return this.getPlayersList().map(name => [name, this.getPlayerColor(name)]);
+    }
 }
 
 /**
  *
  */
-export class PlayerState extends State {
+export class PlayerState extends BaseState {
     constructor(value) {
         super();
 
