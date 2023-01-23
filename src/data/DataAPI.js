@@ -1,14 +1,30 @@
 import { PowerData } from './Data';
-import { STEP_TYPE } from '../constants';
+import { CELL_TYPE, STEP_TYPE } from '../constants';
 import { STATE_FIELDS } from './components/State';
 import { calcAttackResult } from '../power/main';
 
 /**
- * Расширяем данные методами для совершения ходов.
+ * Расширяем данные "PowerData" методами для совершения ходов.
  * С постфикосм "PC" не выполняются промежуточные перерисовки.
- * Методы доступные вне Data.
  */
 export class PowerDataAPI extends PowerData {
+
+    // CHANGE TURN
+
+    /**
+     * Поменять статусы для совершения след. хода. Убрать подсветки.
+     *
+     * @param {string} newPlayerName
+     */
+    doNextTurn(newPlayerName) {
+
+        // Сброс предыдущих состояний.
+        this.resetHighlight();
+        this.rerender('turnButtonInactive');
+
+        // Установка новых состояний.
+        this.setStepType(newPlayerName, CELL_TYPE.WAITING_SELECT);
+    }
 
     // FOR ATTACK
 
@@ -37,6 +53,9 @@ export class PowerDataAPI extends PowerData {
         this.setStepType(name, STEP_TYPE.CHOOSE_FOR_ATTACK, true);
     }
 
+    /**
+     *
+     */
     doPeopleAttack(position) {
         const activePosition = this.getActiveTilePosition();
         const activePower = this.getPowerValue(activePosition);

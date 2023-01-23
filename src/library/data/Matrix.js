@@ -11,18 +11,83 @@ export class BaseMatrix extends Array {
     }
 
     /**
+     * Принимаем матрицу и последовательно записывает её.
+     *
+     * @param {array} matrix.
+     */
+    overwriteMatrix(matrix) {
+        matrix.forEach((row, index) => {
+            this[index] = row;
+        });
+    }
+
+    /**
      * Получить элемент матрицы.
      *
      * @param {object} position - { x, y } .
      */
-    getItem(position) {
-        if (!this.checkPositionLimits(position)) {
+    getItem({ x, y }) {
+        if (!this.checkPositionLimits({ x, y })) {
             console.log('checkPositionLimits ERROR');
 
             return null;
         }
 
-        return this[position.y][position.x];
+        return this[y][x];
+    }
+
+    /**
+     * Меняем одно переданное значение на другое
+     *
+     * @param {string} property
+     * @param {any|array} oldValue
+     * @param {any} newValue
+     *
+     * @return {array} [{ x, y }]. Координаты изменённых элементов.
+     */
+    changeParamByParam(property, oldValue, newValue) {
+        const changedList = [];
+
+        this.matrix.forEach(row => {
+            row.forEach(item => {
+                let isEqual;
+
+                if (Array.isArray(oldValue)) {
+                    isEqual = oldValue.some(oldValueItem => oldValueItem === item[property]);
+                } else {
+                    isEqual = item[property] === oldValue;
+                }
+
+                if (isEqual) {
+                    item[property] = newValue;
+
+                    changedList.push(item.position);
+                }
+            });
+        });
+
+        return changedList;
+    }
+
+    /**
+     *
+     */
+    getEmptyMatrix() {
+        if (!this.MAX_X && !this.MAX_Y) {
+            return [[]];
+        }
+
+        for (let i = 0; i < this.MAX_Y; i++) {
+            let rowResult = [];
+
+            for (let j = 0; j < this.MAX_X; j++) {
+                rowResult.push({ x: j, y: i });
+            }
+
+            result.push(rowResult);
+        }
+
+        return result;
     }
 
     /**

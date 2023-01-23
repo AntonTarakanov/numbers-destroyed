@@ -1,7 +1,7 @@
 import { CELL_TARGET_TYPE } from './constants';
 import { STEP_TYPE, CELL_TYPE, CALC_ATTACK_RESULTS } from '../constants';
-import { DataHelper } from '../library/DataHelper';
-import { getEmptyMatrix, getOpponentLinkedTile, setRandomElementsInMap } from './components/Matrix';
+import { DataHelper } from '../library';
+import { getOpponentLinkedTile, PowerMatrix } from './components/Matrix';
 import { PowerState, STATE_FIELDS } from './components/State';
 import { MATRIX_FIELDS } from './components/Tile';
 
@@ -10,26 +10,19 @@ import { MATRIX_FIELDS } from './components/Tile';
  */
 export class PowerData extends DataHelper {
 
-    createApp() {
+    initData() {
         this.playersName = this.getPlayersName();
         this.state = new PowerState(this.playersName);
+        this.matrix = new PowerMatrix(this.config, this.state.getShotInfo());
 
-        const emptyMap = this.createEmptyMatrix();
-        this.matrix = setRandomElementsInMap(emptyMap, this.state);
+        // TODO: не реализовано.
+        // this.setFirstTurn();
 
         // TODO: реализовать нормальный функционал после раздела "настройки".
-        const typeType = 'default';
-        if (typeType === 'default') {
-            this.state.setIsPeopleFlagTrue(['player0']);
+        const isPeopleFlag = 'default';
+        if (isPeopleFlag === 'default') {
+            this.state.setIsPeopleFlagTrue([this.playersName[0]]);
         }
-
-        this.setFirstTurn();
-
-        return true;
-    }
-
-    createEmptyMatrix() {
-        return getEmptyMatrix(this.config, this.state);
     }
 
     decreaseAvailablePower(name) {
@@ -58,8 +51,7 @@ export class PowerData extends DataHelper {
             value = this.matrix.getCountTilesByName(name);
         }
 
-        // TODO: прописать метод.
-        this.state[name].availablePower = value;
+        this.state.setAvailablePower(name, value);
     }
 
     /**
@@ -106,6 +98,57 @@ export class PowerData extends DataHelper {
         }
     }
 
+    /**
+     * Проставить stepType.
+     *
+     * @param {string} targetType - тип простановки. На все, по id, ещё какие-то выборки.
+     * @param {any} target
+     * @param {string} value
+     * @param {boolean} useRerender
+     */
+    setCellTypeForAll(targetType, target, value, useRerender = false) {
+        if (CELL_TARGET_TYPE.byPlayerName === targetType) {
+            const tileList = this.matrix.getTileListByPlayer(target);
+
+            tileList.forEach(tile => {
+                tile.setType(value);
+
+                if (useRerender) {
+                    this.rerenderByPosition(tile.position);
+                }
+            });
+        }
+
+        if (CELL_TARGET_TYPE.byPosition === targetType) {
+            const item = this.matrix.getItem(target);
+
+            if (item?.type) {
+                item.type = value;
+            }
+
+            if (useRerender) {
+                this.rerenderByPosition(target);
+            }
+        }
+    }
+
+    /**
+     * Проставить stepType для переданного списка.
+     *
+     * @param {array} list
+     * @param {any} value
+     * @param {boolean} useRerender
+     */
+    setCellTypeInList(list, value, useRerender = false) {
+        list.forEach(tile => {
+            tile.setType(value);
+
+            if (useRerender) {
+                this.rerenderByPosition(tile.position);
+            }
+        });
+    }
+
     setCurrentStepType(type) {
         this.state.setCurrentStepType(type);
     }
@@ -148,7 +191,7 @@ export class PowerData extends DataHelper {
         const playersList = this.state.getPlayersList();
         const currentIndex = playersList.indexOf(playerName);
 
-        return playersList[currentIndex + 1];
+        return playersList[currentIndex + 1] || playersList[0];
     }
 
     /**
@@ -211,6 +254,10 @@ export class PowerData extends DataHelper {
         }
     }
 
+    /**
+     *
+     * @param {string} name - playerName.
+     */
     changeStepAfterAttack(name) {
         this.state.resetActiveTilePosition();
         this.state.resetAvailablePosition();

@@ -65,3 +65,9 @@ export const MATRIX_TYPES = {
     SIMPLE: MATRIX_NAMES.SQUARE1_MATRIX_NAME,   // Квадрат с двумя связями. Нужен только для тестирования. Реализован через таблицу.
     HEXAGON: MATRIX_NAMES.HEXAGON1_MATRIX_NAME, // Базовый тип с шестью связями.
 }
+
+// Тип распределения Power (кому какая клетка принадлежит).
+export const SORTING_TYPES = {
+    RANDOM: 'random',
+    FROM_FIRST: 'fromFirst',
+}

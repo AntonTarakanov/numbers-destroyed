@@ -1,4 +1,4 @@
-import { Base } from '../base/base';
+import { Base, ConfigHelper, BASE_HANDLER_TYPES } from '../base';
 import { BaseState } from './State';
 import { BaseMatrix } from './Matrix';
 import {
@@ -6,8 +6,6 @@ import {
     ERROR_TEXT,
     DEFAULT_PLAYER_NAME,
 } from './constants';
-
-import { CELL_TARGET_TYPE } from '../../data/constants';
 
 /**
  * Универсальные методы для работы с данными.
@@ -24,11 +22,14 @@ export class DataHelper extends Base {
         this.ERROR_TEXT = ERROR_TEXT;
 
         this.handler = handler;
-        this.config = config;
+        this.config = new ConfigHelper(config);
         this.isDev = isDev;
 
-        this.checkRequiredFields();
-        this.initData();
+        const checkResult = this.checkRequiredFields();
+
+        if (checkResult || isDev) {
+            this.initData();
+        }
     }
 
     /**
@@ -36,7 +37,7 @@ export class DataHelper extends Base {
      */
     initData() {
         this.state = new BaseState();
-        this.matrix = new BaseMatrix();
+        this.matrix = new BaseMatrix(this.config.MAP);
     }
 
     setState(property, value) {
@@ -62,7 +63,7 @@ export class DataHelper extends Base {
     }
 
     getNumberOfPlayers() {
-        return this.config.COUNT_PLAYER;
+        return this.config.COUNT_PLAYER || 1;
     }
 
     /**
@@ -80,91 +81,34 @@ export class DataHelper extends Base {
      * @param {string} property
      * @param {any|array} oldValue
      * @param {any} newValue
-     * @param {boolean} useRerender
+     * @param {boolean} useHandler
      */
-    // TODO: переделать/пересомтреть всё что ниже.
-    changeParamByParam(property, oldValue, newValue, useRerender = false) {
-        this.matrix.forEach(row => {
-            row.forEach(item => {
-                let isEqual;
+    changeParamByParam(property, oldValue, newValue, useHandler = false) {
+        const changedList = this.matrix.changeParamByParam(property, oldValue, newValue);
 
-                if (Array.isArray(oldValue)) {
-                    isEqual = oldValue.some(oldValueItem => oldValueItem === item[property]);
-                } else {
-                    isEqual = item[property] === oldValue;
-                }
-
-                if (isEqual) {
-                    item[property] = newValue;
-
-                    if (useRerender) {
-                        this.rerenderByPosition(item.position);
-                    }
-                }
-            });
-        });
-    }
-
-    /**
-     * TODO: перенести в частное.
-     *
-     * Проставить stepType.
-     * @param {string} targetType - тип простановки. На все, по id, ещё какие-то выборки.
-     * @param {any} target
-     * @param {string} value
-     * @param {boolean} useRerender
-     */
-    setCellTypeForAll(targetType, target, value, useRerender = false) {
-        if (CELL_TARGET_TYPE.byPlayerName === targetType) {
-            const tileList = this.matrix.getTileListByPlayer(target);
-
-            tileList.forEach(tile => {
-                tile.setType(value);
-
-                if (useRerender) {
-                    this.rerenderByPosition(tile.position);
-                }
+        if (useHandler) {
+            changedList.forEach(position => {
+                this.useHandler(position);
             });
         }
-
-        if (CELL_TARGET_TYPE.byPosition === targetType) {
-            const row = this.matrix[target.y];
-            const item = row[target.x];
-
-            if (item?.type) {
-                item.type = value;
-            }
-
-            if (useRerender) {
-                this.rerenderByPosition(target);
-            }
-        }
     }
 
     /**
-     * Проставить stepType для переданного списка.
-     * @param {array} list
-     * @param {any} value
-     * @param {boolean} useRerender
-     */
-    setCellTypeInList(list, value, useRerender = false) {
-        list.forEach(tile => {
-            tile.setType(value);
-
-            if (useRerender) {
-                this.rerenderByPosition(tile.position);
-            }
-        });
-    }
-
-    rerenderByPosition(position) {
-        this.rerender('rerenderByPosition', position);
-    }
-
-    /**
+     * Событие изменения элемента.
      *
+     * @param {object} position - { x, y } .
      */
-    rerender(type, data) {
+    useHandler(position) {
+        this.useHandlerWithCustom(BASE_HANDLER_TYPES.ELEMENT_CHANGED, position);
+    }
+
+    /**
+     * Любое событие.
+     *
+     * @param {string} type
+     * @param {any} data
+     */
+    useHandlerWithCustom(type, data) {
         this.handler(type, data);
     }
 }

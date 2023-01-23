@@ -1,4 +1,4 @@
-import { MATRIX_TYPES } from './constants';
+import { MATRIX_TYPES, SORTING_TYPES } from './constants';
 
 /**
  * Базовый конфиг для построения приложения.
@@ -16,4 +16,5 @@ export const POWER_CONFIG = {
     FIRST_TURN_INDEX: 0,
     MAX_POWER_VALUE: 8,
     MATRIX_TYPE: MATRIX_TYPES.HEXAGON,
+    SORTING_TYPE: SORTING_TYPES.RANDOM,
 };
