@@ -1,15 +1,16 @@
-import { createEmptyDiv, getClassByColor, createDiv } from './helper';
-import { CELL_CLASS_NAME, CONNECT_CLASS_NAME } from './constants';
-import { CONNECT_TYPE } from '../constants';
+import { renderUtils } from '../../library';
+import { getClassByColor } from '../helper';
+import { CELL_CLASS_NAME, CONNECT_CLASS_NAME } from '../constants';
+import { CONNECT_TYPE } from '../../constants';
 
-const getContentWrap = () => createDiv('cell_row flex justifySpaceBetween');
+const getContentWrap = () => renderUtils.getDiv('cell_row flex justifySpaceBetween');
 
 /**
  *
  * @param {object} item - свойства color может быть пустым.
  */
 const getWrapElement = item => {
-    const element = createEmptyDiv();
+    const element = renderUtils.getEmptyDiv();
     let elementClassName = `${CELL_CLASS_NAME.COMMON} flex`;
 
     if (item.color?.value) {
@@ -32,9 +33,9 @@ const getTopElement = ({ connectList }) => {
     const element = getContentWrap();
     const emptyClass = `${CONNECT_CLASS_NAME.BASE} ${CONNECT_CLASS_NAME.EMPTY}`;
 
-    const left = createDiv(CONNECT_CLASS_NAME.BASE);
-    const middle = createDiv(emptyClass);
-    const right = createDiv(emptyClass);
+    const left = renderUtils.getDiv(CONNECT_CLASS_NAME.BASE);
+    const middle = renderUtils.getDiv(emptyClass);
+    const right = renderUtils.getDiv(emptyClass);
 
     if (connectList.includes(CONNECT_TYPE.LEFT_TOP)) {
         left.className = `${left.className} ${CONNECT_CLASS_NAME.DIAGONAL_LEFT}`;
@@ -58,9 +59,9 @@ const getMiddleElement = ({ powerValue, connectList }) => {
         contentClass = `${contentClass} ${CONNECT_CLASS_NAME.LINE}`;
     }
 
-    const left = createDiv(contentClass);
-    const middle = createDiv(contentClass);
-    const right = createDiv(contentClass);
+    const left = renderUtils.getDiv(contentClass);
+    const middle = renderUtils.getDiv(contentClass);
+    const right = renderUtils.getDiv(contentClass);
 
     if (powerValue) {
         middle.textContent = powerValue;
@@ -75,9 +76,9 @@ const getBottomElement = ({ connectList }) => {
     const element = getContentWrap();
     const emptyClass = `${CONNECT_CLASS_NAME.BASE} ${CONNECT_CLASS_NAME.EMPTY}`
 
-    const left = createDiv(emptyClass);
-    const middle = createDiv(emptyClass);
-    const right = createDiv(CONNECT_CLASS_NAME.BASE);
+    const left = renderUtils.getDiv(emptyClass);
+    const middle = renderUtils.getDiv(emptyClass);
+    const right = renderUtils.getDiv(CONNECT_CLASS_NAME.BASE);
 
     if (connectList.includes(CONNECT_TYPE.RIGHT_BOTTOM)) {
         right.className = `${right.className} ${CONNECT_CLASS_NAME.DIAGONAL_RIGHT}`;

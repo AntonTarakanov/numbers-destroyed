@@ -157,8 +157,13 @@ body {
 
 /* COMMON START: */
 .justifyCenter,
+.flexColumn,
 .flex {
     display: flex;
+}
+
+.flexColumn {
+    flex-direction: column;
 }
 
 .justifySpaceBetween {

@@ -1,7 +1,10 @@
 export const COMMON_CLASS_NAMES = {
     APP: 'application',
+
     FLEX: 'flex',
     JUSTIFY_CENTER: 'justifyCenter',
+    FLEX_COLUMN: 'flexColumn',
+
     HEADER: 'header',
     HEADER_IMG: 'header_img',
 }

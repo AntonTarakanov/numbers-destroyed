@@ -1,6 +1,6 @@
-import { getDiv } from './utils';
-import burger from '../static/free-icon-font-menu-burger.svg';
-import settings from '../static/free-icon-font-settings.svg';
+import { getDiv } from '../utils';
+import burger from '../../static/free-icon-font-menu-burger.svg';
+import settings from '../../static/free-icon-font-settings.svg';
 
 /**
  * Шапка с кнопками бутерброда и шестерёнкой.

@@ -1,10 +1,8 @@
-// TODO: дублирование
 export const getEmptyDiv = () => document.createElement('div');
 
 /**
  * Div с простым наполнением.
  */
-// TODO: дублирование
 export const getDiv = (className, id, text, child) => {
     const element = getEmptyDiv();
 

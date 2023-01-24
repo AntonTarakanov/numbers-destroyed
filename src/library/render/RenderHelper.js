@@ -1,6 +1,7 @@
 import { getDiv, getEmptyDiv } from './utils';
-import { getHeader } from './components/header';
+import { getHeader } from './components/Header';
 import { COMMON_CLASS_NAMES, COMMON_DOM_IDS } from './constants';
+import { buildDivMatrix } from './components/DivMatrix';
 
 /**
  * TODO: необходимо добавить возможность заменять иконки.
@@ -59,5 +60,46 @@ export class RenderHelper {
 
     getEmptyDiv() {
         return getEmptyDiv();
+    }
+
+    /**
+     * Устанавливаем атрибуты для клетки.
+     *
+     * @param {object} tileElement - DOM-элемент клетки.
+     * @param {object} attribute - атрибуты.
+     * @param {string} prefix -
+     */
+    setAttributeInTile(tileElement, attribute, prefix) {
+        for (let key in attribute) {
+            if (attribute.hasOwnProperty(key)) {
+                const currentValue = attribute[key];
+
+                if (typeof currentValue === 'object' && currentValue !== null) {
+                    this.setAttributeInTile(tileElement, currentValue, key);
+                } else {
+                    tileElement.setAttribute(`data-${prefix ? prefix + '-' : ''}${key}`, attribute[key]);
+                }
+            }
+        }
+    }
+
+    // COMPONENTS
+
+    getContentMethods() {
+        return {
+            getDiv: this.getDiv,
+            getEmptyDiv: this.getEmptyDiv,
+            getTile: this.buildDivTile,
+            setAttributeInTile: this.setAttributeInTile,
+            tileHandler: this.handler,
+        };
+    }
+
+    buildDivMatrix(matrix) {
+        return buildDivMatrix(matrix, this.getContentMethods());
+    }
+
+    buildDivTile() {
+        return this.getDiv();
     }
 }

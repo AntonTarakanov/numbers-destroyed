@@ -1,4 +1,4 @@
-import { HANDLER_TYPE } from '../constants';
+import { HANDLER_TYPE, STEP_TYPE } from '../constants';
 
 /**
  * Набор методов для выполнения событий приложения.
@@ -45,26 +45,34 @@ export class PowerLogicAPI {
     turnButtonClickHandler(DataAPI, RenderAPI, info) {
         const { type } = info;
 
+        console.log('turnButtonClickHandler active');
+
         if (type === HANDLER_TYPE.TURN_BUTTON_CLICK) {
             DataAPI.activeGivePowerStep();
         }
 
         if (type === HANDLER_TYPE.GIFT_END_BUTTON_CLICK) {
-            const playerInfo = DataAPI.getNextPlayerInfo();
+            const { info: nextPlayerInfo, name: nextPlayerName } = DataAPI.getNextPlayerInfo();
 
-            console.log('playerInfo', playerInfo);
+            if (nextPlayerInfo.isPeople) {
+                console.log('Данный функционал не реализован.');
+                DataAPI.setStepType(nextPlayerName, STEP_TYPE.CHOOSE_FOR_ATTACK, true);
+            } else {
+                console.log('ХОД NEXT');
 
-            // Получить след. игрока.
-            // если человек - меняем статусы. Ждём хода.
-            // если комп - меняем статусы. Делаем ход.
+                DataAPI.doNextTurn(nextPlayerName);
+                this.doRandomAttacks(nextPlayerName, DataAPI);
+                this.doSimpleGiftPower(nextPlayerName, DataAPI);
+                this.turnButtonClickHandler(DataAPI, RenderAPI, {
+                    type: HANDLER_TYPE.GIFT_END_BUTTON_CLICK,
+                });
+            }
 
             // Обработка хода соперника.
             // Ожидание пока сходит соперник.
             // appData.activeGivePowerStep();
 
             // DataAPI.activeGivePowerStep();
-
-            console.log('Завершить раздачу this', this);
         }
     }
 }
