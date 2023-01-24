@@ -2,12 +2,10 @@ import { STEP_TYPE } from '../constants';
 import { getPositionObject, someEqualPosition } from './utils';
 
 /**
- * Логика игры.
- */
-
-/**
  * Обработка клика по плитке.
+ * Плитки меняют состояния в зависимости от типа хода.
  *
+ * TODO: привести к единому виду с "turnButtonClickHandler".
  * @param {event} event
  * @param {object} context
  * @param {DataHelper} appData
@@ -48,9 +46,4 @@ export const tileClickHandler = (event, context, appData) => {
     if (currentStepTypeState === STEP_TYPE.GIVE_POWER) {
         appData.doGivePower(tilePlayerName, pressedPosition);
     }
-
-    // Ожидание пока сходит соперник.
-    /*if (whoseTurnItem.stepType === 'opponentWaiting') {
-        console.log('Дождитесь хода соперника.');
-    }*/
 }

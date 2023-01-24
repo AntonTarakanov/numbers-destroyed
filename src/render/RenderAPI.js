@@ -1,5 +1,5 @@
 import { PowerRender } from './Render';
-import { buildTable, buildTD } from './components/table';
+import { buildTable, buildTD } from './components/Table';
 import { COMMON_DOM_IDS } from '../library/render/constants';
 import { AdditionalFieldComponent } from './components/AdditionalField';
 import { POWER_DOM_IDS, TEXTS } from './constants';

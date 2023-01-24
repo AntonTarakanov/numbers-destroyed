@@ -97,7 +97,7 @@ const getBottomElement = ({ connectList }) => {
  */
 export const getPowerTileRenderElement = item => {
     const wrap = getWrapElement(item);
-    const methodList = [getTopElement,  getMiddleElement, getBottomElement];
+    const methodList = [getTopElement, getMiddleElement, getBottomElement];
 
     methodList.forEach(method => wrap.append(method(item)));
 

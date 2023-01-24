@@ -1,4 +1,6 @@
 import { HANDLER_TYPE } from '../../constants';
+import { CELL_CLASS_NAME } from '../constants';
+import { getClassByCellType, getClassByColor } from '../helper';
 
 export const buildHexagonTile = (item, contentMethods) => {
     const clickHandler = function(event) {
@@ -17,14 +19,37 @@ export const buildHexagonTile = (item, contentMethods) => {
     return tile;
 }
 
-const getTileContent = (item, contentMethods) => {
+const getTileContent = (tile, contentMethods) => {
     const wrapElem = contentMethods.getDiv();
 
-    wrapElem.textContent = 1;
+    console.log(tile);
+
+    if (tile.type === 'connectLine') {
+        wrapElem.textContent = '|';
+    }
+
+    if (tile.type === 'ready') {
+        wrapElem.textContent = tile.powerValue;
+    }
+
+    wrapElem.className = `${CELL_CLASS_NAME.COMMON} flex`;
+
+    if (tile.color) {
+        const colorClass = getClassByColor(tile.color);
+
+        wrapElem.className = wrapElem.className + ' ' + colorClass;
+    }
 
     return wrapElem;
 }
 
 const getClassForTile = item => {
-    return '';
+    const byCellType = getClassByCellType(item.type);
+    let result = CELL_CLASS_NAME.WRAP + ' ' + 'smallMargin';
+
+    if (byCellType) {
+        result = `${result} ${byCellType}`;
+    }
+
+    return result;
 }

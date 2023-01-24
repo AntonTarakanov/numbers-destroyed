@@ -175,4 +175,8 @@ body {
     justify-content: center;
 }
 
+.smallMargin {
+    margin: 2px;
+}
+
 /* COMMON END. */

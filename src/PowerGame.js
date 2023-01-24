@@ -13,8 +13,8 @@ export default class PowerGameApp {
         }
 
         this.logicAPI = new PowerLogicAPI();
-        this.dataAPI = new PowerDataAPI(this.dataHandler, config, isDev);
-        this.renderAPI = new PowerRenderAPI(this.domHandler, RENDER_CONFIG, isDev);
+        this.dataAPI = new PowerDataAPI(this.dataHandler.bind(this), config, isDev);
+        this.renderAPI = new PowerRenderAPI(this.domHandler.bind(this), RENDER_CONFIG, isDev);
 
         this.isDev = isDev;
     }

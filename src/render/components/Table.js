@@ -1,7 +1,7 @@
 import { getPowerTileRenderElement } from './powerTile';
-import { CELL_CLASS_NAME } from './constants';
-import { CELL_TYPE, HANDLER_TYPE } from '../constants';
-import { getClassByCellType } from './helper';
+import { CELL_CLASS_NAME } from '../constants';
+import { HANDLER_TYPE } from '../../constants';
+import { getClassByCellType } from '../helper';
 
 /**
  * Создаём таблицу для приложения.

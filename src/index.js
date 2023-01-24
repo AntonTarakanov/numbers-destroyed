@@ -1,21 +1,27 @@
 import './style.css';
-import { PowerRenderHelper } from './render';
+import { PowerRenderAPI } from './render';
 import { PowerDataAPI } from './data';
 import { HANDLER_TYPE, TURN_BUTTON_EVENTS } from './constants';
 import { tileClickHandler } from './power/powerTurn';
-import { POWER_CONFIG } from './data/constants';
-import { PowerLogicAPI } from './power/LogicAPI';
+import { POWER_CONFIG } from './config';
+import { PowerLogicAPI } from './power';
+
+// TODO: новый способ инициализации приложения.
+import PowerGameApp from './PowerGame';
 
 const APP_NAME = 'powerValue';
 const isDev = true;
 
-/**
- * Инициализация приложения.
- * Классы только для текущего приложения. Далее можно вынести общие методы в небольшую библиотеку.
- * Смысл метода в комбинированном взаимодействии двух классов через переданные в них handler.
- * Возможно имеет смысл создать общий класс для этого взаимодействия.
- */
 function createApp() {
+    const DOM_IDS = { root: APP_NAME };
+    const powerGame = new PowerGameApp(POWER_CONFIG, DOM_IDS, isDev);
+
+    powerGame.start();
+}
+
+createApp();
+
+function createAppOld() {
     const renderHelperArg1 = { root: APP_NAME };
 
     try {
@@ -29,9 +35,9 @@ function createApp() {
 
         const LogicAPI = new PowerLogicAPI();
         const AppData = new PowerDataAPI(proxyDataHandler, POWER_CONFIG, isDev);
-        const AppRender = new PowerRenderHelper(renderHelperArg1, proxyDomHandler, isDev);
+        const AppRender = new PowerRenderAPI(renderHelperArg1, proxyDomHandler, isDev);
 
-        AppData.createApp();
+        AppData.initData();
         AppRender.createApp(AppData.matrix, AppData.state);
     } catch(error) {
         console.log(error);
@@ -56,6 +62,14 @@ function busDataHandler(AppData, AppRender, data, type) {
 
     if (type === 'turnButtonInactive') {
         AppRender.rerenderTurnButton('highlight', false);
+    }
+
+    if (type === 'dev1_active') {
+        AppRender.rerenderTurnButton('dev1_highlight', true);
+    }
+
+    if (type === 'dev1_inactive') {
+        AppRender.rerenderTurnButton('dev1_highlight', false);
     }
 
     if (type === 'activeGiftView') {
@@ -90,5 +104,3 @@ function busDomHandler(event, context, appData, type, LogicAPI) {
         }
     }
 }
-
-createApp();

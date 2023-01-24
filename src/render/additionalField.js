@@ -29,7 +29,7 @@ export function getPowerTurnButton() {
         return onClickHandler(event, this, HANDLER_TYPE.TURN_BUTTON_CLICK);
     }
     const buttonTile = getTile.call(this);
-    const buttonNode = this.getDiv(LOG_CLASS.BUTTON, TEXTS.NEXT_TURN);
+    const buttonNode = this.getDiv(LOG_CLASS.BUTTON, null, TEXTS.NEXT_TURN);
 
     buttonNode.addEventListener('click', buttonHandler);
 
@@ -57,8 +57,8 @@ export function buildLog(state) {
     });
 
     // Статус игры, чей ход
-    const turnNode = this.getDiv(null, `turn - ${state.currentTurn}`);
-    const stepNode = this.getDiv(null, `step - ${state.currentStepType}`);
+    const turnNode = this.getDiv(null, null, `turn - ${state.currentTurn}`);
+    const stepNode = this.getDiv(null, null, `step - ${state.currentStepType}`);
 
     logNode.append(turnNode, stepNode);
 

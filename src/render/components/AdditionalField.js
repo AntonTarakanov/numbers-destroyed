@@ -44,6 +44,15 @@ export class AdditionalFieldComponent extends BaseComponent {
     }
 
     /**
+     * @param {boolean} status
+     */
+    devButtonHighlight(status) {
+        if (this.devButtonElement1) {
+            status ? this.devButtonElement1.highlightOn() : this.devButtonElement1.highlightOff();
+        }
+    }
+
+    /**
      *
      */
     activeGiftView(data) {
