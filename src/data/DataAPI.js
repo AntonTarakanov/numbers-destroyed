@@ -9,6 +9,12 @@ import { calcAttackResult } from '../power/main';
  */
 export class PowerDataAPI extends PowerData {
 
+    setFirstTurn() {
+        const name = this.getFirstTurnName();
+
+        this.setStepType(name, STEP_TYPE.CHOOSE_FOR_ATTACK);
+    }
+
     // CHANGE TURN
 
     /**

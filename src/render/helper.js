@@ -1,33 +1,6 @@
 import { CELL_TYPE } from '../constants';
 import { CELL_CLASS_NAME, COLOR } from './constants';
 
-export const createEmptyDiv = () => document.createElement('div');
-
-/**
- *
- */
-export const createDiv = (className, text, id, child) => {
-    const element = createEmptyDiv();
-
-    if (className) {
-        element.className = className;
-    }
-
-    if (id) {
-        element.id = id;
-    }
-
-    if (text) {
-        element.textContent = text;
-    }
-
-    if (child) {
-        element.append(child);
-    }
-
-    return element;
-};
-
 export const getClassByCellType = (type) => {
     switch (type) {
         case CELL_TYPE.EMPTY: return CELL_CLASS_NAME.EMPTY;

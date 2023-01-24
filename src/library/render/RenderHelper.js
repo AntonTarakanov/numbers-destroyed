@@ -1,6 +1,6 @@
-import { getDiv, getEmptyDiv } from './elements/utils';
-import { getHeader } from './elements/header';
-import { COMMON_CLASS_NAMES, COMMON_DOM_IDS } from './renderConstants';
+import { getDiv, getEmptyDiv } from './utils';
+import { getHeader } from './components/header';
+import { COMMON_CLASS_NAMES, COMMON_DOM_IDS } from './constants';
 
 /**
  * TODO: необходимо добавить возможность заменять иконки.
@@ -14,8 +14,9 @@ export class RenderHelper {
      *
      *
      */
-    constructor(domIds, handler, isDev = false) {
-        this.DOM_IDS = domIds;
+    constructor(handler, config, isDev = false) {
+        this.DOM_IDS = config.DOM_IDS;
+        this.USE_TABLE = config.USE_TABLE;
         this.handler = handler;
         this.isDev = isDev;
     }

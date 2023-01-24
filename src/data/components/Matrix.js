@@ -52,9 +52,16 @@ export class PowerMatrix extends BaseMatrix {
         }
     }
 
+    /**
+     * Через промежуточный массив, т.к. map попытается создать новый экземпляр PowerMatrix.
+     *
+     * @param {string} name - playerName.
+     */
     getTileListByPlayer(name) {
-        const filtered = this.map(row => {
-            return row.filter(tile => tile.playerName === name);
+        const filtered = [];
+
+        this.forEach(row => {
+            filtered.push(row.filter(tile => tile.playerName === name));
         });
 
         return filtered.flat();

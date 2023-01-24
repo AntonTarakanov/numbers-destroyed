@@ -36,8 +36,10 @@ export const LOG_CLASS = {
 export const TEXTS = {
     NEXT_TURN: 'Завершить ход',
     END_GIFT: 'Завершить раздачу',
+    MATRIX_ERROR: 'Ошибка в переданной матрице.',
 }
 
 export const POWER_DOM_IDS = {
     TURN_BUTTON: 'turnButton',      // TODO: может оказаться лишним.
+    MAIN_FIELD: 'mainField',
 }

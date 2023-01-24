@@ -1,4 +1,4 @@
-import { getDiv } from '../../elements/utils';
+import { getDiv } from '../utils';
 
 /**
  * Что-то самое простое, чтобы упросить работу с DOM.

@@ -15,9 +15,6 @@ export class PowerData extends DataHelper {
         this.state = new PowerState(this.playersName);
         this.matrix = new PowerMatrix(this.config, this.state.getShotInfo());
 
-        // TODO: не реализовано.
-        // this.setFirstTurn();
-
         // TODO: реализовать нормальный функционал после раздела "настройки".
         const isPeopleFlag = 'default';
         if (isPeopleFlag === 'default') {
@@ -32,12 +29,6 @@ export class PowerData extends DataHelper {
     getPowerValue(position) {
         const tile = this.getItemByPosition(position);
         return tile.getPowerValue();
-    }
-
-    setFirstTurn() {
-        const name = this.getFirstTurnName();
-
-        this.setStepType(name, STEP_TYPE.CHOOSE_FOR_ATTACK);
     }
 
     /**
