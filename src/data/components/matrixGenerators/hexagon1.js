@@ -48,8 +48,8 @@ export const getHexagonMatrix1 = (size) => {
                 // 1 - Нечего вертикально связывать.
                 // 2 - В таком случае не будет нижнего Power-Row.
                 // TODO: предупреждать на этапе получения конфига.
-                if ((isEndTile && !isEvenTile) || isEndRow) {
-                    row.push(CELL_TYPE.EMPTY);
+                if (isEndTile || isEndRow) {
+                    row.push(new Tile({ x: j, y: i }, CELL_TYPE.EMPTY));
                     break;
                 }
 
@@ -94,4 +94,16 @@ export const getHexagonMatrix1 = (size) => {
     });
 
     return matrix;
+}
+
+export const getNeighbor = (connectType, { x, y }) => {
+    switch (connectType) {
+        case CONNECT_TYPE.LEFT_TO_BOTTOM: return { x: x + 1, y: y + 2 };
+        case CONNECT_TYPE.RIGHT_TO_BOTTOM: return { x: x - 1, y: y + 2 };
+        case CONNECT_TYPE.LEFT_TO_TOP: return { x: x + 1, y: y - 2 };
+        case CONNECT_TYPE.RIGHT_TO_TOP: return { x: x - 1, y: y - 2 };
+        case CONNECT_TYPE.LEFT_LINE: return { x: x - 2, y: y };
+        case CONNECT_TYPE.RIGHT_LINE: return { x: x + 2, y: y };
+        case CELL_TYPE.READY: return undefined;
+    }
 }

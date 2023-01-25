@@ -30,6 +30,41 @@ body {
     margin: 10px;
 }
 
+.tile_hexagon {
+    min-height: 40px;
+    min-width: 40px;
+    height: 40px;
+    width: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.tile_hexagon_part1,
+.tile_hexagon_part2,
+.tile_hexagon_part3 {
+    float: left;
+}
+
+.tile_hexagon_part1,
+.tile_hexagon_part3 {
+    border-top: 20px solid transparent;
+    border-bottom: 20px solid transparent;
+}
+
+.tile_hexagon_part1 {
+    border-right: 10px solid;
+}
+
+.tile_hexagon_part2 {
+    width: 20px;
+    height: 40px;
+}
+
+.tile_hexagon_part3 {
+    border-left: 10px solid;
+}
+
 .cell {
     min-height: 35px;
     min-width: 35px;
@@ -46,12 +81,15 @@ body {
     height: 100%;
 }
 
-.cell_empty { background: #282E33; }
+/* TODO: всё что cell заменить на square, изначально делал под квадрат. */
+/* TODO: временный коммент-костыль */
+.cell_empty { /*background: #282E33;*/ }
 .cell_waiting { background: #F92672; }
 
 .cell_wrap {
     /*padding: 5px;*/
-    background: #272822;
+    /* TODO: временный коммент-костыль */
+    /*background: #272822;*/
     /*min-height: 40px;
     min-width: 40px;
     height: 40px;
@@ -72,10 +110,75 @@ body {
     box-shadow:0 0 10px #FF0066;
 }
 
-.cell_green { background: #A6E22E!important; }
-.cell_red { background: darkred!important; }
-.cell_magenta { background: #F92672!important; }
-.cell_blue { background: #65AADD!important; }
+
+.cell_green { background: #A6E22E; }
+.cell_red { background: darkred; }
+.cell_magenta { background: #F92672; }
+.cell_blue { background: #65AADD; }
+
+.tile_blue .tile_hexagon_part2 {
+    background-color: #65AADD;
+}
+
+.tile_blue .tile_hexagon_part3,
+.tile_blue .tile_hexagon_part1 {
+    border-color: transparent #65AADD ;
+}
+
+.tile_magenta .tile_hexagon_part2 {
+    background-color: #F92672;
+}
+
+.tile_magenta .tile_hexagon_part3,
+.tile_magenta .tile_hexagon_part1 {
+    border-color: transparent #F92672 ;
+}
+
+.tile_red .tile_hexagon_part2 {
+    background-color: darkred;
+}
+
+.tile_red .tile_hexagon_part3,
+.tile_red .tile_hexagon_part1 {
+    border-color: transparent darkred ;
+}
+
+.tile_green .tile_hexagon_part2 {
+    background-color: #A6E22E;
+}
+
+.tile_green .tile_hexagon_part3,
+.tile_green .tile_hexagon_part1 {
+    border-color: transparent #A6E22E ;
+}
+
+.tile_hexagon_line_1,
+.tile_hexagon_line_2,
+.tile_hexagon_line_3 {
+    border: none;
+    background-color: #F8F8F0;
+    height: 1px;
+    width: 100%;
+    -moz-transform: rotate(7.5deg);
+    -o-transform: rotate(7.5deg);
+    -webkit-transform: rotate(7.5deg);
+    -ms-transform: rotate(7.5deg);
+    /*color: aqua;*/
+}
+
+.tile_hexagon_line_1 {
+    transform: rotate(64deg);
+    margin-left: -6px;
+}
+
+.tile_hexagon_line_2 {
+    transform: rotate(116deg);
+    margin-left: -5px;
+}
+
+.tile_hexagon_line_3 {
+    transform: rotate(180deg);
+}
 
 /* CELL_CONNECT: */
 
@@ -84,46 +187,28 @@ body {
     width: 100%;
 }
 
-.cell_connect_empty {
-
-}
-
-.cell_connect_diagonalLeft {
+.cell_connect_diagonalLeft,
+.cell_connect_diagonalRight,
+.cell_connect_line {
     border: none;
     background-color: #F8F8F0;
-    color: aqua;
     height: 4px;
     width: 100%;
     -moz-transform: rotate(7.5deg);
     -o-transform: rotate(7.5deg);
     -webkit-transform: rotate(7.5deg);
     -ms-transform: rotate(7.5deg);
+}
+
+.cell_connect_diagonalLeft {
     transform: rotate(45deg);
 }
 
 .cell_connect_diagonalRight {
-    border: none;
-    background-color: #F8F8F0;
-    color: aqua;
-    height: 4px;
-    width: 100%;
-    -moz-transform: rotate(7.5deg);
-    -o-transform: rotate(7.5deg);
-    -webkit-transform: rotate(7.5deg);
-    -ms-transform: rotate(7.5deg);
-    transform: rotate(45deg);
+    /*transform: rotate(45deg);*/
 }
 
 .cell_connect_line {
-    border: none;
-    background-color: #F8F8F0;
-    color: aqua;
-    height: 4px;
-    width: 100%;
-    -moz-transform: rotate(7.5deg);
-    -o-transform: rotate(7.5deg);
-    -webkit-transform: rotate(7.5deg);
-    -ms-transform: rotate(7.5deg);
     transform: rotate(0deg);
 }
 
@@ -175,8 +260,10 @@ body {
     justify-content: center;
 }
 
-.smallMargin {
-    margin: 2px;
-}
-
 /* COMMON END. */
+
+/* ВРЕМЕННЫЕ КОСТЫЛИ */
+
+.marginLeftMiddle {
+    margin-left: 25px;
+}

@@ -17,6 +17,11 @@ export function buildDivMatrix(matrix, contentMethods) {
         rowElement.setAttribute('data-order', index);
         rowElement.className = COMMON_CLASS_NAMES.FLEX;
 
+        // Сдвиг строк с power через одну.
+        if (index % 2 !== 0) {
+            rowElement.className = `${rowElement.className} marginLeftMiddle`;
+        }
+
         row.forEach(item => {
             const tile = contentMethods.getTile(item, contentMethods);
 

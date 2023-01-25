@@ -22,6 +22,7 @@ export const CONNECT_TYPE = {
     RIGHT_LINE: 'rightLine',
     LEFT_TOP: 'leftTop',
     RIGHT_BOTTOM: 'rightBottom',
+
     LEFT_TO_BOTTOM: 'leftToBottom',
     RIGHT_TO_BOTTOM: 'rightToBottom',
     LEFT_TO_TOP: 'leftToTop',
@@ -70,4 +71,9 @@ export const MATRIX_TYPES = {
 export const SORTING_TYPES = {
     RANDOM: 'random',
     FROM_FIRST: 'fromFirst',
+}
+
+export const TURN_BUTTON_EVENT_TYPES = {
+    HIGHLIGHT: 'highlight',
+    ACTIVE_GIFT_VIEW: 'activeGiftView',
 }

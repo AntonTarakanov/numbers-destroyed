@@ -2,7 +2,7 @@ import { BaseMatrix } from '../../library';
 import { CONNECT_TYPE, SORTING_TYPES } from '../../constants';
 import { Tile } from './Tile';
 import { MATRIX_TYPES } from '../../constants';
-import { getSquareMatrix1, getHexagonMatrix1 } from './matrixGenerators';
+import { getSquareMatrix1, getHexagonMatrix1, getNeighborHexagon1 } from './matrixGenerators';
 import { setRandomPowerInMatrix } from './matrixGenerators/utils';
 
 /**
@@ -101,19 +101,21 @@ export class PowerMatrix extends BaseMatrix {
      * @param {string} scheme - схема / тип карты.
      * @return {array}
      */
-    getNeighbors({ connectList, position }, scheme = 'simple') {
-        if (scheme === 'simple') {
+    getNeighbors({ connectList, position }, scheme = MATRIX_TYPES.HEXAGON) {
+        const { x: X, y: Y } = position;
+
+        if (scheme === MATRIX_TYPES.SIMPLE) {
             const result = [];
 
             connectList.forEach(type => {
                 let neighborPosition;
 
                 if (type === CONNECT_TYPE.LEFT_TOP) {
-                    neighborPosition = { x: position.x - 1, y: position.y - 1 };
+                    neighborPosition = { x: X - 1, y: Y - 1 };
                 }
 
                 if (type === CONNECT_TYPE.RIGHT_BOTTOM) {
-                    neighborPosition = { x: position.x + 1, y: position.y + 1 };
+                    neighborPosition = { x: X + 1, y: Y + 1 };
                 }
 
                 result.push(this.getItem(neighborPosition));
@@ -121,43 +123,27 @@ export class PowerMatrix extends BaseMatrix {
 
             return result;
         }
+
+        if (scheme === MATRIX_TYPES.HEXAGON) {
+            const result = [];
+
+            connectList.forEach(type => {
+                const neighborPosition = getNeighborHexagon1(type, position);
+
+                result.push(this.getItem(neighborPosition));
+            });
+
+            return result.filter(tile => !!tile);
+        }
     }
-}
 
-/**
- * TODO: убрать.
- * Получить список связанные клеток учитывая исключения.
- *
- * @return {array}
- */
-export function getOpponentLinkedTile(position) {
-    const isOpponentCondition = (name1, name2) => name1 !== name2;
-    const tile = this.getItemByPosition(position);
+    getOpponentLinkedTile(tile, scheme) {
+        const isOpponentCondition = (name1, name2) => name1 !== name2;
+        const neighbors = this.getNeighbors(tile, scheme);
 
-    if (this.config.MATRIX_TYPE === MATRIX_TYPES.SIMPLE) {
-        const opponentTiles = tile.connectList.map(linkType => {
-            let linkedPosition = null;
-            let result = null;
-
-            if (CONNECT_TYPE.LEFT_TOP === linkType) {
-                linkedPosition = { x: position.x - 1, y: position.y - 1 };
-            }
-
-            if (CONNECT_TYPE.RIGHT_BOTTOM === linkType) {
-                linkedPosition = { x: position.x + 1, y: position.y + 1 };
-            }
-
-            if (linkedPosition) {
-                const item = this.getItemByPosition(linkedPosition);
-
-                if (isOpponentCondition(item.playerName, tile.playerName)) {
-                    result = item;
-                }
-            }
-
-            return result;
-        });
-
-        return opponentTiles.filter(item => !!item);
+        return neighbors.filter(linkedTile => isOpponentCondition(
+            linkedTile.getPlayerName(),
+            tile.getPlayerName()
+        ));
     }
 }

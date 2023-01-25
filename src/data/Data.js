@@ -1,7 +1,7 @@
 import { CELL_TARGET_TYPE } from './constants';
 import { STEP_TYPE, CELL_TYPE, CALC_ATTACK_RESULTS } from '../constants';
 import { DataHelper } from '../library';
-import { getOpponentLinkedTile, PowerMatrix } from './components/Matrix';
+import { PowerMatrix } from './components';
 import { PowerState, STATE_FIELDS } from './components/State';
 import { MATRIX_FIELDS } from './components/Tile';
 
@@ -145,7 +145,7 @@ export class PowerData extends DataHelper {
     }
 
     getOpponentTileList(myPosition) {
-        return getOpponentLinkedTile.call(this, myPosition, this.config.MATRIX_TYPE);
+        return this.matrix.getOpponentLinkedTile(myPosition, this.config.MATRIX_TYPE);
     }
 
     resetWaitingSelect() {

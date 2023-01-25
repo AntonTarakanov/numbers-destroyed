@@ -11,9 +11,25 @@ export const CELL_CLASS_NAME = {
     SELECTED: 'cell_selected',
 };
 
+export const HEXAGON_CLASS_NAMES = {
+    TILE_HEXAGON: 'tile_hexagon',
+
+    TILE_HEXAGON_PART1: 'tile_hexagon_part1',
+    TILE_HEXAGON_PART2: 'tile_hexagon_part2',
+    TILE_HEXAGON_PART3: 'tile_hexagon_part3',
+
+    TILE_BLUE: 'tile_blue',
+    TILE_MAGENTA: 'tile_magenta',
+    TILE_RED: 'tile_red',
+    TILE_GREEN: 'tile_green',
+
+    LEFT_TO_BOTTOM: 'tile_hexagon_line_1',
+    RIGHT_TO_BOTTOM: 'tile_hexagon_line_2',
+    LINE: 'tile_hexagon_line_3',
+}
+
 export const CONNECT_CLASS_NAME = {
     BASE: 'cell_connect',
-    EMPTY: 'cell_connect_empty',
     DIAGONAL_LEFT: 'cell_connect_diagonalLeft',
     DIAGONAL_RIGHT: 'cell_connect_diagonalRight',
     LINE: 'cell_connect_line',
