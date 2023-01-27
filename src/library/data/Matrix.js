@@ -48,7 +48,7 @@ export class BaseMatrix extends Array {
     changeParamByParam(property, oldValue, newValue) {
         const changedList = [];
 
-        this.matrix.forEach(row => {
+        this.forEach(row => {
             row.forEach(item => {
                 let isEqual;
 

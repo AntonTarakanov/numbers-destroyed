@@ -12,7 +12,7 @@ export class PowerDataAPI extends PowerData {
     setFirstTurn() {
         const name = this.getFirstTurnName();
 
-        this.setStepType(name, STEP_TYPE.CHOOSE_FOR_ATTACK);
+        this.setStepType(name, STEP_TYPE.CHOOSE_FOR_ATTACK, true);
     }
 
     // CHANGE TURN

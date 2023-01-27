@@ -1,4 +1,5 @@
 export { BaseComponent } from './render/components/Base';
+export { BASE_HANDLER_TYPES } from './base';
 
 export { RenderHelper } from './render/RenderHelper';
 export { DataHelper } from './data/DataHelper';

@@ -93,7 +93,6 @@ export class PowerMatrix extends BaseMatrix {
         });
     }
 
-    // TODO: переписать, будет второй способ организации связи.
     /**
      * Возвращает список доступных клеток через connectList.
      *
@@ -137,8 +136,9 @@ export class PowerMatrix extends BaseMatrix {
         }
     }
 
-    getOpponentLinkedTile(tile, scheme) {
+    getOpponentLinkedTile(position, scheme) {
         const isOpponentCondition = (name1, name2) => name1 !== name2;
+        const tile = this.getItem(position);
         const neighbors = this.getNeighbors(tile, scheme);
 
         return neighbors.filter(linkedTile => isOpponentCondition(
