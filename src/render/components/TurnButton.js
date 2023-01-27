@@ -33,7 +33,7 @@ export class TurnButtonComponent extends BaseComponent {
     }
 
     highlightOn() {
-        this.buttonNode.className = `${this.buttonClassName} cell_selected`;
+        this.buttonNode.className = `${this.buttonClassName} ${LOG_CLASS.BUTTON_SELECTED}`;
     }
 
     highlightOff() {

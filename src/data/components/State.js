@@ -21,7 +21,11 @@ export class PowerState extends BaseState {
     }
 
     setCurrentStepType(value) {
-        return this.setState(STATE_FIELDS.CURRENT_STEP_TYPE, value);
+        this.setState(STATE_FIELDS.CURRENT_STEP_TYPE, value);
+    }
+
+    getCurrentStepType() {
+        return this.getStateProperty(STATE_FIELDS.CURRENT_STEP_TYPE);
     }
 
     getCurrentTurn() {
@@ -29,7 +33,7 @@ export class PowerState extends BaseState {
     }
 
     setCurrentTurn(value) {
-        return this.setState(STATE_FIELDS.CURRENT_TURN, value);
+        this.setState(STATE_FIELDS.CURRENT_TURN, value);
     }
 
     getPlayersList() {

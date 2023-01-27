@@ -4,6 +4,10 @@ import { HANDLER_TYPE, STEP_TYPE } from '../constants';
  * Набор методов для выполнения событий приложения.
  */
 export class PowerLogicAPI {
+    constructor(isDev) {
+        this.isDev = isDev;
+    }
+
 
     /**
      * Выполняем рандомные атаки по переданному игроку
@@ -73,6 +77,24 @@ export class PowerLogicAPI {
             // appData.activeGivePowerStep();
 
             // DataAPI.activeGivePowerStep();
+        }
+    }
+
+    devHandler(type, dataAPI, renderAPI) {
+        if (!this.isDev) {
+            return;
+        }
+
+        if (type === HANDLER_TYPE.DEV_DO_RANDOM_1) {
+            const currentStepType = dataAPI.state.getCurrentStepType();
+            const currentTurn = dataAPI.state.getCurrentTurn();
+
+            if (currentStepType === STEP_TYPE.GIVE_POWER) {
+                this.doSimpleGiftPower(currentTurn, dataAPI);
+                renderAPI.rerender('turnButtonActive');
+            } else {
+                this.doRandomAttacks(currentTurn, dataAPI);
+            }
         }
     }
 }

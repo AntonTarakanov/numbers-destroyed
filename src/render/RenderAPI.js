@@ -2,7 +2,7 @@ import { PowerRender } from './Render';
 import { buildTable } from './components/Table';
 import { AdditionalFieldComponent } from './components/AdditionalField';
 import { POWER_DOM_IDS, TEXTS } from './constants';
-import { TURN_BUTTON_EVENT_TYPES, MATRIX_TYPES } from '../constants';
+import { TURN_BUTTON_EVENT_TYPES, MATRIX_TYPES, STEP_TYPE } from '../constants';
 
 /**
  * Всё что связано с визуальным отображением игры.
@@ -23,7 +23,7 @@ export class PowerRenderAPI extends PowerRender {
     createAdditionalInfo() {
         const rootNode = this.getAdditionalNode();
 
-        this.additionalField = new AdditionalFieldComponent(this.handler, this.isDev);
+        this.additionalField = new AdditionalFieldComponent(this.handler);
         this.additionalField.pastIn(rootNode);
     }
 
@@ -71,6 +71,15 @@ export class PowerRenderAPI extends PowerRender {
 
         if (type === 'dev1_highlight') {
             this.additionalField.devButtonHighlight(type, data);
+        }
+    }
+
+    /**
+     * @param {string} stepType - в зависимости от stepType dev-кнопка выполняет разные действия.
+     */
+    showDevButton(stepType) {
+        if (stepType === STEP_TYPE.CHOOSE_FOR_ATTACK) {
+            this.additionalField.showDevButton('Сделать ходы');
         }
     }
 

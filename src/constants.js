@@ -45,6 +45,7 @@ export const HANDLER_TYPE = {
     TURN_BUTTON_CLICK: 'turnButtonClick',           // клик по "Следующий ход".
     GIFT_END_BUTTON_CLICK: 'giftEndButtonClick',    // клик по "Завершить раздачу".
     TILE_CLICK: 'tileClick',                        // клик по плитке.
+    CHANGE_TURN_BUTTON: 'changeTurnButton',         //
 
     DEV_DO_RANDOM_1: 'devDoRandom1',                // клик по автовыполнению чего либо.
 }
@@ -55,11 +56,15 @@ export const CALC_ATTACK_RESULTS = {
     DEFENSIVE: 'defensive',
 }
 
-//
 export const TURN_BUTTON_EVENTS = [
     HANDLER_TYPE.TURN_BUTTON_CLICK,
     HANDLER_TYPE.GIFT_END_BUTTON_CLICK
 ];
+
+export const TURN_BUTTON_EVENT_TYPES = {
+    HIGHLIGHT: 'highlight',
+    ACTIVE_GIFT_VIEW: 'activeGiftView',
+}
 
 // Тип карты / тип элементов на карте.
 export const MATRIX_TYPES = {
@@ -71,9 +76,4 @@ export const MATRIX_TYPES = {
 export const SORTING_TYPES = {
     RANDOM: 'random',
     FROM_FIRST: 'fromFirst',
-}
-
-export const TURN_BUTTON_EVENT_TYPES = {
-    HIGHLIGHT: 'highlight',
-    ACTIVE_GIFT_VIEW: 'activeGiftView',
 }

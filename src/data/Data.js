@@ -1,5 +1,5 @@
 import { CELL_TARGET_TYPE } from './constants';
-import { STEP_TYPE, CELL_TYPE, CALC_ATTACK_RESULTS } from '../constants';
+import { STEP_TYPE, CELL_TYPE, CALC_ATTACK_RESULTS, TURN_BUTTON_EVENT_TYPES } from '../constants';
 import { DataHelper } from '../library';
 import { PowerMatrix } from './components';
 import { PowerState, STATE_FIELDS } from './components/State';
@@ -268,7 +268,7 @@ export class PowerData extends DataHelper {
 
         if (canAttackList.length === 0) {
             if (isPeople) {
-                this.rerender('turnButtonActive');
+                this.rerender(TURN_BUTTON_EVENT_TYPES.HIGHLIGHT);
             } else {
                 // След. ход.
                 console.log("isn't people");

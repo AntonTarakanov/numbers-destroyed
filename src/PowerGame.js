@@ -5,6 +5,7 @@ import { PowerLogicAPI } from './power';
 import { BASE_HANDLER_TYPES } from './library';
 
 import { tileClickHandler } from './power/powerTurn';
+import { HANDLER_TYPE, TURN_BUTTON_EVENT_TYPES } from './constants';
 
 /**
  * Игра PowerNumber.
@@ -16,7 +17,7 @@ export default class PowerGameApp {
             DOM_IDS: domIds,
         }
 
-        this.logicAPI = new PowerLogicAPI();
+        this.logicAPI = new PowerLogicAPI(isDev);
         this.dataAPI = new PowerDataAPI(this.dataHandler.bind(this), config, isDev);
         this.renderAPI = new PowerRenderAPI(this.domHandler.bind(this), RENDER_CONFIG, isDev);
 
@@ -30,6 +31,8 @@ export default class PowerGameApp {
         this.dataAPI.setFirstTurn();
 
         if (this.isDev) {
+            this.renderAPI.showDevButton(this.dataAPI.state.getCurrentStepType());
+
             window.testDataAPI = this.dataAPI;
             window.testRenderAPI = this.renderAPI;
             window.testLogicAPI = this.logicAPI;
@@ -43,14 +46,18 @@ export default class PowerGameApp {
             this.renderAPI.rerenderTile(tile, this.config.MATRIX_TYPE);
         }
 
-        if (type === 'turnButtonActive') {
-            console.log('turnButtonActive');
+        if (TURN_BUTTON_EVENT_TYPES.HIGHLIGHT === type) {
+            this.renderAPI.rerenderTurnButton(type, true);
         }
     }
 
     domHandler(event, targetElement, type) {
         if (BASE_HANDLER_TYPES.TILE_CLICK === type) {
             tileClickHandler(event, targetElement, this.dataAPI);
+        }
+
+        if (type === HANDLER_TYPE.DEV_DO_RANDOM_1) {
+            this.logicAPI.devHandler(type, this.dataAPI, this.renderAPI);
         }
     }
 }

@@ -45,6 +45,7 @@ export const LOG_CLASS = {
     // WRAP: 'log_wrap',
     TILE: 'log_tile',
     BUTTON: 'log_button',
+    BUTTON_SELECTED: 'log_button_selected',
 }
 
 export const TEXTS = {

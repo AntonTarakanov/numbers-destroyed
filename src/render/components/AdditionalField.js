@@ -10,22 +10,15 @@ import { HANDLER_TYPE } from '../../constants';
  * Логирование.
  */
 export class AdditionalFieldComponent extends BaseComponent {
-    constructor(handler, isDev) {
+    constructor(handler) {
         super();
 
-        // this.handler = handler;
+        this.handler = handler;
         this.tileClassName = LOG_CLASS.TILE;
         this.buttonClassName = LOG_CLASS.BUTTON;
 
         this.buttonElement = new TurnButtonComponent(handler, HANDLER_TYPE.TURN_BUTTON_CLICK, TEXTS.NEXT_TURN);
         this.element = this.getNewElement();
-
-        // Вспомогательные действия для отладки.
-        if (isDev) {
-            this.devButtonElement1 = new TurnButtonComponent(handler, HANDLER_TYPE.DEV_DO_RANDOM_1, 'Сделать ходы');
-
-            this.devButtonElement1.pastIn(this.element);
-        }
     }
 
     getNewElement() {
@@ -64,5 +57,17 @@ export class AdditionalFieldComponent extends BaseComponent {
      */
     devButtonChange(type, data) {
         this.devButtonElement1.setText('Раздать power');
+    }
+
+    /**
+     * Вторая кнопка.
+     */
+    showDevButton(text, isActive = false) {
+        if (this.element.childNodes.length > 1) {
+            this.devButtonElement1.setText(text);
+        } else {
+            this.devButtonElement1 = new TurnButtonComponent(this.handler, HANDLER_TYPE.DEV_DO_RANDOM_1, text);
+            this.devButtonElement1.pastIn(this.element);
+        }
     }
 }
