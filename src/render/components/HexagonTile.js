@@ -3,21 +3,28 @@ import { CELL_CLASS_NAME, COLOR, HEXAGON_CLASS_NAMES } from '../constants';
 import { getClassByCellType } from '../helper';
 import { COMMON_CLASS_NAMES } from '../../library/render/constants';
 
-export const buildHexagonTile = (item, contentMethods) => {
+export const buildHexagonTile = (tile, contentMethods) => {
     const clickHandler = function(event) {
         contentMethods.tileHandler(event, this, HANDLER_TYPE.TILE_CLICK);
     }
 
-    const tile = contentMethods.getDiv();
-    const content = getTileContent(item, contentMethods);
+    const tileNode = contentMethods.getDiv();
+    const content = getTileContent(tile, contentMethods);
+    const powerValue = contentMethods.getDiv();
 
-    tile.appendChild(content);
-    tile.addEventListener('click', clickHandler);
+    powerValue.textContent = tile.powerValue;
+    powerValue.className = HEXAGON_CLASS_NAMES.POWER_VALUE;
 
-    tile.className = getClassForTileWrap(item);
-    contentMethods.setAttributeInTile(tile, item);
+    tileNode.append(powerValue, content);
 
-    return tile;
+    if (tile.type !== undefined && tile.type !== CELL_TYPE.CONNECT_LINE) {
+        tileNode.addEventListener('click', clickHandler);
+    }
+
+    tileNode.className = getClassForTileWrap(tile);
+    contentMethods.setAttributeInTile(tileNode, tile);
+
+    return tileNode;
 }
 
 const getTileContent = (tile, contentMethods) => {
@@ -31,20 +38,13 @@ const getTileContent = (tile, contentMethods) => {
         wrapElem.append(line);
     }
 
-    if (tile.type === CELL_TYPE.READY) {
+    if ([CELL_TYPE.READY, CELL_TYPE.WAITING_SELECT].includes(tile.type)) {
         const hexagon = contentMethods.getDiv();
+        const hexagonSpan = document.createElement('span');
 
-        const part1 = contentMethods.getDiv();
-        const part2 = contentMethods.getDiv();
-        const part3 = contentMethods.getDiv();
+        hexagon.className = HEXAGON_CLASS_NAMES.HEXAGON;
 
-        hexagon.className = COMMON_CLASS_NAMES.FLEX;
-
-        part1.className = HEXAGON_CLASS_NAMES.TILE_HEXAGON_PART1;
-        part2.className = HEXAGON_CLASS_NAMES.TILE_HEXAGON_PART2;
-        part3.className = HEXAGON_CLASS_NAMES.TILE_HEXAGON_PART3;
-
-        hexagon.append(part1, part2, part3);
+        hexagon.append(hexagonSpan);
         wrapElem.append(hexagon);
     }
 

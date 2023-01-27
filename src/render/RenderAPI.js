@@ -1,8 +1,8 @@
 import { PowerRender } from './Render';
-import { buildTable, buildTD } from './components/Table';
-import { COMMON_DOM_IDS } from '../library/render/constants';
+import { buildTable } from './components/Table';
 import { AdditionalFieldComponent } from './components/AdditionalField';
 import { POWER_DOM_IDS, TEXTS } from './constants';
+import { TURN_BUTTON_EVENT_TYPES, MATRIX_TYPES } from '../constants';
 
 /**
  * Всё что связано с визуальным отображением игры.
@@ -43,31 +43,25 @@ export class PowerRenderAPI extends PowerRender {
     }
 
     buildMap(matrix) {
-        // return this.USE_TABLE ? buildTable.call(this, matrix) : buildDivMatrix.call(this, matrix);
-        // console.log('this.buildDivMatrix', this.buildDivMatrix);
-
         return this.USE_TABLE ? buildTable.call(this, matrix) : this.buildDivMatrix(matrix);
     }
 
-    /**
-     * Найти элемент в tr и заменить.
-     */
-    rerenderTD(matrix, item) {
-        const tdNode = buildTD.call(this, item);
+    rerenderTile(tile, matrixType) {
+        if (matrixType === MATRIX_TYPES.HEXAGON) {
+            this.rerenderDivTile(tile);
+        }
 
-        const commonMap = this.getElementById(COMMON_DOM_IDS.MAIN);
-        const trNode = commonMap.getElementsByTagName('tr')[item.position.y];
-        const oldTd = trNode.getElementsByTagName('td')[item.position.x];
-
-        trNode.replaceChild(tdNode, oldTd);
+        if (matrixType === MATRIX_TYPES.SIMPLE) {
+            this.rerenderTableTile(tile);
+        }
     }
 
     rerenderTurnButton(type, data) {
-        if (type === 'highlight') {
+        if (type === TURN_BUTTON_EVENT_TYPES.HIGHLIGHT) {
             this.additionalField.buttonHighlight(data);
         }
 
-        if (type === 'activeGiftView') {
+        if (type === TURN_BUTTON_EVENT_TYPES.ACTIVE_GIFT_VIEW) {
             this.additionalField.activeGiftView(data);
         }
 

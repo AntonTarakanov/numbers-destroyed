@@ -13,10 +13,8 @@ export const CELL_CLASS_NAME = {
 
 export const HEXAGON_CLASS_NAMES = {
     TILE_HEXAGON: 'tile_hexagon',
-
-    TILE_HEXAGON_PART1: 'tile_hexagon_part1',
-    TILE_HEXAGON_PART2: 'tile_hexagon_part2',
-    TILE_HEXAGON_PART3: 'tile_hexagon_part3',
+    HEXAGON: 'hexagon',
+    POWER_VALUE: 'hexagon_powerValue',
 
     TILE_BLUE: 'tile_blue',
     TILE_MAGENTA: 'tile_magenta',

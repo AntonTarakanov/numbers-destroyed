@@ -9,6 +9,7 @@
 /* #F8F8F0 - monokai белый */
 /* #00CC99 - приятный зелёный */
 /* #FF0066 - розовый 2 */
+/* #FF9999 - розовая тень / акцент */
 
 body {
     background: #18191D;
@@ -40,29 +41,80 @@ body {
     justify-content: center;
 }
 
-.tile_hexagon_part1,
-.tile_hexagon_part2,
-.tile_hexagon_part3 {
-    float: left;
+:root {
+    --hex-side: 22px;
+    --hex-rotate: 30deg;
 }
 
-.tile_hexagon_part1,
-.tile_hexagon_part3 {
-    border-top: 20px solid transparent;
-    border-bottom: 20px solid transparent;
+.hexagon {
+    width: calc(var(--hex-side) * 1.732);
+    height: var(--hex-side);
+    position: relative;
+    transform: rotate(var(--hex-rotate));
 }
 
-.tile_hexagon_part1 {
-    border-right: 10px solid;
+.cell_waitingSelect .hexagon {
+    box-shadow:0 0 18px #FF9999;
 }
 
-.tile_hexagon_part2 {
-    width: 20px;
-    height: 40px;
+.hexagon:hover {
+    box-shadow:0 0 25px #F8F8F0;
 }
 
-.tile_hexagon_part3 {
-    border-left: 10px solid;
+.cell_selected .hexagon {
+    box-shadow:0 0 10px #FF0066;
+}
+
+.hexagon:before,
+.hexagon:after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+}
+
+.hexagon_powerValue {
+    position: absolute;
+    z-index: 2;
+    font-weight: 600;
+     margin-top: 10px;
+    height: 37px;
+    width: 37px;
+    text-align: center;
+}
+
+.hexagon:before {
+    transform: rotate(60deg);
+}
+
+.hexagon:after {
+    transform: rotate(-60deg);
+}
+
+.tile_blue .hexagon:before,
+.tile_blue .hexagon:after,
+.tile_blue .hexagon {
+    background: #65AADD;
+}
+
+.tile_magenta .hexagon:before,
+.tile_magenta .hexagon:after,
+.tile_magenta .hexagon {
+    background: #F92672;
+}
+
+.tile_red .hexagon:before,
+.tile_red .hexagon:after,
+.tile_red .hexagon {
+    background: darkred;
+}
+
+.tile_green .hexagon:before,
+.tile_green .hexagon:after,
+.tile_green .hexagon {
+    background: #A6E22E;
 }
 
 .cell {
@@ -98,16 +150,16 @@ body {
 
 .cell_wrap:hover,
 .cell_waitingSelect {
-    -moz-box-shadow:0 0 10px #000;
-    -webkit-box-shadow:0 0 10px #000;
-    box-shadow:0 0 10px #F8F8F0;
+    /*-moz-box-shadow:0 0 10px #000;*/
+    /*-webkit-box-shadow:0 0 10px #000;*/
+    /*box-shadow:0 0 10px #F8F8F0;*/
 }
 
 /* Так же для TurnButton. */
 .cell_selected {
-    -moz-box-shadow:0 0 10px #000;
-    -webkit-box-shadow:0 0 10px #000;
-    box-shadow:0 0 10px #FF0066;
+    /*-moz-box-shadow:0 0 10px #000;*/
+    /*-webkit-box-shadow:0 0 10px #000;*/
+    /*box-shadow:0 0 10px #FF0066;*/
 }
 
 
@@ -115,42 +167,6 @@ body {
 .cell_red { background: darkred; }
 .cell_magenta { background: #F92672; }
 .cell_blue { background: #65AADD; }
-
-.tile_blue .tile_hexagon_part2 {
-    background-color: #65AADD;
-}
-
-.tile_blue .tile_hexagon_part3,
-.tile_blue .tile_hexagon_part1 {
-    border-color: transparent #65AADD ;
-}
-
-.tile_magenta .tile_hexagon_part2 {
-    background-color: #F92672;
-}
-
-.tile_magenta .tile_hexagon_part3,
-.tile_magenta .tile_hexagon_part1 {
-    border-color: transparent #F92672 ;
-}
-
-.tile_red .tile_hexagon_part2 {
-    background-color: darkred;
-}
-
-.tile_red .tile_hexagon_part3,
-.tile_red .tile_hexagon_part1 {
-    border-color: transparent darkred ;
-}
-
-.tile_green .tile_hexagon_part2 {
-    background-color: #A6E22E;
-}
-
-.tile_green .tile_hexagon_part3,
-.tile_green .tile_hexagon_part1 {
-    border-color: transparent #A6E22E ;
-}
 
 .tile_hexagon_line_1,
 .tile_hexagon_line_2,
@@ -163,7 +179,6 @@ body {
     -o-transform: rotate(7.5deg);
     -webkit-transform: rotate(7.5deg);
     -ms-transform: rotate(7.5deg);
-    /*color: aqua;*/
 }
 
 .tile_hexagon_line_1 {

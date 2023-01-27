@@ -276,6 +276,15 @@ export class PowerData extends DataHelper {
         }
     }
 
+    rerenderByPosition(position) {
+        this.useHandler(position);
+    }
+
+    // TODO: для быстрой совместимости. Перейти на "useHandler".
+    rerender(type) {
+        this.useHandlerWithCustom(type);
+    }
+
     // TODO: убрать дублирование
     checkPositionLimits({ x, y }) {
         const limitsMethod = (value, maxLimit) => value >= 0 && value <= maxLimit;
