@@ -81,6 +81,10 @@ export class PowerRenderAPI extends PowerRender {
         if (stepType === STEP_TYPE.CHOOSE_FOR_ATTACK) {
             this.additionalField.showDevButton('Сделать ходы');
         }
+
+        if (stepType === STEP_TYPE.GIVE_POWER) {
+            this.additionalField.showDevButton('Раздать power');
+        }
     }
 
     rerenderLog(state) {

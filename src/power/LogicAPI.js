@@ -49,10 +49,9 @@ export class PowerLogicAPI {
     turnButtonClickHandler(DataAPI, RenderAPI, info) {
         const { type } = info;
 
-        console.log('turnButtonClickHandler active');
-
         if (type === HANDLER_TYPE.TURN_BUTTON_CLICK) {
             DataAPI.activeGivePowerStep();
+            RenderAPI.showDevButton(DataAPI.state.getCurrentStepType());
         }
 
         if (type === HANDLER_TYPE.GIFT_END_BUTTON_CLICK) {
@@ -91,8 +90,10 @@ export class PowerLogicAPI {
 
             if (currentStepType === STEP_TYPE.GIVE_POWER) {
                 this.doSimpleGiftPower(currentTurn, dataAPI);
-                renderAPI.rerender('turnButtonActive');
-            } else {
+                // renderAPI.rerender('turnButtonActive');
+            }
+
+            if (currentStepType === STEP_TYPE.CHOOSE_FOR_ATTACK) {
                 this.doRandomAttacks(currentTurn, dataAPI);
             }
         }

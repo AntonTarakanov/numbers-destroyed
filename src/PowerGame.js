@@ -5,7 +5,7 @@ import { PowerLogicAPI } from './power';
 import { BASE_HANDLER_TYPES } from './library';
 
 import { tileClickHandler } from './power/powerTurn';
-import { HANDLER_TYPE, TURN_BUTTON_EVENT_TYPES } from './constants';
+import { HANDLER_TYPE, TURN_BUTTON_EVENT_TYPES, TURN_BUTTON_EVENTS } from './constants';
 
 /**
  * Игра PowerNumber.
@@ -54,6 +54,10 @@ export default class PowerGameApp {
     domHandler(event, targetElement, type) {
         if (BASE_HANDLER_TYPES.TILE_CLICK === type) {
             tileClickHandler(event, targetElement, this.dataAPI);
+        }
+
+        if (TURN_BUTTON_EVENTS.includes(type)) {
+            this.logicAPI.turnButtonClickHandler(this.dataAPI, this.renderAPI, { type });
         }
 
         if (type === HANDLER_TYPE.DEV_DO_RANDOM_1) {

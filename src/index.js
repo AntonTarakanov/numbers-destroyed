@@ -1,8 +1,7 @@
 import './style.css';
 import { PowerRenderAPI } from './render';
 import { PowerDataAPI } from './data';
-import { HANDLER_TYPE, TURN_BUTTON_EVENTS } from './constants';
-import { tileClickHandler } from './power/powerTurn';
+import { HANDLER_TYPE } from './constants';
 import { POWER_CONFIG } from './config';
 import { PowerLogicAPI } from './power';
 
@@ -44,16 +43,12 @@ function createAppOld() {
     }
 }
 
-/**
- * TODO: добавить возможность сразу передавать Tile, без лишнего запроса "getItemByPosition".
- */
 function busDataHandler(AppData, AppRender, data, type) {
-
     if (type === 'rerenderByPosition') {
         const item = AppData.getItemByPosition(data);
 
         AppRender.rerenderTD(AppData.matrix, item);
-        AppRender.rerenderLog(AppData.state);
+        // AppRender.rerenderLog(AppData.state);
     }
 
     if (type === 'turnButtonActive') {
@@ -85,16 +80,6 @@ function busDataHandler(AppData, AppRender, data, type) {
  *
  */
 function busDomHandler(event, context, appData, type, LogicAPI) {
-    console.log(event, context, appData, type);
-
-    if (type === HANDLER_TYPE.TILE_CLICK) {
-        tileClickHandler(event, context, appData);
-    }
-
-    if (TURN_BUTTON_EVENTS.includes(type)) {
-        LogicAPI.turnButtonClickHandler(appData, null, { type });
-    }
-
     if (type === HANDLER_TYPE.DEV_DO_RANDOM_1) {
         if (appData.state.currentStepType === 'givePower') {
             LogicAPI.doSimpleGiftPower(appData.state.currentTurn, appData);
