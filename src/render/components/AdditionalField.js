@@ -47,9 +47,11 @@ export class AdditionalFieldComponent extends BaseComponent {
 
     /**
      *
+     * @param {object} data - { highlight, amount }
      */
-    activeGiftView(data) {
-        this.buttonElement.changeTurnInfo(`${TEXTS.END_GIFT} - ${data}`, HANDLER_TYPE.GIFT_END_BUTTON_CLICK);
+    activeGiftView({ highlight, amount }) {
+        this.buttonElement.changeTurnInfo(`${TEXTS.END_GIFT} - ${amount}`, HANDLER_TYPE.GIFT_END_BUTTON_CLICK);
+        this.buttonHighlight(highlight);
     }
 
     /**

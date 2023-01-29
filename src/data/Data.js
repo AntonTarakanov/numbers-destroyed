@@ -276,6 +276,33 @@ export class PowerData extends DataHelper {
         }
     }
 
+    doGivePowerBase(playerName, position, useRerender = false) {
+        const availablePower = this.state.getAvailablePower(playerName);
+
+        // уменьшаем в state / меняем отображение.
+        if (availablePower > 0) {
+            const increaseResult = this.increasePowerValue(position);
+
+            if (increaseResult) {
+                const newPower = availablePower - 1;
+
+                this.decreaseAvailablePower(playerName);
+                this.rerenderByPosition(position);
+                this.activeGiftView(newPower, useRerender);
+            }
+        }
+    }
+
+    // Если нет возможности раздавать - подсвечиваем кнопку.
+    activeGiftView(amount, useRerender = false) {
+        const highlight = amount === 0;
+        const isRerenderCase = useRerender || highlight;
+
+        if (isRerenderCase) {
+            this.useHandlerWithCustom(TURN_BUTTON_EVENT_TYPES.ACTIVE_GIFT_VIEW, { highlight, amount });
+        }
+    }
+
     rerenderByPosition(position) {
         this.useHandler(position);
     }

@@ -49,9 +49,17 @@ export default class PowerGameApp {
         if (TURN_BUTTON_EVENT_TYPES.HIGHLIGHT === type) {
             this.renderAPI.rerenderTurnButton(type, true);
         }
+
+        if (TURN_BUTTON_EVENT_TYPES.ACTIVE_GIFT_VIEW === type) {
+            this.renderAPI.rerenderTurnButton(type, data);
+        }
     }
 
     domHandler(event, targetElement, type) {
+        if (this.isDev) {
+            console.log(event, targetElement, type);
+        }
+
         if (BASE_HANDLER_TYPES.TILE_CLICK === type) {
             tileClickHandler(event, targetElement, this.dataAPI);
         }

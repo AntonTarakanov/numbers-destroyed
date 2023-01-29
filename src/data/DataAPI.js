@@ -104,12 +104,7 @@ export class PowerDataAPI extends PowerData {
         this.setStepType(playerName, STEP_TYPE.GIVE_POWER, true);
         this.setAvailablePower(playerName, tileList.length);
 
-        this.rerender('turnButtonInactive');
-        this.rerender('activeGiftView', tileList.length);
-
-        if (this.isDev) {
-            this.rerender('dev_AutoGiftActive');
-        }
+        this.activeGiftView(tileList.length, true);
     }
 
     /**
@@ -127,25 +122,7 @@ export class PowerDataAPI extends PowerData {
      * @param {object} position { x, y }.
      */
     doGivePower(playerName, position) {
-        const availablePower = this.state.getAvailablePower(playerName);
-
-        // уменьшаем в state / меняем отображение.
-        if (availablePower > 0) {
-            const increaseResult = this.increasePowerValue(position);
-
-            if (increaseResult) {
-                const newPower = availablePower - 1;
-
-                this.decreaseAvailablePower(playerName);
-                this.rerenderByPosition(position);
-                this.rerender('activeGiftView', newPower);
-
-                // Если нет возможности раздавать - подсвечиваем кнопку.
-                if (newPower === 0) {
-                    this.rerender('turnButtonActive');
-                }
-            }
-        }
+        this.doGivePowerBase(playerName, position, true);
     }
 
     /**
@@ -155,11 +132,6 @@ export class PowerDataAPI extends PowerData {
      * @param {object} position { x, y }.
      */
     doGivePowerPC(playerName, position) {
-        const increaseResult = this.increasePowerValue(position);
-
-        if (increaseResult) {
-            this.decreaseAvailablePower(playerName);
-            this.rerenderByPosition(position);
-        }
+        this.doGivePowerBase(playerName, position);
     }
 }
