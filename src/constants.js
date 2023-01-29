@@ -77,3 +77,8 @@ export const SORTING_TYPES = {
     RANDOM: 'random',
     FROM_FIRST: 'fromFirst',
 }
+
+export const DEV_BUTTON_CAPTIONS = {
+    MAKE_MOVE: 'Сделать ходы',
+    GIVE_POWER: 'Раздать power',
+}
