@@ -1,4 +1,4 @@
-import { HANDLER_TYPE, STEP_TYPE } from '../constants';
+import { HANDLER_TYPE, STEP_TYPE, TURN_BUTTON_EVENT_TYPES } from '../constants';
 
 /**
  * Набор методов для выполнения событий приложения.
@@ -50,7 +50,7 @@ export class PowerLogicAPI {
         const { type } = info;
 
         if (type === HANDLER_TYPE.TURN_BUTTON_CLICK) {
-            DataAPI.activeGivePowerStep();
+            DataAPI.activeGivePowerStep(true);
             RenderAPI.showDevButton(DataAPI.state.getCurrentStepType());
         }
 
@@ -58,24 +58,18 @@ export class PowerLogicAPI {
             const { info: nextPlayerInfo, name: nextPlayerName } = DataAPI.getNextPlayerInfo();
 
             if (nextPlayerInfo.isPeople) {
-                console.log('Данный функционал не реализован.');
                 DataAPI.setStepType(nextPlayerName, STEP_TYPE.CHOOSE_FOR_ATTACK, true);
+                RenderAPI.showDevButton(DataAPI.state.getCurrentStepType());
+                RenderAPI.rerenderTurnButton(TURN_BUTTON_EVENT_TYPES.ACTIVE_TURN_BUTTON, { highlight: false });
             } else {
-                console.log('ХОД NEXT');
-
                 DataAPI.doNextTurn(nextPlayerName);
                 this.doRandomAttacks(nextPlayerName, DataAPI);
+                DataAPI.activeGivePowerStep();
                 this.doSimpleGiftPower(nextPlayerName, DataAPI);
                 this.turnButtonClickHandler(DataAPI, RenderAPI, {
                     type: HANDLER_TYPE.GIFT_END_BUTTON_CLICK,
                 });
             }
-
-            // Обработка хода соперника.
-            // Ожидание пока сходит соперник.
-            // appData.activeGivePowerStep();
-
-            // DataAPI.activeGivePowerStep();
         }
     }
 

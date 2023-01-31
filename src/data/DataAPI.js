@@ -97,22 +97,16 @@ export class PowerDataAPI extends PowerData {
      * Перевести ход в стадию раздачи power.
      * Отображаем кол-во доступных power.
      */
-    activeGivePowerStep() {
+    activeGivePowerStep(isPeople = false) {
         const playerName = this.state.getCurrentTurn();
         const tileList = this.matrix.getTileListByPlayer(playerName);
 
-        this.setStepType(playerName, STEP_TYPE.GIVE_POWER, true);
+        this.setStepType(playerName, STEP_TYPE.GIVE_POWER, isPeople);
         this.setAvailablePower(playerName, tileList.length);
 
-        this.activeGiftView(tileList.length, true);
-    }
-
-    /**
-     * Установливаем stepType в статус раздачи power.
-     * Нет дополнительного отображения.
-     */
-    activeGivePowerStepPC() {
-        this.setCurrentStepType(STEP_TYPE.GIVE_POWER);
+        if (isPeople) {
+            this.activeGiftView(tileList.length, isPeople);
+        }
     }
 
     /**

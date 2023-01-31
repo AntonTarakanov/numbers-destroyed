@@ -64,6 +64,7 @@ export const TURN_BUTTON_EVENTS = [
 export const TURN_BUTTON_EVENT_TYPES = {
     HIGHLIGHT: 'highlight',
     ACTIVE_GIFT_VIEW: 'activeGiftView',
+    ACTIVE_TURN_BUTTON: 'activeTurnButton',
 }
 
 // Тип карты / тип элементов на карте.

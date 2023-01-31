@@ -54,6 +54,11 @@ export class AdditionalFieldComponent extends BaseComponent {
         this.buttonHighlight(highlight);
     }
 
+    activeTurnView({ highlight }) {
+        this.buttonElement.changeTurnInfo(TEXTS.NEXT_TURN, HANDLER_TYPE.TURN_BUTTON_CLICK);
+        this.buttonHighlight(highlight);
+    }
+
     /**
      *
      */

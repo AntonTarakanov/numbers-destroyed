@@ -17,6 +17,10 @@ export class PowerRenderAPI extends PowerRender {
     }
 
     rerenderTurnButton(type, data) {
+        if (type === TURN_BUTTON_EVENT_TYPES.ACTIVE_TURN_BUTTON) {
+            this.additionalField.activeTurnView(data);
+        }
+
         if (type === TURN_BUTTON_EVENT_TYPES.HIGHLIGHT) {
             this.additionalField.buttonHighlight(data);
         }

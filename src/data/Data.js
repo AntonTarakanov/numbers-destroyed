@@ -274,6 +274,17 @@ export class PowerData extends DataHelper {
                 console.log("isn't people");
             }
         }
+
+        this.checkVictory();
+    }
+
+    checkVictory() {
+        const list = this.matrix.getListWithOnlyPlayers();
+        const filtered = list.filter((player, index, list) => player === list[0]);
+
+        if (filtered.length === list.length) {
+            alert('Кто-то победил! Но я пока не умею определять кто.');
+        }
     }
 
     doGivePowerBase(playerName, position, useRerender = false) {

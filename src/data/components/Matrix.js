@@ -71,6 +71,20 @@ export class PowerMatrix extends BaseMatrix {
         return this.getTileListByPlayer(name).length;
     }
 
+    getListWithOnlyPlayers() {
+        const result = [];
+
+        this.forEach(row => {
+            row.forEach(tile => {
+                if (!!tile.playerName) {
+                    result.push(tile.playerName);
+                }
+            });
+        });
+
+        return result;
+    }
+
     /**
      * Возвращает список tile, которые могут атаковать.
      *
