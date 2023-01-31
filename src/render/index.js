@@ -1,1 +1,0 @@
-export { PowerRenderAPI } from './RenderAPI';
