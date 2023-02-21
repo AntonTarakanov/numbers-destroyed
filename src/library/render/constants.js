@@ -14,3 +14,5 @@ export const COMMON_DOM_IDS = {
     ADDITIONAL: 'additionalField',
     HEADER: 'header',
 }
+
+export const ATTRIBUTE_ORDER = 'data-order';

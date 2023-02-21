@@ -1,7 +1,5 @@
-import { RenderHelper } from '../library';
-import { COMMON_DOM_IDS } from '../library/render/constants';
+import { RenderHexagonMatrix } from './RenderHexagonMatrix';
 
-import { buildHexagonTile } from './components/HexagonTile';
 import { AdditionalFieldComponent } from './components/AdditionalField';
 import { POWER_DOM_IDS, TEXTS } from './constants';
 import { buildTable } from './components/Table';
@@ -9,7 +7,7 @@ import { buildTable } from './components/Table';
 /**
  * Всё что связано с визуальным отображением игры.
  */
-export class PowerRender extends RenderHelper {
+export class PowerRender extends RenderHexagonMatrix {
 
     createApp(matrix) {
         const baseForm = this.getBaseForm();
@@ -47,30 +45,5 @@ export class PowerRender extends RenderHelper {
 
         this.additionalField = new AdditionalFieldComponent(this.handler);
         this.additionalField.pastIn(rootNode);
-    }
-
-    buildDivTile(item, contentMethods) {
-        return buildHexagonTile(item, contentMethods);
-    }
-
-    rerenderDivTile(tile) {
-        const {x, y} = tile.position;
-
-        const commonMap = this.getElementById(COMMON_DOM_IDS.MAIN);
-        const rowNodes = commonMap.firstChild;
-        const oldNode = rowNodes.childNodes[y].childNodes[x];
-        const tileNode = this.buildDivTile(tile, this.getContentMethods());
-
-        rowNodes.childNodes[y].replaceChild(tileNode, oldNode);
-    }
-
-    rerenderTableTile(tile) {
-        const tdNode = buildTD.call(this, tile);
-
-        const commonMap = this.getElementById(COMMON_DOM_IDS.MAIN);
-        const trNode = commonMap.getElementsByTagName('tr')[tile.position.y];
-        const oldTd = trNode.getElementsByTagName('td')[tile.position.x];
-
-        trNode.replaceChild(tdNode, oldTd);
     }
 }
