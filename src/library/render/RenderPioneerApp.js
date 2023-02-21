@@ -1,5 +1,5 @@
 import { RenderPioneer } from './Pioneer';
-import { getHeader } from './components/Header';
+import { Header } from './components/Header';
 import { COMMON_CLASS_NAMES, COMMON_DOM_IDS } from './constants';
 
 /**
@@ -7,40 +7,70 @@ import { COMMON_CLASS_NAMES, COMMON_DOM_IDS } from './constants';
  * Шапка, поле приложения, информационное поле.
  */
 export class RenderPioneerApp extends RenderPioneer {
-    constructor(handler, config, isDev = false) {
+    constructor(DOM_IDS) {
         super();
 
-        this.DOM_IDS = config.DOM_IDS;
-        this.USE_TABLE = config.USE_TABLE;
-        this.handler = handler;
-        this.isDev = isDev;
+        this.DOM_IDS = DOM_IDS;
+
+        this.headerInstance = this.getHeaderInstance();
+        this.additionalFieldInstance = this.getAdditionalFieldInstance();
+        this.appFieldInstance = this.getAppFieldInstance();
     }
 
     /**
-     * Базовая пустая форма с id:
-     *  основное поле
-     *  вспомогательное поле
+     * Базовая пустая форма(appForm) с id:
+     *  основное поле (appField)
+     *  вспомогательное поле (additionalField)
      *  header
      */
-    getBaseForm() {
-        const appNode = this.getDiv(COMMON_CLASS_NAMES.APP, this.DOM_IDS.root);
+    getAppFormNode() {
+        const appNodeWrap = this.getDiv(COMMON_CLASS_NAMES.APP, this.DOM_IDS.root);
         const contentNode = this.getDiv(COMMON_CLASS_NAMES.JUSTIFY_CENTER);
-        const mainNode = this.getDiv(COMMON_CLASS_NAMES.FLEX, COMMON_DOM_IDS.MAIN);
-        const additionalNode = this.getDiv(null, COMMON_DOM_IDS.ADDITIONAL);
+        const appFieldNode = this.appFieldInstance.getAppFieldNode();
+        const additionalFieldNode = this.additionalFieldInstance.getFieldNode();
+        const headerNode = this.headerInstance.getHeaderNode(
+            COMMON_CLASS_NAMES.HEADER, COMMON_CLASS_NAMES.HEADER_IMG, COMMON_DOM_IDS.HEADER
+        );
 
-        const headerNode = this.getHeader();
+        contentNode.append(appFieldNode, additionalFieldNode);
+        appNodeWrap.append(headerNode, contentNode);
 
-        contentNode.append(mainNode, additionalNode);
-        appNode.append(headerNode, contentNode);
-
-        return appNode;
+        return appNodeWrap;
     }
 
-    getAdditionalNode() {
+    getAppFieldInstance() {
+        const divCreator = this.getDiv;
+
+        return {
+            getAppFieldNode: function() {
+                return divCreator(COMMON_CLASS_NAMES.FLEX, COMMON_DOM_IDS.MAIN);
+            }
+        };
+    }
+
+    getHeaderInstance() {
+        return new Header();
+    }
+
+    getAdditionalFieldInstance() {
+        const divCreator = this.getDiv;
+
+        return {
+            getFieldNode: function() {
+                return divCreator(null, COMMON_DOM_IDS.ADDITIONAL);
+            }
+        };
+    }
+
+    getAdditionalFieldNode() {
         return this.getElementById(COMMON_DOM_IDS.ADDITIONAL);
     }
 
-    getHeader() {
-        return getHeader(COMMON_CLASS_NAMES.HEADER, COMMON_CLASS_NAMES.HEADER_IMG, COMMON_DOM_IDS.HEADER);
+    getHeaderNode() {
+        return this.getElementById(COMMON_DOM_IDS.HEADER);
+    }
+
+    getAppFieldNode() {
+        return this.getElementById(COMMON_DOM_IDS.MAIN);
     }
 }

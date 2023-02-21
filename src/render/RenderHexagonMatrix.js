@@ -1,10 +1,8 @@
 import { RenderHelper } from '../library';
 import { COMMON_CLASS_NAMES, COMMON_DOM_IDS } from '../library/render/constants';
-import { getClassForTileWrap } from './components/HexagonTile';
+import { getClassForTileWrap, getClassForConnect, getClassByColor } from './components/HexagonTile';
 import { CELL_TYPE, HANDLER_TYPE } from '../constants';
 import { HEXAGON_CLASS_NAMES } from './constants';
-import { getClassForConnect, getClassByColor } from './components/HexagonTile';
-import { buildTD } from './components/Table';
 
 /**
  * Добавляется функционал рендера плиток гексагонами.
@@ -13,7 +11,18 @@ import { buildTD } from './components/Table';
  */
 export class RenderHexagonMatrix extends RenderHelper {
 
-    buildDivTile(tile) {
+    buildRowNode(row, index) {
+        const rowElement = super.buildRowNode(row, index);
+
+        // Сдвиг строк с power через одну.
+        if (index % 2 !== 0) {
+            rowElement.className = `${rowElement.className} ${COMMON_CLASS_NAMES.MARGIN_LEFT_MIDDLE}`;
+        }
+
+        return rowElement;
+    }
+
+    buildDivTileNode(tile) {
         const onTileClick = this.handler;
         const clickHandler = function(event) {
             onTileClick(event, this, HANDLER_TYPE.TILE_CLICK);
@@ -28,7 +37,6 @@ export class RenderHexagonMatrix extends RenderHelper {
 
         tileNode.append(powerValue, content);
 
-        // TODO: условие должно быть более очевидное.
         if (tile.type !== undefined && tile.type !== CELL_TYPE.CONNECT_LINE) {
             tileNode.addEventListener('click', clickHandler);
         }
@@ -77,19 +85,8 @@ export class RenderHexagonMatrix extends RenderHelper {
         const commonMap = this.getElementById(COMMON_DOM_IDS.MAIN);
         const rowNodes = commonMap.firstChild;
         const oldNode = rowNodes.childNodes[y].childNodes[x];
-        const tileNode = this.buildDivTile(tile);
+        const tileNode = this.buildDivTileNode(tile);
 
         rowNodes.childNodes[y].replaceChild(tileNode, oldNode);
-    }
-
-    // TODO: нужно полностью переписать.
-    rerenderTableTile(tile) {
-        const tdNode = buildTD.call(this, tile);
-
-        const commonMap = this.getElementById(COMMON_DOM_IDS.MAIN);
-        const trNode = commonMap.getElementsByTagName('tr')[tile.position.y];
-        const oldTd = trNode.getElementsByTagName('td')[tile.position.x];
-
-        trNode.replaceChild(tdNode, oldTd);
     }
 }

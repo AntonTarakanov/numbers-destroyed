@@ -2,7 +2,6 @@ import { RenderHexagonMatrix } from './RenderHexagonMatrix';
 
 import { AdditionalFieldComponent } from './components/AdditionalField';
 import { POWER_DOM_IDS, TEXTS } from './constants';
-import { buildTable } from './components/Table';
 
 /**
  * Всё что связано с визуальным отображением игры.
@@ -10,9 +9,9 @@ import { buildTable } from './components/Table';
 export class PowerRender extends RenderHexagonMatrix {
 
     createApp(matrix) {
-        const baseForm = this.getBaseForm();
+        const appForm = this.getAppFormNode();
 
-        document.body.appendChild(baseForm);
+        document.body.appendChild(appForm);
 
         this.createMatrix(matrix);
         this.createAdditionalInfo();
@@ -34,14 +33,14 @@ export class PowerRender extends RenderHexagonMatrix {
     }
 
     buildMap(matrix) {
-        return this.USE_TABLE ? buildTable.call(this, matrix) : this.buildDivMatrix(matrix);
+        return this.USE_TABLE ? this.buildTableMatrixNode(matrix) : this.buildDivMatrixNode(matrix);
     }
 
     /**
      * Не хватило фантазии на более интересное название.
      */
     createAdditionalInfo() {
-        const rootNode = this.getAdditionalNode();
+        const rootNode = this.getAdditionalFieldNode();
 
         this.additionalField = new AdditionalFieldComponent(this.handler);
         this.additionalField.pastIn(rootNode);

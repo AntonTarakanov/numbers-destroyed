@@ -7,6 +7,8 @@ export const COMMON_CLASS_NAMES = {
 
     HEADER: 'header',
     HEADER_IMG: 'header_img',
+
+    MARGIN_LEFT_MIDDLE: 'marginLeftMiddle',
 }
 
 export const COMMON_DOM_IDS = {
